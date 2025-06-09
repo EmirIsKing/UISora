@@ -4,7 +4,22 @@ import ImageGeneration from "@/actions/imageGen";
 import PromptFattening from "@/actions/promptFattening";
 import UiGeneration from "@/actions/uiGeneration";
 import GetImages from "@/actions/getImages";
+import convertToJson from "@/actions/convertToJson";
+import HtmlToJson from "@/actions/HtmlToJson";
 
+type UIComponent = {
+    screen: string;
+    component: string;
+    message: string;
+};
+
+interface HtmlNode {
+    type: string;
+    attributes?: {
+        [key: string]: string;
+    };
+    content?: Array<HtmlNode | string>;
+}
 
 export async function POST(request: Request) {
     try {
@@ -59,10 +74,29 @@ export async function POST(request: Request) {
             ImageContainer = imageHolder;
         }
 
-        const fattenedPrompt = FattenedPromptJson.ui[0].ui
-        const ui = await UiGeneration(fattenedPrompt, ImageContainer, previousUI);
-        console.log(ui);
-        return NextResponse.json(ui);
+        const convertedUI: HtmlNode[] = []; // Specify the proper return type from HtmlToJson
+        const fattenedPrompt = FattenedPromptJson.ui[0].ui;
+        const Response = await UiGeneration(fattenedPrompt, ImageContainer, previousUI);
+        const Data = await Response.json();
+        const uiData: UIComponent[] = Data.ui;
+        console.log(uiData);
+
+// Use Promise.all to handle async operations in map
+        await Promise.all(uiData.map(async (item) => {
+            const temp = await HtmlToJson(item.component);
+            convertedUI.push(JSON.parse(temp));
+        }));
+
+// Now you can use convertedUI
+        const compose = {
+            ui: convertedUI,
+            message: Data.message,
+            imageHolder: ImageContainer
+        };
+        console.log(convertedUI);
+
+        console.log(compose);
+        return NextResponse.json(compose);
     } catch (error) {
         console.error(error);
         return NextResponse.json(

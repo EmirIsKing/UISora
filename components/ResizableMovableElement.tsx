@@ -155,7 +155,6 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                                 contentRef.current?.blur();
                             }
                         }}
-                        dangerouslySetInnerHTML={{ __html: content }}
                         style={{
                             width: '100%',
                             height: '100%',
@@ -178,7 +177,14 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                             clickHandler()
                             editHandler()
                         }}
-                    />
+                    >
+                        <span>{metadata.content?.title}</span>
+                        <span>{metadata.content?.subtitle}</span>
+                        {metadata.children?.map((child) => {
+                            return <RDE key={child.id} metadata={child} />;
+                        })}
+
+                    </p>
                 );
 
             case 'image':
@@ -204,7 +210,7 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                                 editHandler()
                             }
                         }}
-                    />
+                   />
                 );
 
             case 'button':
@@ -232,7 +238,6 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                                 contentRef.current?.blur();
                             }
                         }}
-                        dangerouslySetInnerHTML={{ __html: content }}
                         style={{
                             width: '100%',
                             height: '100%',
@@ -253,7 +258,9 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                                 e.preventDefault();
                             }
                         }}
-                    />
+                    >
+                        {metadata.content}
+                    </button>
                 );
 
             case 'card':
@@ -281,7 +288,6 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                                 handleBlur();
                             }
                         }}
-                        dangerouslySetInnerHTML={{ __html:content }}
                         style={{
                             width: '100%',
                             height: '100%',
@@ -293,7 +299,46 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                     >
                         <h1>{metadata.content?.title}</h1>
                         <h2>{metadata.content?.subtitle}</h2>
+                        {metadata.children?.map((child) => {
+                            return <RDE key={child.id} metadata={child} />;
+                        })}
 
+                    </div>
+                );
+            // Add this case to your switch statement in RDE.tsx
+            case 'container':
+                return (
+                    <div
+                        className="container"
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            ...metadata.style,
+                        }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            clickHandler();
+                        }}
+                    >
+                        {metadata.content && (
+                            <div
+                                ref={contentRef}
+                                contentEditable={editable}
+                                suppressContentEditableWarning={true}
+                                onBlur={handleBlur}
+                                onKeyDown={handleKeyDown}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    outline: 'none',
+                                    pointerEvents: editable ? 'auto' : 'none',
+                                    ...(editable ? metadata.hoverStyle : {})
+                                }}
+                            >
+                                {metadata.content}
+                            </div>
+                        )}
                     </div>
                 );
 
@@ -322,7 +367,6 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                                 handleBlur();
                             }
                         }}
-                        dangerouslySetInnerHTML={{ __html:content }}
                         style={{
                             width: '100%',
                             height: '100%',
@@ -331,36 +375,79 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                         ...metadata.style,
                             ...metadata.hoverStyle
                         }}
-                    />
+                    >
+                        <h1>{metadata.content?.title}</h1>
+                        <h2>{metadata.content?.subtitle}</h2>
+                        {metadata.children?.map((child) => {
+                            return <RDE key={child.id} metadata={child} />;
+                        })}
+
+                    </div>
                 );
         }
     };
 
     return (
-        <Rnd
-            size={{width: meta.width, height: meta.height}}
-            position={{x: meta.x, y: meta.y}}
-            style={{zIndex: 50, outline: selected === metadata.id ? '4px solid #2fedea' : 'none'}}
-            onDragStop={setPosition}
-            onResize={setSize}
-            onClick = {(e:any)=> {
-                e.stopPropagation()
-            }}
-            enableResizing={selected === metadata.id}
-        >
+        // <Rnd
+        //     size={{width: meta.width, height: meta.height}}
+        //     position={{x: 0, y:0}}
+        //     style={{zIndex: 50, outline: selected === metadata.id ? '4px solid #2fedea' : 'none'}}
+        //     onDragStop={setPosition}
+        //     onResize={setSize}
+        //     onClick = {(e:any)=> {
+        //         e.stopPropagation()
+        //     }}
+        //     enableResizing={selected === metadata.id}
+        // >
+        //     {renderContent()}
+        // </Rnd>
+        <div>
             {renderContent()}
-        </Rnd>
+        </div>
     )
 }
 export default RDE
 
-export const RenderRDE = ({ metadata }: { metadata: RDEmetadata }) => {
+export const RenderRDE = ({ metadata, parentPosition = { x: 0, y: 0 } }: {
+    metadata: RDEmetadata,
+    parentPosition?: { x: number, y: number }
+}) => {
+    // Calculate absolute position based on parent
+    const absolutePosition = {
+        x: (metadata.x || 0) + parentPosition.x,
+        y: (metadata.y || 0) + parentPosition.y
+    };
+
+    // If this is a container, render children first with absolute positioning
+    if (metadata.type === 'container') {
+        return (
+            <div
+                style={{
+                    width: metadata.width,
+                    height: metadata.height,
+                    ...metadata.style
+                }}
+            >
+                {metadata.children?.map((child) => (
+                    <RenderRDE
+                        key={child.id}
+                        metadata={child}
+                        parentPosition={absolutePosition}
+                    />
+                ))}
+            </div>
+        );
+    }
+
+    // For non-container elements, use the RDE component with absolute positioning
     return (
-        <>
-            <RDE key={metadata.id} metadata={metadata} />
-            {metadata.children?.map((child) => (
-                <RenderRDE key={child.id} metadata={child} />
-            ))}
-        </>
+        <RDE
+            key={metadata.id}
+            metadata={{
+                ...metadata,
+                x: absolutePosition.x,
+                y: absolutePosition.y
+            }}
+        />
     );
 };

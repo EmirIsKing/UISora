@@ -9,11 +9,13 @@ import {useExportModal} from "@/store/store";
 import {usePanning, useSelectElement} from "@/store/store";
 import {Button} from "@heroui/button";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import RDE from "@/components/ResizableMovableElement";
+// import RDE from "@/components/ResizableMovableElement";
 import {RenderRDE} from "@/components/ResizableMovableElement";
+import {htmltype} from "@/types/types";
 import {RDEmetadata} from "@/types/types";
 import {Hand, SquareMousePointer} from "lucide-react";
-
+import { Renderer } from "@/components/Renderer";
+import {jsondata} from "@/utils/newtestjson";
 
 type ChatItemType = {
     userPrompt: string;
@@ -23,7 +25,7 @@ type ChatItemType = {
 
 export default function Project({ params }: { params: Promise<{ projectId: string }> }) {
     const [prompt, setPrompt] = useState('');
-    const [generatedUI, setGeneratedUI] = useState<MetaData>({ui: []});
+    const [generatedUI, setGeneratedUI] = useState<MetaData>({ui:[]});
     const [chat, setChat] = useState<ChatItemType[]>([]);
     const [chain, setChain] = useState('')
     const [imageHolder, setImageHolder] = useState([]);
@@ -41,114 +43,9 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
     console.log("projectId", projectId);
 
-    const [testData, setTestData] = useState<TestData>({
-        ui: [
-            {
-                "screen": {
-                    name: "Login",
-                    width: 280,
-                    height: 540,
-                },
-                "component": [ {
-                    id: "el-1",
-                    type: "text",
-                    x: 20,
-                    y: 80,
-                    width: 280,
-                    height: 40,
-                    content: "Sign In",
-                    style: {
-                        fontSize: "28px",
-                        fontWeight: "bold",
-                        textAlign: "center",
-                        color: "#fff",
-                        textShadow: "0 2px 4px rgba(0,0,0,0.3)"
-                    }
-                },
-                    {
-                        id: "el-2",
-                        type: "input",
-                        x: 20,
-                        y: 150,
-                        width: 280,
-                        height: 50,
-                        placeholder: "Email",
-                        value: "",
-                        style: {
-                            borderRadius: "8px",
-                            border: "1px solid rgba(255,255,255,0.3)",
-                            padding: "0 15px",
-                            fontSize: "16px",
-                            backgroundColor: "rgba(255,255,255,0.9)",
-                            backdropFilter: "blur(2px)",
-                            boxShadow: "0 2px 10px rgba(0,0,0,0.1)"
-                        }
-                    },
-                    {
-                        id: "el-3",
-                        type: "input",
-                        x: 20,
-                        y: 220,
-                        width: 280,
-                        height: 50,
-                        placeholder: "Password",
-                        value: "",
-                        secureTextEntry: true,
-                        style: {
-                            borderRadius: "8px",
-                            border: "1px solid rgba(255,255,255,0.3)",
-                            padding: "0 15px",
-                            fontSize: "16px",
-                            backgroundColor: "rgba(255,255,255,0.9)",
-                            backdropFilter: "blur(2px)",
-                            boxShadow: "0 2px 10px rgba(0,0,0,0.1)"
-                        }
-                    },
-                    {
-                        id: "el-4",
-                        type: "button",
-                        x: 20,
-                        y: 300,
-                        width: 280,
-                        height: 50,
-                        content: "Sign In",
-                        style: {
-                            backgroundColor: "#4285F4",
-                            color: "white",
-                            borderRadius: "8px",
-                            textAlign: "center",
-                            fontSize: "18px",
-                            fontWeight: "bold",
-                            border: "none",
-                            cursor: "pointer",
-                            transition: "all 0.3s ease",
-                            boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
-                        },
-                        hoverStyle: {
-                            transform: "translateY(-2px)",
-                            boxShadow: "0 6px 8px rgba(0,0,0,0.15)"
-                        }
-                    },
-                    {
-                        id: "el-5",
-                        type: "text",
-                        x: 20,
-                        y: 370,
-                        width: 280,
-                        height: 20,
-                        content: "Don't have an account? Sign Up",
-                        style: {
-                            textAlign: "center",
-                            fontSize: "14px",
-                            color: "rgba(255,255,255,0.9)",
-                            cursor: "pointer",
-                            textDecoration: "underline"
-                        }
-                    }] as RDEmetadata[],
-            }
-        ] as ScreenConfig[],
-        "message": "This login screen uses a modern, minimalistic login design. "
-    });
+
+
+
     interface ScreenConfig {
         screen: {
             name: string;
@@ -217,10 +114,10 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
 
            // Append the new UI instead of replacing it
-           setGeneratedUI(prev => ({
-               ...prev,
-               ui: [...(data.ui || [])]
-           }));
+           // setGeneratedUI(prev => ({
+           //     ...prev,
+           //     ui: [...(data.ui || [])]
+           // }));
            setImageHolder(data.imageHolder)
            console.log("date.ui: ",data.ui)
            console.log("ImageHolder: ",imageHolder)
@@ -355,6 +252,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                                 transform: 'translate(-50%, -50%)',
                                             }}
                                         >
+
                                                 {/*{generatedUI.map((item, i) => (*/}
                                                 {/*    <Screen screen={item.screen} key={i} component={item.component} />*/}
                                                 {/*))}*/}
@@ -382,8 +280,8 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                             {/*        );*/}
                                             {/*    })}*/}
                                             {/*</div>*/}
+                                            {/*prev use*/}
                                             <div className="flex flex-wrap items-start gap-x-[100px] p-4">
-
                                                 {generatedUI.ui.map((item: ScreenConfig, index: number) => {
                                                     const screenWidth = item.screen.width || 280;
                                                     const screenHeight = item.screen.height || 540;
@@ -394,10 +292,11 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                                             style={{
                                                                 width: `${screenWidth}px`,
                                                                 minHeight: `${screenHeight}px`,
-                                                                flexShrink: 0
+                                                                flexShrink: 0,
+                                                                position: 'relative' // Important for absolute positioning of children
                                                             }}
                                                         >
-                                                            <Screen screen={item.screen.name}>
+                                                            <Screen screen={item.screen}>
                                                                 {item.component.map((element: RDEmetadata) => (
                                                                     <RenderRDE key={element.id} metadata={element} />
                                                                 ))}
@@ -410,8 +309,6 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                             {/*{uiElements.map((item, i) => (*/}
                                             {/*    <RDE key={i} metadata={item}/>*/}
                                             {/*))}*/}
-
-
                                         </div>
                                     </div>
                                 </TransformComponent>

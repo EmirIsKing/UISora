@@ -1,1843 +1,1548 @@
-export const jsondata = [
-    {
-        "screen": {
-            "name": "Splash Screen",
-            "width": 270,
-            "height": 500
-        },
-        "component": [
-            {
-                "id": "splash-root",
-                "type": "container",
-                "children": [
+export const jsondata = {
+    "ui": [
+        {
+            "screen": {
+                "name": "Splash Screen",
+                "width": 320,
+                "height": 568
+            },
+            "component": {
+                "type": "div",
+                "content": [
                     {
-                        "id": "splash-overlay",
-                        "type": "container",
-                        "children": [
+                        "type": "div",
+                        "content": [
                             {
-                                "id": "app-logo",
-                                "type": "text",
-                                "content": "CoffeeCraft",
-                                "style": {
-                                    "fontSize": "24px",
-                                    "fontWeight": "600",
-                                    "color": "#ffffff",
-                                    "textAlign": "center",
-                                    "marginBottom": "10px",
-                                    "animation": "fadeIn 1s ease-in",
-                                    "zIndex": 2
-                                }
-                            },
-                            {
-                                "id": "coffee-cup-animation",
-                                "type": "image",
-                                "src": "https://v3.fal.media/files/monkey/Z4-IaoCHWJhX4pLJfxp8A.png",
-                                "style": {
-                                    "width": "80px",
-                                    "height": "80px",
-                                    "objectFit": "contain",
-                                    "margin": "0 auto",
-                                    "animation": "fadeIn 1.5s ease-in",
-                                    "zIndex": 2
-                                }
-                            },
-                            {
-                                "id": "tagline",
-                                "type": "text",
-                                "content": "Brewed to Perfection",
-                                "style": {
-                                    "fontSize": "16px",
-                                    "fontStyle": "italic",
-                                    "color": "#ffffff",
-                                    "textAlign": "center",
-                                    "marginTop": "10px",
-                                    "textShadow": "0 2px 4px rgba(0,0,0,0.4)",
-                                    "zIndex": 2
+                                "type": "div",
+                                "content": [
+                                    "BrewMate"
+                                ],
+                                "attributes": {
+                                    "id": "splash-logo",
+                                    "style": "display:inline-block; background:rgba(0,0,0,0.4); color:#fff; padding:10px 20px; border-radius:5px; font-family:'Georgia', serif; font-size:24px; animation:fadeIn 2s ease-in-out;"
                                 }
                             }
                         ],
-                        "style": {
-                            "display": "flex",
-                            "flexDirection": "column",
-                            "justifyContent": "center",
-                            "alignItems": "center",
-                            "height": "100%",
-                            "backgroundColor": "rgba(0,0,0,0.35)",
-                            "padding": "20px"
+                        "attributes": {
+                            "id": "splash-logo-overlay",
+                            "style": "position:absolute; bottom:20px; width:100%; text-align:center;"
+                        }
+                    },
+                    {
+                        "type": "style",
+                        "content": [
+                            " @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } "
+                        ]
+                    }
+                ],
+                "attributes": {
+                    "id": "splash-screen-container",
+                    "style": "width:320px; height:568px; background: url('https://v3.fal.media/files/elephant/Z2_vhHcu4J94RzWhbIELc.png') no-repeat center center; background-size: cover; position: relative;"
+                }
+            }
+        },
+        {
+            "screen": {
+                "name": "Onboarding Screen 1 - Welcome",
+                "width": 320,
+                "height": 600
+            },
+            "component": {
+                "type": "div",
+                "content": [
+                    {
+                        "type": "div",
+                        "content": [
+                            {
+                                "type": "h2",
+                                "content": [
+                                    "Welcome to BrewMate"
+                                ],
+                                "attributes": {
+                                    "id": "welcome-title",
+                                    "style": "font-family:'Georgia', serif; font-size:22px; color:#5d4037; margin-bottom:15px;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "attributes": {
+                                    "id": "welcome-image",
+                                    "style": "width:100%; height:150px; background: url('https://v3.fal.media/files/panda/jyUmDO2hDda3dH9VhyUTA.png') no-repeat center center; background-size:cover; border-radius:8px; margin-bottom:15px;"
+                                }
+                            },
+                            {
+                                "type": "p",
+                                "content": [
+                                    "Discover the best brews in town. Order ahead and skip the line!"
+                                ],
+                                "attributes": {
+                                    "id": "welcome-text",
+                                    "style": "font-family:'Helvetica', sans-serif; font-size:14px; color:#4e342e; margin-bottom:20px;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    {
+                                        "type": "button",
+                                        "content": [
+                                            "Skip"
+                                        ],
+                                        "attributes": {
+                                            "id": "skip-btn",
+                                            "style": "background:#a1887f; color:#fff; border:none; padding:8px 12px; border-radius:5px; font-family:'Helvetica', sans-serif; box-shadow:0 2px 4px rgba(0,0,0,0.2);"
+                                        }
+                                    },
+                                    {
+                                        "type": "button",
+                                        "content": [
+                                            "Next"
+                                        ],
+                                        "attributes": {
+                                            "id": "next-btn1",
+                                            "style": "background:#6d4c41; color:#fff; border:none; padding:8px 12px; border-radius:5px; font-family:'Helvetica', sans-serif; box-shadow:0 2px 4px rgba(0,0,0,0.2);"
+                                        }
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "onboarding1-buttons",
+                                    "style": "display:flex; justify-content:space-between;"
+                                }
+                            }
+                        ],
+                        "attributes": {
+                            "id": "welcome-card",
+                            "style": "background:rgba(255,255,255,0.9); border-radius:10px; padding:20px; width:90%; max-width:300px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1);"
                         }
                     }
                 ],
-                "style": {
-                    "backgroundImage": "url('https://v3.fal.media/files/penguin/lqzJvbibTebckzxTh10kG.png')",
-                    "backgroundSize": "cover",
-                    "backgroundPosition": "center",
-                    "width": "100%",
-                    "height": "100%",
-                    "display": "flex",
-                    "justifyContent": "center",
-                    "alignItems": "center",
-                    "zIndex": 1
+                "attributes": {
+                    "id": "onboarding1-container",
+                    "style": "width:320px; min-height:600px; background:linear-gradient(135deg, #f3e2c7, #deb887); display:flex; align-items:center; justify-content:center; padding:20px;"
                 }
             }
-        ]
-    },
-    {
-        "screen": {
-            "name": "Onboarding Screen",
-            "width": 270,
-            "height": 500
         },
-        "component": [
-            {
-                "id": "onboarding-root",
-                "type": "container",
-                "children": [
+        {
+            "screen": {
+                "name": "Onboarding Screen 2 - Customization",
+                "width": 320,
+                "height": 600
+            },
+            "component": {
+                "type": "div",
+                "content": [
                     {
-                        "id": "onboarding-slider",
-                        "type": "container",
-                        "children": [
+                        "type": "div",
+                        "content": [
                             {
-                                "id": "onboard-step-1",
-                                "type": "container",
-                                "children": [
-                                    {
-                                        "id": "step1-image",
-                                        "type": "image",
-                                        "src": "https://v3.fal.media/files/monkey/Z4-IaoCHWJhX4pLJfxp8A.png",
-                                        "style": {
-                                            "width": "100%",
-                                            "height": "240px",
-                                            "objectFit": "cover",
-                                            "borderRadius": "8px"
-                                        }
-                                    },
-                                    {
-                                        "id": "step1-text",
-                                        "type": "container",
-                                        "children": [
-                                            {
-                                                "id": "step1-title",
-                                                "type": "text",
-                                                "content": "Crafted With Passion.",
-                                                "style": {
-                                                    "fontSize": "20px",
-                                                    "fontWeight": "700",
-                                                    "color": "#333333",
-                                                    "textAlign": "center",
-                                                    "marginTop": "15px"
-                                                }
-                                            },
-                                            {
-                                                "id": "step1-subtitle",
-                                                "type": "text",
-                                                "content": "Our coffee is made from freshly roasted beans with love.",
-                                                "style": {
-                                                    "fontSize": "14px",
-                                                    "color": "#555555",
-                                                    "textAlign": "center",
-                                                    "marginTop": "5px",
-                                                    "paddingLeft": "10px",
-                                                    "paddingRight": "10px"
-                                                }
-                                            }
-                                        ],
-                                        "style": {
-                                            "marginTop": "10px"
-                                        }
-                                    }
+                                "type": "h2",
+                                "content": [
+                                    "Your Coffee, Your Way"
                                 ],
-                                "style": {
-                                    "padding": "10px",
-                                    "width": "100%",
-                                    "flexShrink": 0
+                                "attributes": {
+                                    "id": "customization-title",
+                                    "style": "font-family:'Georgia', serif; font-size:22px; color:#5d4037; margin-bottom:15px;"
                                 }
                             },
                             {
-                                "id": "onboard-step-2",
-                                "type": "container",
-                                "children": [
+                                "type": "div",
+                                "content": [
                                     {
-                                        "id": "step2-image",
-                                        "type": "image",
-                                        "src": "https://v3.fal.media/files/zebra/euEQYvgSNHM1CeDV4Smcl.png",
-                                        "style": {
-                                            "width": "100%",
-                                            "height": "240px",
-                                            "objectFit": "cover",
-                                            "borderRadius": "8px"
+                                        "type": "div",
+                                        "attributes": {
+                                            "id": "carousel-item1",
+                                            "style": "min-width:80px; height:80px; border-radius:8px; background: url('https://v3.fal.media/files/lion/R66RwjYcREqTxK0WwinPl.png') no-repeat center center; background-size:cover; margin-right:8px;"
                                         }
                                     },
                                     {
-                                        "id": "step2-text",
-                                        "type": "container",
-                                        "children": [
-                                            {
-                                                "id": "step2-title",
-                                                "type": "text",
-                                                "content": "A Place to Connect.",
-                                                "style": {
-                                                    "fontSize": "20px",
-                                                    "fontWeight": "700",
-                                                    "color": "#333333",
-                                                    "textAlign": "center",
-                                                    "marginTop": "15px"
-                                                }
-                                            },
-                                            {
-                                                "id": "step2-subtitle",
-                                                "type": "text",
-                                                "content": "Come hang out, work, or relax with a perfect brew.",
-                                                "style": {
-                                                    "fontSize": "14px",
-                                                    "color": "#555555",
-                                                    "textAlign": "center",
-                                                    "marginTop": "5px",
-                                                    "paddingLeft": "10px",
-                                                    "paddingRight": "10px"
-                                                }
-                                            }
-                                        ],
-                                        "style": {
-                                            "marginTop": "10px"
+                                        "type": "div",
+                                        "attributes": {
+                                            "id": "carousel-item2",
+                                            "style": "min-width:80px; height:80px; border-radius:8px; background: url('https://v3.fal.media/files/penguin/Y6VlPIBJ5mxjt2DFtidJe.png') no-repeat center center; background-size:cover; margin-right:8px;"
+                                        }
+                                    },
+                                    {
+                                        "type": "div",
+                                        "attributes": {
+                                            "id": "carousel-item3",
+                                            "style": "min-width:80px; height:80px; border-radius:8px; background: url('https://v3.fal.media/files/monkey/8r64qAm_cZFY7Vn508MSe.png') no-repeat center center; background-size:cover;"
                                         }
                                     }
                                 ],
-                                "style": {
-                                    "padding": "10px",
-                                    "width": "100%",
-                                    "flexShrink": 0
+                                "attributes": {
+                                    "id": "carousel-container",
+                                    "style": "display:flex; overflow-x:auto; margin-bottom:15px; padding-bottom:10px; scrollbar-width: thin; scrollbar-color: transparent transparent;"
                                 }
                             },
                             {
-                                "id": "onboard-step-3",
-                                "type": "container",
-                                "children": [
+                                "type": "p",
+                                "content": [
+                                    "Control every detail of your brew, just the way you like it."
+                                ],
+                                "attributes": {
+                                    "id": "customization-text",
+                                    "style": "font-family:'Helvetica', sans-serif; font-size:14px; color:#4e342e; margin-bottom:20px;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
                                     {
-                                        "id": "step3-image",
-                                        "type": "image",
-                                        "src": "https://v3.fal.media/files/koala/Ds2_NBvqfUaX6elOiIAzv.png",
-                                        "style": {
-                                            "width": "100%",
-                                            "height": "240px",
-                                            "objectFit": "cover",
-                                            "borderRadius": "8px"
+                                        "type": "button",
+                                        "content": [
+                                            "Back"
+                                        ],
+                                        "attributes": {
+                                            "id": "back-btn2",
+                                            "style": "background:#a1887f; color:#fff; border:none; padding:8px 12px; border-radius:5px; font-family:'Helvetica', sans-serif; box-shadow:0 2px 4px rgba(0,0,0,0.2);"
                                         }
                                     },
                                     {
-                                        "id": "step3-text",
-                                        "type": "container",
-                                        "children": [
-                                            {
-                                                "id": "step3-title",
-                                                "type": "text",
-                                                "content": "Order Ahead & Save Time.",
-                                                "style": {
-                                                    "fontSize": "20px",
-                                                    "fontWeight": "700",
-                                                    "color": "#333333",
-                                                    "textAlign": "center",
-                                                    "marginTop": "15px"
-                                                }
-                                            },
-                                            {
-                                                "id": "step3-subtitle",
-                                                "type": "text",
-                                                "content": "Skip the line and enjoy your coffee faster.",
-                                                "style": {
-                                                    "fontSize": "14px",
-                                                    "color": "#555555",
-                                                    "textAlign": "center",
-                                                    "marginTop": "5px",
-                                                    "paddingLeft": "10px",
-                                                    "paddingRight": "10px"
-                                                }
-                                            }
+                                        "type": "button",
+                                        "content": [
+                                            "Next"
                                         ],
-                                        "style": {
-                                            "marginTop": "10px"
+                                        "attributes": {
+                                            "id": "next-btn2",
+                                            "style": "background:#6d4c41; color:#fff; border:none; padding:8px 12px; border-radius:5px; font-family:'Helvetica', sans-serif; box-shadow:0 2px 4px rgba(0,0,0,0.2);"
                                         }
                                     }
                                 ],
-                                "style": {
-                                    "padding": "10px",
-                                    "width": "100%",
-                                    "flexShrink": 0
+                                "attributes": {
+                                    "id": "onboarding2-buttons",
+                                    "style": "display:flex; justify-content:space-between;"
                                 }
                             }
                         ],
-                        "style": {
-                            "display": "flex",
-                            "flexDirection": "row",
-                            "overflowX": "scroll",
-                            "scrollbarWidth": "thin",
-                            "scrollbarColor": "transparent transparent",
-                            "paddingBottom": "10px"
-                        }
-                    },
-                    {
-                        "id": "onboarding-footer",
-                        "type": "container",
-                        "children": [
-                            {
-                                "id": "dots-indicator",
-                                "type": "container",
-                                "children": [
-                                    {
-                                        "id": "dot-1",
-                                        "type": "container",
-                                        "style": {
-                                            "width": "8px",
-                                            "height": "8px",
-                                            "backgroundColor": "#888888",
-                                            "borderRadius": "50%",
-                                            "margin": "0 4px"
-                                        }
-                                    },
-                                    {
-                                        "id": "dot-2",
-                                        "type": "container",
-                                        "style": {
-                                            "width": "8px",
-                                            "height": "8px",
-                                            "backgroundColor": "#888888",
-                                            "borderRadius": "50%",
-                                            "margin": "0 4px"
-                                        }
-                                    },
-                                    {
-                                        "id": "dot-3",
-                                        "type": "container",
-                                        "style": {
-                                            "width": "8px",
-                                            "height": "8px",
-                                            "backgroundColor": "#555555",
-                                            "borderRadius": "50%",
-                                            "margin": "0 4px"
-                                        }
-                                    }
-                                ],
-                                "style": {
-                                    "display": "flex",
-                                    "justifyContent": "center",
-                                    "marginBottom": "10px"
-                                }
-                            },
-                            {
-                                "id": "get-started-button",
-                                "type": "button",
-                                "content": "Get Started",
-                                "style": {
-                                    "width": "100%",
-                                    "padding": "12px",
-                                    "backgroundColor": "#3E8E7E",
-                                    "color": "#ffffff",
-                                    "fontSize": "16px",
-                                    "fontWeight": "600",
-                                    "border": "none",
-                                    "borderRadius": "25px",
-                                    "cursor": "pointer"
-                                }
-                            }
-                        ],
-                        "style": {
-                            "padding": "0 20px",
-                            "marginTop": "10px"
+                        "attributes": {
+                            "id": "customization-card",
+                            "style": "background:rgba(255,255,255,0.9); border-radius:10px; padding:20px; width:90%; max-width:300px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1);"
                         }
                     }
                 ],
-                "style": {
-                    "display": "flex",
-                    "flexDirection": "column",
-                    "justifyContent": "space-between",
-                    "height": "100%",
-                    "paddingTop": "20px",
-                    "paddingBottom": "20px"
+                "attributes": {
+                    "id": "onboarding2-container",
+                    "style": "width:320px; min-height:600px; background:linear-gradient(135deg, #f3e2c7, #deb887); display:flex; align-items:center; justify-content:center; padding:20px;"
                 }
             }
-        ]
-    },
-    {
-        "screen": {
-            "name": "Home Screen",
-            "width": 270,
-            "height": 600
         },
-        "component": [
-            {
-                "id": "home-root",
-                "type": "container",
-                "children": [
+        {
+            "screen": {
+                "name": "Onboarding Screen 3 - Rewards",
+                "width": 320,
+                "height": 600
+            },
+            "component": {
+                "type": "div",
+                "content": [
                     {
-                        "id": "nav-bar",
-                        "type": "container",
-                        "children": [
+                        "type": "div",
+                        "content": [
                             {
-                                "id": "nav-logo",
-                                "type": "text",
-                                "content": "CoffeeCraft",
-                                "style": {
-                                    "fontSize": "18px",
-                                    "fontWeight": "700",
-                                    "color": "#3E8E7E"
-                                }
-                            },
-                            {
-                                "id": "nav-notification",
-                                "type": "image",
-                                "src": "https://img.icons8.com/ios-filled/50/000000/appointment-reminders.png",
-                                "style": {
-                                    "width": "20px",
-                                    "height": "20px",
-                                    "objectFit": "contain"
-                                }
-                            }
-                        ],
-                        "style": {
-                            "display": "flex",
-                            "flexDirection": "row",
-                            "justifyContent": "space-between",
-                            "alignItems": "center",
-                            "padding": "10px 15px",
-                            "borderBottom": "1px solid #eeeeee"
-                        }
-                    },
-                    {
-                        "id": "greeting-section",
-                        "type": "container",
-                        "children": [
-                            {
-                                "id": "greeting-text",
-                                "type": "text",
-                                "content": "Good Morning, Alex",
-                                "style": {
-                                    "fontSize": "16px",
-                                    "fontWeight": "600",
-                                    "color": "#333333",
-                                    "marginBottom": "4px"
-                                }
-                            },
-                            {
-                                "id": "location-text",
-                                "type": "text",
-                                "content": "Downtown Coffee - Open Until 8PM",
-                                "style": {
-                                    "fontSize": "12px",
-                                    "color": "#777777"
-                                }
-                            }
-                        ],
-                        "style": {
-                            "padding": "10px 15px"
-                        }
-                    },
-                    {
-                        "id": "search-bar",
-                        "type": "container",
-                        "children": [
-                            {
-                                "id": "search-input",
-                                "type": "input",
-                                "placeholder": "Search drinks, snacks...",
-                                "style": {
-                                    "width": "100%",
-                                    "padding": "8px 12px",
-                                    "borderRadius": "20px",
-                                    "border": "1px solid #cccccc",
-                                    "fontSize": "14px"
-                                }
-                            },
-                            {
-                                "id": "search-icon",
-                                "type": "image",
-                                "src": "https://img.icons8.com/ios-filled/50/000000/search.png",
-                                "style": {
-                                    "width": "16px",
-                                    "height": "16px",
-                                    "position": "relative",
-                                    "left": "-30px",
-                                    "top": "8px"
-                                }
-                            }
-                        ],
-                        "style": {
-                            "padding": "0 15px",
-                            "marginBottom": "10px"
-                        }
-                    },
-                    {
-                        "id": "category-scroll",
-                        "type": "container",
-                        "children": [
-                            {
-                                "id": "cat-coffee",
-                                "type": "button",
-                                "content": "Coffee",
-                                "style": {
-                                    "padding": "6px 12px",
-                                    "backgroundColor": "#e0f2f1",
-                                    "color": "#00796b",
-                                    "border": "none",
-                                    "borderRadius": "15px",
-                                    "fontSize": "12px",
-                                    "marginRight": "6px"
-                                }
-                            },
-                            {
-                                "id": "cat-tea",
-                                "type": "button",
-                                "content": "Tea",
-                                "style": {
-                                    "padding": "6px 12px",
-                                    "backgroundColor": "#e0f2f1",
-                                    "color": "#00796b",
-                                    "border": "none",
-                                    "borderRadius": "15px",
-                                    "fontSize": "12px",
-                                    "marginRight": "6px"
-                                }
-                            },
-                            {
-                                "id": "cat-pastry",
-                                "type": "button",
-                                "content": "Pastry",
-                                "style": {
-                                    "padding": "6px 12px",
-                                    "backgroundColor": "#e0f2f1",
-                                    "color": "#00796b",
-                                    "border": "none",
-                                    "borderRadius": "15px",
-                                    "fontSize": "12px",
-                                    "marginRight": "6px"
-                                }
-                            },
-                            {
-                                "id": "cat-snacks",
-                                "type": "button",
-                                "content": "Snacks",
-                                "style": {
-                                    "padding": "6px 12px",
-                                    "backgroundColor": "#e0f2f1",
-                                    "color": "#00796b",
-                                    "border": "none",
-                                    "borderRadius": "15px",
-                                    "fontSize": "12px",
-                                    "marginRight": "6px"
-                                }
-                            },
-                            {
-                                "id": "cat-specials",
-                                "type": "button",
-                                "content": "Specials",
-                                "style": {
-                                    "padding": "6px 12px",
-                                    "backgroundColor": "#e0f2f1",
-                                    "color": "#00796b",
-                                    "border": "none",
-                                    "borderRadius": "15px",
-                                    "fontSize": "12px"
-                                }
-                            }
-                        ],
-                        "style": {
-                            "display": "flex",
-                            "flexDirection": "row",
-                            "overflowX": "scroll",
-                            "padding": "0 15px",
-                            "marginBottom": "10px"
-                        }
-                    },
-                    {
-                        "id": "featured-carousel",
-                        "type": "container",
-                        "children": [
-                            {
-                                "id": "promo-card-1",
-                                "type": "container",
-                                "children": [
-                                    {
-                                        "id": "promo-image-1",
-                                        "type": "image",
-                                        "src": "https://v3.fal.media/files/tiger/XKmWaOkJ3tvJE-NqVKgy8.png",
-                                        "style": {
-                                            "width": "100%",
-                                            "height": "120px",
-                                            "objectFit": "cover",
-                                            "borderRadius": "8px"
-                                        }
-                                    },
-                                    {
-                                        "id": "promo-text-1",
-                                        "type": "text",
-                                        "content": "20% Off Cold Brew Today!",
-                                        "style": {
-                                            "fontSize": "14px",
-                                            "fontWeight": "600",
-                                            "color": "#ffffff",
-                                            "position": "relative",
-                                            "top": "-30px",
-                                            "textAlign": "center"
-                                        }
-                                    }
+                                "type": "h2",
+                                "content": [
+                                    "Sip & Earn"
                                 ],
-                                "style": {
-                                    "backgroundColor": "#00000080",
-                                    "borderRadius": "8px",
-                                    "marginRight": "10px",
-                                    "padding": "5px",
-                                    "width": "200px"
+                                "attributes": {
+                                    "id": "rewards-title",
+                                    "style": "font-family:'Georgia', serif; font-size:22px; color:#5d4037; margin-bottom:15px;"
                                 }
                             },
                             {
-                                "id": "promo-card-2",
-                                "type": "container",
-                                "children": [
-                                    {
-                                        "id": "promo-image-2",
-                                        "type": "image",
-                                        "src": "https://v3.fal.media/files/monkey/Z4-IaoCHWJhX4pLJfxp8A.png",
-                                        "style": {
-                                            "width": "100%",
-                                            "height": "120px",
-                                            "objectFit": "cover",
-                                            "borderRadius": "8px"
-                                        }
-                                    },
-                                    {
-                                        "id": "promo-text-2",
-                                        "type": "text",
-                                        "content": "Try Our New Matcha Latte",
-                                        "style": {
-                                            "fontSize": "14px",
-                                            "fontWeight": "600",
-                                            "color": "#ffffff",
-                                            "position": "relative",
-                                            "top": "-30px",
-                                            "textAlign": "center"
-                                        }
-                                    }
-                                ],
-                                "style": {
-                                    "backgroundColor": "#00000080",
-                                    "borderRadius": "8px",
-                                    "padding": "5px",
-                                    "width": "200px"
+                                "type": "div",
+                                "attributes": {
+                                    "id": "rewards-image",
+                                    "style": "width:100%; height:150px; background: url('https://v3.fal.media/files/penguin/Y6VlPIBJ5mxjt2DFtidJe.png') no-repeat center center; background-size:cover; border-radius:8px; margin-bottom:15px;"
                                 }
-                            }
-                        ],
-                        "style": {
-                            "display": "flex",
-                            "flexDirection": "row",
-                            "overflowX": "scroll",
-                            "padding": "0 15px",
-                            "marginBottom": "10px"
-                        }
-                    },
-                    {
-                        "id": "popular-grid",
-                        "type": "container",
-                        "children": [
+                            },
                             {
-                                "id": "popular-item-1",
-                                "type": "container",
-                                "children": [
+                                "type": "p",
+                                "content": [
+                                    "Earn points every time you order. Get free drinks and special treats!"
+                                ],
+                                "attributes": {
+                                    "id": "rewards-text",
+                                    "style": "font-family:'Helvetica', sans-serif; font-size:14px; color:#4e342e; margin-bottom:20px;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
                                     {
-                                        "id": "item-image-1",
-                                        "type": "image",
-                                        "src": "https://v3.fal.media/files/tiger/XKmWaOkJ3tvJE-NqVKgy8.png",
-                                        "style": {
-                                            "width": "100%",
-                                            "height": "80px",
-                                            "objectFit": "cover",
-                                            "borderRadius": "8px"
-                                        }
-                                    },
-                                    {
-                                        "id": "item-name-1",
-                                        "type": "text",
-                                        "content": "Cold Brew",
-                                        "style": {
-                                            "fontSize": "14px",
-                                            "fontWeight": "600",
-                                            "marginTop": "5px",
-                                            "color": "#333333",
-                                            "textAlign": "center"
-                                        }
-                                    },
-                                    {
-                                        "id": "item-price-1",
-                                        "type": "text",
-                                        "content": "$3.50",
-                                        "style": {
-                                            "fontSize": "12px",
-                                            "color": "#777777",
-                                            "textAlign": "center",
-                                            "marginTop": "3px"
-                                        }
-                                    },
-                                    {
-                                        "id": "add-to-cart-1",
                                         "type": "button",
-                                        "content": "+",
-                                        "style": {
-                                            "backgroundColor": "#3E8E7E",
-                                            "color": "#ffffff",
-                                            "border": "none",
-                                            "borderRadius": "50%",
-                                            "width": "24px",
-                                            "height": "24px",
-                                            "alignSelf": "center",
-                                            "marginTop": "5px",
-                                            "cursor": "pointer"
-                                        },
-                                        "hoverStyle": {
-                                            "transform": "translateY(-2px)"
-                                        }
-                                    }
-                                ],
-                                "style": {
-                                    "padding": "8px",
-                                    "margin": "4px",
-                                    "backgroundColor": "#ffffff",
-                                    "borderRadius": "8px",
-                                    "boxShadow": "0 2px 4px rgba(0,0,0,0.1)",
-                                    "width": "45%"
-                                }
-                            },
-                            {
-                                "id": "popular-item-2",
-                                "type": "container",
-                                "children": [
-                                    {
-                                        "id": "item-image-2",
-                                        "type": "image",
-                                        "src": "https://v3.fal.media/files/monkey/Z4-IaoCHWJhX4pLJfxp8A.png",
-                                        "style": {
-                                            "width": "100%",
-                                            "height": "80px",
-                                            "objectFit": "cover",
-                                            "borderRadius": "8px"
+                                        "content": [
+                                            "Back"
+                                        ],
+                                        "attributes": {
+                                            "id": "back-btn3",
+                                            "style": "background:#a1887f; color:#fff; border:none; padding:8px 12px; border-radius:5px; font-family:'Helvetica', sans-serif; box-shadow:0 2px 4px rgba(0,0,0,0.2);"
                                         }
                                     },
                                     {
-                                        "id": "item-name-2",
-                                        "type": "text",
-                                        "content": "Espresso",
-                                        "style": {
-                                            "fontSize": "14px",
-                                            "fontWeight": "600",
-                                            "marginTop": "5px",
-                                            "color": "#333333",
-                                            "textAlign": "center"
-                                        }
-                                    },
-                                    {
-                                        "id": "item-price-2",
-                                        "type": "text",
-                                        "content": "$2.75",
-                                        "style": {
-                                            "fontSize": "12px",
-                                            "color": "#777777",
-                                            "textAlign": "center",
-                                            "marginTop": "3px"
-                                        }
-                                    },
-                                    {
-                                        "id": "add-to-cart-2",
                                         "type": "button",
-                                        "content": "+",
-                                        "style": {
-                                            "backgroundColor": "#3E8E7E",
-                                            "color": "#ffffff",
-                                            "border": "none",
-                                            "borderRadius": "50%",
-                                            "width": "24px",
-                                            "height": "24px",
-                                            "alignSelf": "center",
-                                            "marginTop": "5px",
-                                            "cursor": "pointer"
-                                        },
-                                        "hoverStyle": {
-                                            "transform": "translateY(-2px)"
+                                        "content": [
+                                            "Get Started"
+                                        ],
+                                        "attributes": {
+                                            "id": "get-started-btn",
+                                            "style": "background:#6d4c41; color:#fff; border:none; padding:8px 12px; border-radius:5px; font-family:'Helvetica', sans-serif; box-shadow:0 2px 4px rgba(0,0,0,0.2);"
                                         }
                                     }
                                 ],
-                                "style": {
-                                    "padding": "8px",
-                                    "margin": "4px",
-                                    "backgroundColor": "#ffffff",
-                                    "borderRadius": "8px",
-                                    "boxShadow": "0 2px 4px rgba(0,0,0,0.1)",
-                                    "width": "45%"
+                                "attributes": {
+                                    "id": "onboarding3-buttons",
+                                    "style": "display:flex; justify-content:space-between;"
                                 }
                             }
                         ],
-                        "style": {
-                            "display": "flex",
-                            "flexWrap": "wrap",
-                            "justifyContent": "space-between",
-                            "padding": "0 15px",
-                            "marginBottom": "50px"
-                        }
-                    },
-                    {
-                        "id": "bottom-nav",
-                        "type": "container",
-                        "children": [
-                            {
-                                "id": "nav-home",
-                                "type": "button",
-                                "content": "Home",
-                                "style": {
-                                    "fontSize": "12px",
-                                    "color": "#3E8E7E",
-                                    "background": "none",
-                                    "border": "none"
-                                }
-                            },
-                            {
-                                "id": "nav-menu",
-                                "type": "button",
-                                "content": "Menu",
-                                "style": {
-                                    "fontSize": "12px",
-                                    "color": "#777777",
-                                    "background": "none",
-                                    "border": "none"
-                                }
-                            },
-                            {
-                                "id": "nav-order",
-                                "type": "button",
-                                "content": "Order",
-                                "style": {
-                                    "fontSize": "12px",
-                                    "color": "#777777",
-                                    "background": "none",
-                                    "border": "none"
-                                }
-                            },
-                            {
-                                "id": "nav-rewards",
-                                "type": "button",
-                                "content": "Rewards",
-                                "style": {
-                                    "fontSize": "12px",
-                                    "color": "#777777",
-                                    "background": "none",
-                                    "border": "none"
-                                }
-                            },
-                            {
-                                "id": "nav-profile",
-                                "type": "button",
-                                "content": "Profile",
-                                "style": {
-                                    "fontSize": "12px",
-                                    "color": "#777777",
-                                    "background": "none",
-                                    "border": "none"
-                                }
-                            }
-                        ],
-                        "style": {
-                            "display": "flex",
-                            "justifyContent": "space-around",
-                            "alignItems": "center",
-                            "padding": "10px 0",
-                            "borderTop": "1px solid #eeeeee",
-                            "position": "fixed",
-                            "bottom": 0,
-                            "width": "100%",
-                            "backgroundColor": "#ffffff"
+                        "attributes": {
+                            "id": "rewards-card",
+                            "style": "background:rgba(255,255,255,0.9); border-radius:10px; padding:20px; width:90%; max-width:300px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1);"
                         }
                     }
                 ],
-                "style": {
-                    "backgroundColor": "#f9f9f9",
-                    "height": "100%",
-                    "overflowY": "auto"
+                "attributes": {
+                    "id": "onboarding3-container",
+                    "style": "width:320px; min-height:600px; background:linear-gradient(135deg, #f3e2c7, #deb887); display:flex; align-items:center; justify-content:center; padding:20px;"
                 }
             }
-        ]
-    },
-    {
-        "screen": {
-            "name": "Menu Screen",
-            "width": 270,
-            "height": 600
         },
-        "component": [
-            {
-                "id": "menu-root",
-                "type": "container",
-                "children": [
+        {
+            "screen": {
+                "name": "Home Screen",
+                "width": 320,
+                "height": 700
+            },
+            "component": {
+                "type": "div",
+                "content": [
                     {
-                        "id": "filter-bar",
-                        "type": "container",
-                        "children": [
+                        "type": "div",
+                        "content": [
                             {
-                                "id": "filter-all",
-                                "type": "button",
-                                "content": "All",
-                                "style": {
-                                    "padding": "6px 10px",
-                                    "backgroundColor": "#3E8E7E",
-                                    "color": "#ffffff",
-                                    "border": "none",
-                                    "borderRadius": "15px",
-                                    "fontSize": "12px",
-                                    "marginRight": "4px"
+                                "type": "span",
+                                "content": [
+                                    "Good Morning, Alex"
+                                ],
+                                "attributes": {
+                                    "id": "greeting-text",
+                                    "style": "font-size:16px;"
                                 }
                             },
                             {
-                                "id": "filter-hot",
-                                "type": "button",
-                                "content": "Hot Drinks",
-                                "style": {
-                                    "padding": "6px 10px",
-                                    "backgroundColor": "#e0f2f1",
-                                    "color": "#00796b",
-                                    "border": "none",
-                                    "borderRadius": "15px",
-                                    "fontSize": "12px",
-                                    "marginRight": "4px"
-                                }
-                            },
-                            {
-                                "id": "filter-cold",
-                                "type": "button",
-                                "content": "Cold Drinks",
-                                "style": {
-                                    "padding": "6px 10px",
-                                    "backgroundColor": "#e0f2f1",
-                                    "color": "#00796b",
-                                    "border": "none",
-                                    "borderRadius": "15px",
-                                    "fontSize": "12px",
-                                    "marginRight": "4px"
-                                }
-                            },
-                            {
-                                "id": "filter-food",
-                                "type": "button",
-                                "content": "Food",
-                                "style": {
-                                    "padding": "6px 10px",
-                                    "backgroundColor": "#e0f2f1",
-                                    "color": "#00796b",
-                                    "border": "none",
-                                    "borderRadius": "15px",
-                                    "fontSize": "12px",
-                                    "marginRight": "4px"
-                                }
-                            },
-                            {
-                                "id": "filter-seasonal",
-                                "type": "button",
-                                "content": "Seasonal",
-                                "style": {
-                                    "padding": "6px 10px",
-                                    "backgroundColor": "#e0f2f1",
-                                    "color": "#00796b",
-                                    "border": "none",
-                                    "borderRadius": "15px",
-                                    "fontSize": "12px"
+                                "type": "span",
+                                "content": [
+                                    "🛒"
+                                ],
+                                "attributes": {
+                                    "id": "cart-icon",
+                                    "style": "font-size:18px;"
                                 }
                             }
                         ],
-                        "style": {
-                            "display": "flex",
-                            "flexDirection": "row",
-                            "padding": "10px 15px",
-                            "overflowX": "auto"
+                        "attributes": {
+                            "id": "app-bar",
+                            "style": "display:flex; justify-content:space-between; align-items:center; padding:15px; background:#6d4c41; color:#fff; border-bottom:1px solid rgba(0,0,0,0.1);"
                         }
                     },
                     {
-                        "id": "menu-list",
-                        "type": "container",
-                        "children": [
+                        "type": "div",
+                        "content": [
                             {
-                                "id": "menu-item-1",
-                                "type": "container",
-                                "children": [
+                                "type": "div",
+                                "content": [
                                     {
-                                        "id": "menu-item-image-1",
-                                        "type": "image",
-                                        "src": "https://v3.fal.media/files/tiger/XKmWaOkJ3tvJE-NqVKgy8.png",
-                                        "style": {
-                                            "width": "60px",
-                                            "height": "60px",
-                                            "objectFit": "cover",
-                                            "borderRadius": "8px",
-                                            "marginRight": "10px"
+                                        "type": "div",
+                                        "attributes": {
+                                            "id": "coffee-banner",
+                                            "style": "width:100%; height:180px; background: url('https://v3.fal.media/files/monkey/8r64qAm_cZFY7Vn508MSe.png') no-repeat center center; background-size:cover;"
                                         }
                                     },
                                     {
-                                        "id": "menu-item-info-1",
-                                        "type": "container",
-                                        "children": [
+                                        "type": "div",
+                                        "content": [
                                             {
-                                                "id": "menu-item-name-1",
-                                                "type": "text",
-                                                "content": "Cappuccino",
-                                                "style": {
-                                                    "fontSize": "16px",
-                                                    "fontWeight": "600",
-                                                    "color": "#333333"
+                                                "type": "h3",
+                                                "content": [
+                                                    "Caramel Macchiato"
+                                                ],
+                                                "attributes": {
+                                                    "id": "coffee-name",
+                                                    "style": "font-family:'Georgia', serif; color:#5d4037; margin:5px 0;"
                                                 }
                                             },
                                             {
-                                                "id": "menu-item-desc-1",
-                                                "type": "text",
-                                                "content": "Rich and foamy espresso.",
-                                                "style": {
-                                                    "fontSize": "12px",
-                                                    "color": "#777777"
-                                                }
-                                            }
-                                        ],
-                                        "style": {
-                                            "flex": 1
-                                        }
-                                    },
-                                    {
-                                        "id": "menu-item-price-1",
-                                        "type": "text",
-                                        "content": "$3.75",
-                                        "style": {
-                                            "fontSize": "14px",
-                                            "color": "#333333",
-                                            "marginRight": "10px"
-                                        }
-                                    },
-                                    {
-                                        "id": "menu-add-cart-1",
-                                        "type": "button",
-                                        "content": "+",
-                                        "style": {
-                                            "backgroundColor": "#3E8E7E",
-                                            "color": "#ffffff",
-                                            "padding": "6px",
-                                            "border": "none",
-                                            "borderRadius": "50%",
-                                            "cursor": "pointer"
-                                        }
-                                    }
-                                ],
-                                "style": {
-                                    "display": "flex",
-                                    "flexDirection": "row",
-                                    "alignItems": "center",
-                                    "padding": "10px 15px",
-                                    "borderBottom": "1px solid #eeeeee"
-                                }
-                            },
-                            {
-                                "id": "menu-item-2",
-                                "type": "container",
-                                "children": [
-                                    {
-                                        "id": "menu-item-image-2",
-                                        "type": "image",
-                                        "src": "https://v3.fal.media/files/monkey/Z4-IaoCHWJhX4pLJfxp8A.png",
-                                        "style": {
-                                            "width": "60px",
-                                            "height": "60px",
-                                            "objectFit": "cover",
-                                            "borderRadius": "8px",
-                                            "marginRight": "10px"
-                                        }
-                                    },
-                                    {
-                                        "id": "menu-item-info-2",
-                                        "type": "container",
-                                        "children": [
-                                            {
-                                                "id": "menu-item-name-2",
-                                                "type": "text",
-                                                "content": "Latte",
-                                                "style": {
-                                                    "fontSize": "16px",
-                                                    "fontWeight": "600",
-                                                    "color": "#333333"
+                                                "type": "p",
+                                                "content": [
+                                                    "A perfect blend of sweet and bold."
+                                                ],
+                                                "attributes": {
+                                                    "id": "promo-text",
+                                                    "style": "font-size:14px; color:#4e342e; margin:5px 0;"
                                                 }
                                             },
                                             {
-                                                "id": "menu-item-desc-2",
-                                                "type": "text",
-                                                "content": "Smooth espresso with steamed milk.",
-                                                "style": {
-                                                    "fontSize": "12px",
-                                                    "color": "#777777"
+                                                "type": "button",
+                                                "content": [
+                                                    "Order Now"
+                                                ],
+                                                "attributes": {
+                                                    "id": "order-now-btn",
+                                                    "style": "background:#a1887f; color:#fff; border:none; padding:8px 12px; border-radius:5px; font-size:14px; box-shadow:0 2px 4px rgba(0,0,0,0.2);"
                                                 }
                                             }
                                         ],
-                                        "style": {
-                                            "flex": 1
-                                        }
-                                    },
-                                    {
-                                        "id": "menu-item-price-2",
-                                        "type": "text",
-                                        "content": "$4.00",
-                                        "style": {
-                                            "fontSize": "14px",
-                                            "color": "#333333",
-                                            "marginRight": "10px"
-                                        }
-                                    },
-                                    {
-                                        "id": "menu-add-cart-2",
-                                        "type": "button",
-                                        "content": "+",
-                                        "style": {
-                                            "backgroundColor": "#3E8E7E",
-                                            "color": "#ffffff",
-                                            "padding": "6px",
-                                            "border": "none",
-                                            "borderRadius": "50%",
-                                            "cursor": "pointer"
+                                        "attributes": {
+                                            "id": "coffee-info",
+                                            "style": "padding:10px; text-align:center;"
                                         }
                                     }
                                 ],
-                                "style": {
-                                    "display": "flex",
-                                    "flexDirection": "row",
-                                    "alignItems": "center",
-                                    "padding": "10px 15px",
-                                    "borderBottom": "1px solid #eeeeee"
+                                "attributes": {
+                                    "id": "coffee-of-day-card",
+                                    "style": "position:relative; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);"
                                 }
                             }
                         ],
-                        "style": {
-                            "overflowY": "scroll",
-                            "height": "calc(100% - 60px)"
+                        "attributes": {
+                            "id": "hero-section",
+                            "style": "padding:15px;"
+                        }
+                    },
+                    {
+                        "type": "div",
+                        "content": [
+                            {
+                                "type": "button",
+                                "content": [
+                                    "Espresso"
+                                ],
+                                "attributes": {
+                                    "id": "cat-espresso",
+                                    "style": "background:#deb887; color:#fff; border:none; padding:8px 12px; border-radius:20px; margin-right:8px; font-size:12px;"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "content": [
+                                    "Cold Brew"
+                                ],
+                                "attributes": {
+                                    "id": "cat-coldbrew",
+                                    "style": "background:#deb887; color:#fff; border:none; padding:8px 12px; border-radius:20px; margin-right:8px; font-size:12px;"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "content": [
+                                    "Frappé"
+                                ],
+                                "attributes": {
+                                    "id": "cat-frappe",
+                                    "style": "background:#deb887; color:#fff; border:none; padding:8px 12px; border-radius:20px; margin-right:8px; font-size:12px;"
+                                }
+                            }
+                        ],
+                        "attributes": {
+                            "id": "category-nav",
+                            "style": "padding:15px; overflow-x:auto; white-space:nowrap; margin-bottom:15px; scrollbar-width: thin; scrollbar-color: transparent transparent;"
+                        }
+                    },
+                    {
+                        "type": "div",
+                        "content": [
+                            {
+                                "type": "div",
+                                "content": [
+                                    {
+                                        "type": "div",
+                                        "attributes": {
+                                            "id": "tile1-image",
+                                            "style": "width:100%; height:80px; background: url('https://v3.fal.media/files/lion/R66RwjYcREqTxK0WwinPl.png') no-repeat center center; background-size:cover; border-radius:5px;"
+                                        }
+                                    },
+                                    {
+                                        "type": "h4",
+                                        "content": [
+                                            "Latte"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile1-name",
+                                            "style": "font-size:14px; margin:5px 0; color:#5d4037;"
+                                        }
+                                    },
+                                    {
+                                        "type": "p",
+                                        "content": [
+                                            "$4.50"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile1-price",
+                                            "style": "font-size:12px; color:#4e342e; margin:2px 0;"
+                                        }
+                                    },
+                                    {
+                                        "type": "span",
+                                        "content": [
+                                            "＋"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile1-add",
+                                            "style": "font-size:16px; cursor:pointer;"
+                                        }
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "drink-tile1",
+                                    "style": "background:#fff; border:1px solid #eee; border-radius:8px; padding:10px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.1);"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    {
+                                        "type": "div",
+                                        "attributes": {
+                                            "id": "tile2-image",
+                                            "style": "width:100%; height:80px; background: url('https://v3.fal.media/files/panda/jyUmDO2hDda3dH9VhyUTA.png') no-repeat center center; background-size:cover; border-radius:5px;"
+                                        }
+                                    },
+                                    {
+                                        "type": "h4",
+                                        "content": [
+                                            "Cappuccino"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile2-name",
+                                            "style": "font-size:14px; margin:5px 0; color:#5d4037;"
+                                        }
+                                    },
+                                    {
+                                        "type": "p",
+                                        "content": [
+                                            "$4.00"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile2-price",
+                                            "style": "font-size:12px; color:#4e342e; margin:2px 0;"
+                                        }
+                                    },
+                                    {
+                                        "type": "span",
+                                        "content": [
+                                            "＋"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile2-add",
+                                            "style": "font-size:16px; cursor:pointer;"
+                                        }
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "drink-tile2",
+                                    "style": "background:#fff; border:1px solid #eee; border-radius:8px; padding:10px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.1);"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    {
+                                        "type": "div",
+                                        "attributes": {
+                                            "id": "tile3-image",
+                                            "style": "width:100%; height:80px; background: url('https://v3.fal.media/files/penguin/Y6VlPIBJ5mxjt2DFtidJe.png') no-repeat center center; background-size:cover; border-radius:5px;"
+                                        }
+                                    },
+                                    {
+                                        "type": "h4",
+                                        "content": [
+                                            "Mocha"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile3-name",
+                                            "style": "font-size:14px; margin:5px 0; color:#5d4037;"
+                                        }
+                                    },
+                                    {
+                                        "type": "p",
+                                        "content": [
+                                            "$4.75"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile3-price",
+                                            "style": "font-size:12px; color:#4e342e; margin:2px 0;"
+                                        }
+                                    },
+                                    {
+                                        "type": "span",
+                                        "content": [
+                                            "＋"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile3-add",
+                                            "style": "font-size:16px; cursor:pointer;"
+                                        }
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "drink-tile3",
+                                    "style": "background:#fff; border:1px solid #eee; border-radius:8px; padding:10px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.1);"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    {
+                                        "type": "div",
+                                        "attributes": {
+                                            "id": "tile4-image",
+                                            "style": "width:100%; height:80px; background: url('https://v3.fal.media/files/monkey/8r64qAm_cZFY7Vn508MSe.png') no-repeat center center; background-size:cover; border-radius:5px;"
+                                        }
+                                    },
+                                    {
+                                        "type": "h4",
+                                        "content": [
+                                            "Espresso"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile4-name",
+                                            "style": "font-size:14px; margin:5px 0; color:#5d4037;"
+                                        }
+                                    },
+                                    {
+                                        "type": "p",
+                                        "content": [
+                                            "$3.00"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile4-price",
+                                            "style": "font-size:12px; color:#4e342e; margin:2px 0;"
+                                        }
+                                    },
+                                    {
+                                        "type": "span",
+                                        "content": [
+                                            "＋"
+                                        ],
+                                        "attributes": {
+                                            "id": "tile4-add",
+                                            "style": "font-size:16px; cursor:pointer;"
+                                        }
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "drink-tile4",
+                                    "style": "background:#fff; border:1px solid #eee; border-radius:8px; padding:10px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.1);"
+                                }
+                            }
+                        ],
+                        "attributes": {
+                            "id": "popular-grid",
+                            "style": "display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:0 15px;"
                         }
                     }
                 ],
-                "style": {
-                    "backgroundColor": "#ffffff",
-                    "height": "100%"
+                "attributes": {
+                    "id": "home-screen-container",
+                    "style": "width:320px; min-height:700px; background:#fffaf0; font-family:'Helvetica', sans-serif; padding-bottom:20px; overflow-y:auto;"
                 }
             }
-        ]
-    },
-    {
-        "screen": {
-            "name": "Drink Detail Screen",
-            "width": 270,
-            "height": 600
         },
-        "component": [
-            {
-                "id": "drink-detail-root",
-                "type": "container",
-                "children": [
+        {
+            "screen": {
+                "name": "Menu Screen",
+                "width": 320,
+                "height": 650
+            },
+            "component": {
+                "type": "div",
+                "content": [
                     {
-                        "id": "detail-background",
-                        "type": "image",
-                        "src": "https://v3.fal.media/files/monkey/Z4-IaoCHWJhX4pLJfxp8A.png",
-                        "style": {
-                            "width": "100%",
-                            "height": "250px",
-                            "objectFit": "cover",
-                            "filter": "brightness(0.7)"
-                        }
-                    },
-                    {
-                        "id": "detail-overlay",
-                        "type": "container",
-                        "children": [
+                        "type": "div",
+                        "content": [
                             {
-                                "id": "drink-name",
-                                "type": "text",
-                                "content": "Caramel Latte",
-                                "style": {
-                                    "fontSize": "22px",
-                                    "fontWeight": "700",
-                                    "color": "#ffffff",
-                                    "marginBottom": "4px"
-                                }
-                            },
-                            {
-                                "id": "drink-price",
-                                "type": "text",
-                                "content": "$4.50",
-                                "style": {
-                                    "fontSize": "18px",
-                                    "color": "#ffffff",
-                                    "marginBottom": "8px"
-                                }
-                            },
-                            {
-                                "id": "favorite-icon",
-                                "type": "image",
-                                "src": "https://img.icons8.com/ios-filled/50/ffffff/like--v1.png",
-                                "style": {
-                                    "width": "20px",
-                                    "height": "20px"
-                                }
-                            },
-                            {
-                                "id": "customization-options",
-                                "type": "container",
-                                "children": [
-                                    {
-                                        "id": "size-selector",
-                                        "type": "container",
-                                        "children": [
-                                            {
-                                                "id": "size-s",
-                                                "type": "button",
-                                                "content": "S",
-                                                "style": {
-                                                    "padding": "8px",
-                                                    "border": "1px solid #ffffff",
-                                                    "borderRadius": "50%",
-                                                    "color": "#ffffff",
-                                                    "marginRight": "6px"
-                                                }
-                                            },
-                                            {
-                                                "id": "size-m",
-                                                "type": "button",
-                                                "content": "M",
-                                                "style": {
-                                                    "padding": "8px",
-                                                    "border": "1px solid #ffffff",
-                                                    "borderRadius": "50%",
-                                                    "color": "#ffffff",
-                                                    "marginRight": "6px"
-                                                }
-                                            },
-                                            {
-                                                "id": "size-l",
-                                                "type": "button",
-                                                "content": "L",
-                                                "style": {
-                                                    "padding": "8px",
-                                                    "border": "1px solid #ffffff",
-                                                    "borderRadius": "50%",
-                                                    "color": "#ffffff"
-                                                }
-                                            }
-                                        ],
-                                        "style": {
-                                            "display": "flex",
-                                            "flexDirection": "row",
-                                            "marginBottom": "10px"
-                                        }
-                                    },
-                                    {
-                                        "id": "milk-options",
-                                        "type": "input",
-                                        "placeholder": "Select Milk Option",
-                                        "style": {
-                                            "width": "100%",
-                                            "padding": "8px",
-                                            "borderRadius": "8px",
-                                            "border": "1px solid #cccccc",
-                                            "marginBottom": "10px"
-                                        }
-                                    },
-                                    {
-                                        "id": "addons-chips",
-                                        "type": "container",
-                                        "children": [
-                                            {
-                                                "id": "addon-shot",
-                                                "type": "button",
-                                                "content": "Extra Shot",
-                                                "style": {
-                                                    "padding": "6px 10px",
-                                                    "border": "1px solid #ffffff",
-                                                    "borderRadius": "15px",
-                                                    "color": "#ffffff",
-                                                    "marginRight": "6px"
-                                                }
-                                            },
-                                            {
-                                                "id": "addon-cream",
-                                                "type": "button",
-                                                "content": "Whipped Cream",
-                                                "style": {
-                                                    "padding": "6px 10px",
-                                                    "border": "1px solid #ffffff",
-                                                    "borderRadius": "15px",
-                                                    "color": "#ffffff",
-                                                    "marginRight": "6px"
-                                                }
-                                            },
-                                            {
-                                                "id": "addon-oat",
-                                                "type": "button",
-                                                "content": "Oat Milk",
-                                                "style": {
-                                                    "padding": "6px 10px",
-                                                    "border": "1px solid #ffffff",
-                                                    "borderRadius": "15px",
-                                                    "color": "#ffffff"
-                                                }
-                                            }
-                                        ],
-                                        "style": {
-                                            "display": "flex",
-                                            "flexDirection": "row",
-                                            "marginBottom": "10px"
-                                        }
-                                    },
-                                    {
-                                        "id": "notes-field",
-                                        "type": "input",
-                                        "placeholder": "Add a note...",
-                                        "style": {
-                                            "width": "100%",
-                                            "padding": "8px",
-                                            "borderRadius": "8px",
-                                            "border": "1px solid #cccccc"
-                                        }
-                                    }
-                                ],
-                                "style": {
-                                    "marginTop": "15px"
-                                }
-                            }
-                        ],
-                        "style": {
-                            "position": "relative",
-                            "top": "-180px",
-                            "backgroundColor": "rgba(0,0,0,0.5)",
-                            "padding": "15px",
-                            "borderTopLeftRadius": "15px",
-                            "borderTopRightRadius": "15px"
-                        }
-                    },
-                    {
-                        "id": "detail-footer",
-                        "type": "container",
-                        "children": [
-                            {
-                                "id": "quantity-changer",
-                                "type": "container",
-                                "children": [
-                                    {
-                                        "id": "decrease-qty",
-                                        "type": "button",
-                                        "content": "-",
-                                        "style": {
-                                            "padding": "8px",
-                                            "backgroundColor": "#eeeeee",
-                                            "border": "none",
-                                            "borderRadius": "50%",
-                                            "fontSize": "18px",
-                                            "minWidth": "30px"
-                                        }
-                                    },
-                                    {
-                                        "id": "current-qty",
-                                        "type": "text",
-                                        "content": "1",
-                                        "style": {
-                                            "fontSize": "16px",
-                                            "margin": "0 10px",
-                                            "color": "#ffffff"
-                                        }
-                                    },
-                                    {
-                                        "id": "increase-qty",
-                                        "type": "button",
-                                        "content": "+",
-                                        "style": {
-                                            "padding": "8px",
-                                            "backgroundColor": "#eeeeee",
-                                            "border": "none",
-                                            "borderRadius": "50%",
-                                            "fontSize": "18px",
-                                            "minWidth": "30px"
-                                        }
-                                    }
-                                ],
-                                "style": {
-                                    "display": "flex",
-                                    "alignItems": "center"
-                                }
-                            },
-                            {
-                                "id": "add-to-cart-detail",
                                 "type": "button",
-                                "content": "Add to Cart",
-                                "style": {
-                                    "width": "100%",
-                                    "padding": "12px",
-                                    "backgroundColor": "#ff7043",
-                                    "color": "#ffffff",
-                                    "fontSize": "16px",
-                                    "fontWeight": "700",
-                                    "border": "none",
-                                    "borderRadius": "25px",
-                                    "marginTop": "10px",
-                                    "cursor": "pointer"
+                                "content": [
+                                    "Hot"
+                                ],
+                                "attributes": {
+                                    "id": "seg-hot",
+                                    "style": "background:#6d4c41; color:#fff; border:none; padding:8px 12px; border-radius:20px; font-size:12px;"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "content": [
+                                    "Cold"
+                                ],
+                                "attributes": {
+                                    "id": "seg-cold",
+                                    "style": "background:#a1887f; color:#fff; border:none; padding:8px 12px; border-radius:20px; font-size:12px;"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "content": [
+                                    "Snacks"
+                                ],
+                                "attributes": {
+                                    "id": "seg-snacks",
+                                    "style": "background:#a1887f; color:#fff; border:none; padding:8px 12px; border-radius:20px; font-size:12px;"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "content": [
+                                    "Seasonal"
+                                ],
+                                "attributes": {
+                                    "id": "seg-seasonal",
+                                    "style": "background:#a1887f; color:#fff; border:none; padding:8px 12px; border-radius:20px; font-size:12px;"
                                 }
                             }
                         ],
-                        "style": {
-                            "padding": "0 15px",
-                            "marginTop": "15px"
+                        "attributes": {
+                            "id": "segmented-controller",
+                            "style": "display:flex; justify-content:space-around; margin-bottom:15px;"
+                        }
+                    },
+                    {
+                        "type": "div",
+                        "content": [
+                            {
+                                "type": "div",
+                                "content": [
+                                    {
+                                        "type": "div",
+                                        "attributes": {
+                                            "id": "menu-thumb1",
+                                            "style": "width:60px; height:60px; background: url('https://v3.fal.media/files/panda/jyUmDO2hDda3dH9VhyUTA.png') no-repeat center center; background-size:cover; border-radius:5px; margin-right:10px;"
+                                        }
+                                    },
+                                    {
+                                        "type": "div",
+                                        "content": [
+                                            {
+                                                "type": "h4",
+                                                "content": [
+                                                    "Espresso"
+                                                ],
+                                                "attributes": {
+                                                    "id": "menu-item-name1",
+                                                    "style": "font-size:14px; color:#5d4037; margin:2px 0; cursor:pointer;"
+                                                }
+                                            },
+                                            {
+                                                "type": "p",
+                                                "content": [
+                                                    "Strong and bold flavor."
+                                                ],
+                                                "attributes": {
+                                                    "id": "menu-item-desc1",
+                                                    "style": "font-size:12px; color:#4e342e; margin:2px 0;"
+                                                }
+                                            },
+                                            {
+                                                "type": "p",
+                                                "content": [
+                                                    "$3.00"
+                                                ],
+                                                "attributes": {
+                                                    "id": "menu-item-price1",
+                                                    "style": "font-size:12px; color:#4e342e; margin:2px 0;"
+                                                }
+                                            }
+                                        ],
+                                        "attributes": {
+                                            "id": "menu-info1",
+                                            "style": "flex:1;"
+                                        }
+                                    },
+                                    {
+                                        "type": "button",
+                                        "content": [
+                                            "Add"
+                                        ],
+                                        "attributes": {
+                                            "id": "add-cart1",
+                                            "style": "background:#6d4c41; color:#fff; border:none; padding:6px 10px; border-radius:5px; font-size:12px;"
+                                        }
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "menu-card1",
+                                    "style": "display:flex; align-items:center; border:1px solid #eee; padding:10px; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.1);"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    {
+                                        "type": "div",
+                                        "attributes": {
+                                            "id": "menu-thumb2",
+                                            "style": "width:60px; height:60px; background: url('https://v3.fal.media/files/monkey/8r64qAm_cZFY7Vn508MSe.png') no-repeat center center; background-size:cover; border-radius:5px; margin-right:10px;"
+                                        }
+                                    },
+                                    {
+                                        "type": "div",
+                                        "content": [
+                                            {
+                                                "type": "h4",
+                                                "content": [
+                                                    "Cappuccino"
+                                                ],
+                                                "attributes": {
+                                                    "id": "menu-item-name2",
+                                                    "style": "font-size:14px; color:#5d4037; margin:2px 0; cursor:pointer;"
+                                                }
+                                            },
+                                            {
+                                                "type": "p",
+                                                "content": [
+                                                    "Creamy and frothy."
+                                                ],
+                                                "attributes": {
+                                                    "id": "menu-item-desc2",
+                                                    "style": "font-size:12px; color:#4e342e; margin:2px 0;"
+                                                }
+                                            },
+                                            {
+                                                "type": "p",
+                                                "content": [
+                                                    "$4.00"
+                                                ],
+                                                "attributes": {
+                                                    "id": "menu-item-price2",
+                                                    "style": "font-size:12px; color:#4e342e; margin:2px 0;"
+                                                }
+                                            }
+                                        ],
+                                        "attributes": {
+                                            "id": "menu-info2",
+                                            "style": "flex:1;"
+                                        }
+                                    },
+                                    {
+                                        "type": "button",
+                                        "content": [
+                                            "Add"
+                                        ],
+                                        "attributes": {
+                                            "id": "add-cart2",
+                                            "style": "background:#6d4c41; color:#fff; border:none; padding:6px 10px; border-radius:5px; font-size:12px;"
+                                        }
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "menu-card2",
+                                    "style": "display:flex; align-items:center; border:1px solid #eee; padding:10px; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.1);"
+                                }
+                            }
+                        ],
+                        "attributes": {
+                            "id": "menu-list",
+                            "style": "display:flex; flex-direction:column; gap:10px;"
                         }
                     }
                 ],
-                "style": {
-                    "display": "flex",
-                    "flexDirection": "column",
-                    "height": "100%",
-                    "overflowY": "auto",
-                    "backgroundColor": "#f2f2f2"
+                "attributes": {
+                    "id": "menu-screen-container",
+                    "style": "width:320px; min-height:650px; background:#fffaf0; font-family:'Helvetica', sans-serif; padding:15px; overflow-y:auto;"
                 }
             }
-        ]
-    },
-    {
-        "screen": {
-            "name": "Order Summary Screen",
-            "width": 270,
-            "height": 600
         },
-        "component": [
-            {
-                "id": "order-summary-root",
-                "type": "container",
-                "children": [
+        {
+            "screen": {
+                "name": "Drink Detail Screen",
+                "width": 320,
+                "height": 700
+            },
+            "component": {
+                "type": "div",
+                "content": [
                     {
-                        "id": "order-items-list",
-                        "type": "container",
-                        "children": [
+                        "type": "div",
+                        "attributes": {
+                            "id": "drink-banner",
+                            "style": "width:100%; height:200px; background: url('https://v3.fal.media/files/penguin/Y6VlPIBJ5mxjt2DFtidJe.png') no-repeat center center; background-size:cover;"
+                        }
+                    },
+                    {
+                        "type": "div",
+                        "content": [
                             {
-                                "id": "order-item-1",
-                                "type": "container",
-                                "children": [
-                                    {
-                                        "id": "order-item-thumb-1",
-                                        "type": "image",
-                                        "src": "https://v3.fal.media/files/tiger/XKmWaOkJ3tvJE-NqVKgy8.png",
-                                        "style": {
-                                            "width": "50px",
-                                            "height": "50px",
-                                            "objectFit": "cover",
-                                            "borderRadius": "8px",
-                                            "marginRight": "10px"
-                                        }
-                                    },
-                                    {
-                                        "id": "order-item-info-1",
-                                        "type": "container",
-                                        "children": [
-                                            {
-                                                "id": "order-item-name-1",
-                                                "type": "text",
-                                                "content": "Cappuccino",
-                                                "style": {
-                                                    "fontSize": "16px",
-                                                    "fontWeight": "600",
-                                                    "color": "#333333"
-                                                }
-                                            },
-                                            {
-                                                "id": "order-item-custom-1",
-                                                "type": "text",
-                                                "content": "Extra shot, Almond Milk",
-                                                "style": {
-                                                    "fontSize": "12px",
-                                                    "color": "#777777"
-                                                }
-                                            }
-                                        ],
-                                        "style": {
-                                            "flex": 1
-                                        }
-                                    },
-                                    {
-                                        "id": "order-item-qty-1",
-                                        "type": "container",
-                                        "children": [
-                                            {
-                                                "id": "decrease-order-qty-1",
-                                                "type": "button",
-                                                "content": "-",
-                                                "style": {
-                                                    "padding": "4px 8px",
-                                                    "backgroundColor": "#eeeeee",
-                                                    "border": "none",
-                                                    "borderRadius": "4px"
-                                                }
-                                            },
-                                            {
-                                                "id": "current-order-qty-1",
-                                                "type": "text",
-                                                "content": "1",
-                                                "style": {
-                                                    "fontSize": "14px",
-                                                    "margin": "0 6px"
-                                                }
-                                            },
-                                            {
-                                                "id": "increase-order-qty-1",
-                                                "type": "button",
-                                                "content": "+",
-                                                "style": {
-                                                    "padding": "4px 8px",
-                                                    "backgroundColor": "#eeeeee",
-                                                    "border": "none",
-                                                    "borderRadius": "4px"
-                                                }
-                                            }
-                                        ],
-                                        "style": {
-                                            "display": "flex",
-                                            "alignItems": "center"
-                                        }
-                                    },
-                                    {
-                                        "id": "order-item-price-1",
-                                        "type": "text",
-                                        "content": "$3.75",
-                                        "style": {
-                                            "fontSize": "14px",
-                                            "color": "#333333",
-                                            "marginLeft": "10px"
-                                        }
-                                    }
+                                "type": "h2",
+                                "content": [
+                                    "Caramel Macchiato"
                                 ],
-                                "style": {
-                                    "display": "flex",
-                                    "flexDirection": "row",
-                                    "alignItems": "center",
-                                    "padding": "10px 15px",
-                                    "borderBottom": "1px solid #eeeeee"
-                                }
-                            }
-                        ],
-                        "style": {
-                            "maxHeight": "250px",
-                            "overflowY": "auto"
-                        }
-                    },
-                    {
-                        "id": "promo-code-field",
-                        "type": "input",
-                        "placeholder": "Enter Promo Code",
-                        "style": {
-                            "width": "calc(100% - 30px)",
-                            "padding": "10px",
-                            "margin": "15px",
-                            "borderRadius": "8px",
-                            "border": "1px solid #cccccc"
-                        }
-                    },
-                    {
-                        "id": "delivery-toggle",
-                        "type": "container",
-                        "children": [
-                            {
-                                "id": "toggle-delivery",
-                                "type": "button",
-                                "content": "Delivery",
-                                "style": {
-                                    "padding": "8px 12px",
-                                    "backgroundColor": "#3E8E7E",
-                                    "color": "#ffffff",
-                                    "border": "none",
-                                    "borderRadius": "20px",
-                                    "marginRight": "5px",
-                                    "fontSize": "12px"
+                                "attributes": {
+                                    "id": "drink-name",
+                                    "style": "font-family:'Georgia', serif; font-size:22px; color:#5d4037; margin-bottom:10px;"
                                 }
                             },
                             {
-                                "id": "toggle-pickup",
-                                "type": "button",
-                                "content": "Pickup",
-                                "style": {
-                                    "padding": "8px 12px",
-                                    "backgroundColor": "#e0f2f1",
-                                    "color": "#00796b",
-                                    "border": "none",
-                                    "borderRadius": "20px",
-                                    "fontSize": "12px"
+                                "type": "div",
+                                "content": [
+                                    "★★★★★"
+                                ],
+                                "attributes": {
+                                    "id": "star-rating",
+                                    "style": "margin-bottom:5px; color:#ffa000;"
                                 }
-                            }
-                        ],
-                        "style": {
-                            "display": "flex",
-                            "justifyContent": "center",
-                            "marginBottom": "15px"
-                        }
-                    },
-                    {
-                        "id": "address-or-time",
-                        "type": "input",
-                        "placeholder": "Enter Address or Select Pickup Time",
-                        "style": {
-                            "width": "calc(100% - 30px)",
-                            "padding": "10px",
-                            "margin": "0 15px 15px 15px",
-                            "borderRadius": "8px",
-                            "border": "1px solid #cccccc"
-                        }
-                    },
-                    {
-                        "id": "total-section",
-                        "type": "container",
-                        "children": [
+                            },
                             {
-                                "id": "estimated-total",
-                                "type": "text",
-                                "content": "Estimated Total: $3.75",
-                                "style": {
-                                    "fontSize": "16px",
-                                    "fontWeight": "600",
-                                    "color": "#333333",
-                                    "textAlign": "center"
+                                "type": "p",
+                                "content": [
+                                    "(124 Reviews)"
+                                ],
+                                "attributes": {
+                                    "id": "review-count",
+                                    "style": "font-size:12px; color:#4e342e; margin-bottom:10px;"
+                                }
+                            },
+                            {
+                                "type": "p",
+                                "content": [
+                                    "A rich blend of espresso with velvety milk, topped with caramel drizzle."
+                                ],
+                                "attributes": {
+                                    "id": "drink-description",
+                                    "style": "font-size:14px; color:#4e342e; margin-bottom:10px;"
+                                }
+                            },
+                            {
+                                "type": "p",
+                                "content": [
+                                    "$4.75"
+                                ],
+                                "attributes": {
+                                    "id": "drink-price",
+                                    "style": "font-size:16px; color:#5d4037; margin-bottom:20px;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    " ",
+                                    {
+                                        "type": "div",
+                                        "content": [
+                                            {
+                                                "type": "p",
+                                                "content": [
+                                                    "Select Size:"
+                                                ],
+                                                "attributes": {
+                                                    "style": "font-size:14px; color:#5d4037; margin-bottom:5px;"
+                                                }
+                                            },
+                                            {
+                                                "type": "button",
+                                                "content": [
+                                                    "Small"
+                                                ],
+                                                "attributes": {
+                                                    "id": "size-small",
+                                                    "style": "background:#a1887f; color:#fff; border:none; padding:6px 10px; border-radius:5px; margin-right:5px;"
+                                                }
+                                            },
+                                            {
+                                                "type": "button",
+                                                "content": [
+                                                    "Medium"
+                                                ],
+                                                "attributes": {
+                                                    "id": "size-medium",
+                                                    "style": "background:#a1887f; color:#fff; border:none; padding:6px 10px; border-radius:5px; margin-right:5px;"
+                                                }
+                                            },
+                                            {
+                                                "type": "button",
+                                                "content": [
+                                                    "Large"
+                                                ],
+                                                "attributes": {
+                                                    "id": "size-large",
+                                                    "style": "background:#a1887f; color:#fff; border:none; padding:6px 10px; border-radius:5px;"
+                                                }
+                                            }
+                                        ],
+                                        "attributes": {
+                                            "id": "size-options",
+                                            "style": "margin-bottom:10px;"
+                                        }
+                                    },
+                                    " ",
+                                    {
+                                        "type": "div",
+                                        "content": [
+                                            {
+                                                "type": "p",
+                                                "content": [
+                                                    "Milk Type:"
+                                                ],
+                                                "attributes": {
+                                                    "style": "font-size:14px; color:#5d4037; margin-bottom:5px;"
+                                                }
+                                            },
+                                            {
+                                                "type": "button",
+                                                "content": [
+                                                    "Regular"
+                                                ],
+                                                "attributes": {
+                                                    "id": "milk-regular",
+                                                    "style": "background:#deb887; color:#fff; border:none; padding:6px 10px; border-radius:5px; margin-right:5px;"
+                                                }
+                                            },
+                                            {
+                                                "type": "button",
+                                                "content": [
+                                                    "Oat Milk"
+                                                ],
+                                                "attributes": {
+                                                    "id": "milk-oat",
+                                                    "style": "background:#deb887; color:#fff; border:none; padding:6px 10px; border-radius:5px;"
+                                                }
+                                            }
+                                        ],
+                                        "attributes": {
+                                            "id": "milk-options",
+                                            "style": "margin-bottom:10px;"
+                                        }
+                                    },
+                                    " ",
+                                    {
+                                        "type": "div",
+                                        "content": [
+                                            {
+                                                "type": "p",
+                                                "content": [
+                                                    "Sweetness:"
+                                                ],
+                                                "attributes": {
+                                                    "style": "font-size:14px; color:#5d4037; margin-bottom:5px;"
+                                                }
+                                            },
+                                            {
+                                                "type": "button",
+                                                "content": [
+                                                    "No Sugar"
+                                                ],
+                                                "attributes": {
+                                                    "id": "sweet-no",
+                                                    "style": "background:#a1887f; color:#fff; border:none; padding:6px 10px; border-radius:5px; margin-right:5px;"
+                                                }
+                                            },
+                                            {
+                                                "type": "button",
+                                                "content": [
+                                                    "Less Sugar"
+                                                ],
+                                                "attributes": {
+                                                    "id": "sweet-yes",
+                                                    "style": "background:#a1887f; color:#fff; border:none; padding:6px 10px; border-radius:5px;"
+                                                }
+                                            }
+                                        ],
+                                        "attributes": {
+                                            "id": "sweetness-options",
+                                            "style": "margin-bottom:10px;"
+                                        }
+                                    },
+                                    " ",
+                                    {
+                                        "type": "div",
+                                        "content": [
+                                            {
+                                                "type": "p",
+                                                "content": [
+                                                    "Toppings:"
+                                                ],
+                                                "attributes": {
+                                                    "style": "font-size:14px; color:#5d4037; margin-bottom:5px;"
+                                                }
+                                            },
+                                            {
+                                                "type": "label",
+                                                "content": [
+                                                    {
+                                                        "type": "input",
+                                                        "attributes": {
+                                                            "type": "checkbox",
+                                                            "id": "topping-whipped",
+                                                            "style": "margin-right:3px;"
+                                                        }
+                                                    },
+                                                    "Whipped Cream"
+                                                ],
+                                                "attributes": {
+                                                    "style": "font-size:12px; color:#4e342e; margin-right:10px;"
+                                                }
+                                            },
+                                            {
+                                                "type": "label",
+                                                "content": [
+                                                    {
+                                                        "type": "input",
+                                                        "attributes": {
+                                                            "type": "checkbox",
+                                                            "id": "topping-cinnamon",
+                                                            "style": "margin-right:3px;"
+                                                        }
+                                                    },
+                                                    "Cinnamon"
+                                                ],
+                                                "attributes": {
+                                                    "style": "font-size:12px; color:#4e342e;"
+                                                }
+                                            }
+                                        ],
+                                        "attributes": {
+                                            "id": "toppings-options"
+                                        }
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "customizer-options",
+                                    "style": "animation:slideIn 0.5s ease-in-out;"
                                 }
                             }
                         ],
-                        "style": {
-                            "padding": "10px 15px"
+                        "attributes": {
+                            "id": "drink-details",
+                            "style": "padding:15px;"
                         }
                     },
                     {
-                        "id": "proceed-to-payment",
                         "type": "button",
-                        "content": "Proceed to Payment",
-                        "style": {
-                            "width": "calc(100% - 30px)",
-                            "padding": "12px",
-                            "backgroundColor": "#3E8E7E",
-                            "color": "#ffffff",
-                            "fontSize": "16px",
-                            "fontWeight": "600",
-                            "border": "none",
-                            "borderRadius": "25px",
-                            "margin": "15px auto",
-                            "display": "block",
-                            "cursor": "pointer"
+                        "content": [
+                            "Add to Cart"
+                        ],
+                        "attributes": {
+                            "id": "add-to-cart-btn",
+                            "style": "background:#6d4c41; color:#fff; border:none; padding:12px; width:90%; margin:15px auto; display:block; border-radius:5px; font-size:16px; box-shadow:0 2px 4px rgba(0,0,0,0.2);"
                         }
                     }
                 ],
-                "style": {
-                    "backgroundColor": "#f9f9f9",
-                    "height": "100%",
-                    "overflowY": "auto"
+                "attributes": {
+                    "id": "drink-detail-container",
+                    "style": "width:320px; min-height:700px; background:#fffaf0; font-family:'Helvetica', sans-serif; overflow-y:auto; padding-bottom:20px;"
                 }
             }
-        ]
-    },
-    {
-        "screen": {
-            "name": "Profile/Rewards Screen",
-            "width": 270,
-            "height": 600
         },
-        "component": [
-            {
-                "id": "profile-root",
-                "type": "container",
-                "children": [
+        {
+            "screen": {
+                "name": "Cart Screen",
+                "width": 320,
+                "height": 650
+            },
+            "component": {
+                "type": "div",
+                "content": [
                     {
-                        "id": "profile-header",
-                        "type": "container",
-                        "children": [
-                            {
-                                "id": "profile-picture",
-                                "type": "image",
-                                "src": "https://img.icons8.com/ios-filled/100/3E8E7E/user-male-circle.png",
-                                "style": {
-                                    "width": "80px",
-                                    "height": "80px",
-                                    "borderRadius": "50%",
-                                    "alignSelf": "center",
-                                    "marginBottom": "10px"
-                                }
-                            },
-                            {
-                                "id": "profile-name",
-                                "type": "text",
-                                "content": "Alex Johnson",
-                                "style": {
-                                    "fontSize": "18px",
-                                    "fontWeight": "700",
-                                    "textAlign": "center",
-                                    "color": "#333333"
-                                }
-                            },
-                            {
-                                "id": "member-level",
-                                "type": "text",
-                                "content": "Gold Member",
-                                "style": {
-                                    "fontSize": "14px",
-                                    "color": "#777777",
-                                    "textAlign": "center"
-                                }
-                            }
+                        "type": "div",
+                        "content": [
+                            "Your Cart"
                         ],
-                        "style": {
-                            "padding": "15px"
+                        "attributes": {
+                            "id": "cart-app-bar",
+                            "style": "padding:15px; background:#6d4c41; color:#fff; text-align:center; font-size:18px; border-bottom:1px solid rgba(0,0,0,0.1);"
                         }
                     },
                     {
-                        "id": "rewards-progress",
-                        "type": "container",
-                        "children": [
+                        "type": "div",
+                        "content": [
                             {
-                                "id": "progress-text",
-                                "type": "text",
-                                "content": "150/200 Beans for Free Drink",
-                                "style": {
-                                    "fontSize": "14px",
-                                    "color": "#333333",
-                                    "marginBottom": "5px",
-                                    "textAlign": "center"
-                                }
-                            },
-                            {
-                                "id": "progress-bar-container",
-                                "type": "container",
-                                "children": [
+                                "type": "div",
+                                "content": [
                                     {
-                                        "id": "progress-bar",
-                                        "type": "container",
-                                        "style": {
-                                            "width": "75%",
-                                            "height": "10px",
-                                            "backgroundColor": "#3E8E7E",
-                                            "borderRadius": "5px"
+                                        "type": "div",
+                                        "attributes": {
+                                            "id": "cart-thumb1",
+                                            "style": "width:60px; height:60px; background: url('https://v3.fal.media/files/lion/R66RwjYcREqTxK0WwinPl.png') no-repeat center center; background-size:cover; border-radius:5px; margin-right:10px;"
+                                        }
+                                    },
+                                    {
+                                        "type": "div",
+                                        "content": [
+                                            {
+                                                "type": "h4",
+                                                "content": [
+                                                    "Espresso"
+                                                ],
+                                                "attributes": {
+                                                    "id": "cart-item-name1",
+                                                    "style": "font-size:14px; color:#5d4037; margin:2px 0;"
+                                                }
+                                            },
+                                            {
+                                                "type": "p",
+                                                "content": [
+                                                    "Oat Milk, No Sugar"
+                                                ],
+                                                "attributes": {
+                                                    "id": "cart-custom-tags1",
+                                                    "style": "font-size:12px; color:#4e342e; margin:2px 0;"
+                                                }
+                                            },
+                                            {
+                                                "type": "p",
+                                                "content": [
+                                                    "$3.00"
+                                                ],
+                                                "attributes": {
+                                                    "id": "cart-price1",
+                                                    "style": "font-size:12px; color:#4e342e; margin:2px 0;"
+                                                }
+                                            }
+                                        ],
+                                        "attributes": {
+                                            "id": "cart-info1",
+                                            "style": "flex:1;"
+                                        }
+                                    },
+                                    {
+                                        "type": "div",
+                                        "content": [
+                                            {
+                                                "type": "button",
+                                                "content": [
+                                                    "+"
+                                                ],
+                                                "attributes": {
+                                                    "id": "qty-plus1",
+                                                    "style": "background:#6d4c41; color:#fff; border:none; padding:4px; border-radius:3px; margin-bottom:3px;"
+                                                }
+                                            },
+                                            {
+                                                "type": "span",
+                                                "content": [
+                                                    "1"
+                                                ],
+                                                "attributes": {
+                                                    "id": "qty-number1",
+                                                    "style": "font-size:14px;"
+                                                }
+                                            },
+                                            {
+                                                "type": "button",
+                                                "content": [
+                                                    "-"
+                                                ],
+                                                "attributes": {
+                                                    "id": "qty-minus1",
+                                                    "style": "background:#6d4c41; color:#fff; border:none; padding:4px; border-radius:3px; margin-top:3px;"
+                                                }
+                                            }
+                                        ],
+                                        "attributes": {
+                                            "id": "quantity-controller1",
+                                            "style": "display:flex; flex-direction:column; align-items:center;"
                                         }
                                     }
                                 ],
-                                "style": {
-                                    "width": "100%",
-                                    "display": "flex",
-                                    "justifyContent": "center"
+                                "attributes": {
+                                    "id": "cart-item1",
+                                    "style": "display:flex; align-items:center; border:1px solid #eee; padding:10px; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.1);"
                                 }
                             }
                         ],
-                        "style": {
-                            "padding": "0 15px 15px 15px"
+                        "attributes": {
+                            "id": "cart-items",
+                            "style": "padding:15px; display:flex; flex-direction:column; gap:10px;"
                         }
                     },
                     {
-                        "id": "profile-buttons-list",
-                        "type": "container",
-                        "children": [
+                        "type": "div",
+                        "content": [
                             {
-                                "id": "btn-my-orders",
-                                "type": "button",
-                                "content": "My Orders",
-                                "style": {
-                                    "width": "100%",
-                                    "padding": "12px",
-                                    "backgroundColor": "#ffffff",
-                                    "border": "1px solid #eeeeee",
-                                    "borderRadius": "8px",
-                                    "marginBottom": "10px",
-                                    "fontSize": "14px",
-                                    "color": "#333333"
+                                "type": "p",
+                                "content": [
+                                    "Subtotal: $3.00"
+                                ],
+                                "attributes": {
+                                    "id": "subtotal",
+                                    "style": "font-size:14px; color:#4e342e; margin:2px 0;"
                                 }
                             },
                             {
-                                "id": "btn-saved-items",
-                                "type": "button",
-                                "content": "Saved Items",
-                                "style": {
-                                    "width": "100%",
-                                    "padding": "12px",
-                                    "backgroundColor": "#ffffff",
-                                    "border": "1px solid #eeeeee",
-                                    "borderRadius": "8px",
-                                    "marginBottom": "10px",
-                                    "fontSize": "14px",
-                                    "color": "#333333"
+                                "type": "p",
+                                "content": [
+                                    "Tax: $0.27"
+                                ],
+                                "attributes": {
+                                    "id": "tax",
+                                    "style": "font-size:14px; color:#4e342e; margin:2px 0;"
                                 }
                             },
                             {
-                                "id": "btn-payment-methods",
-                                "type": "button",
-                                "content": "Payment Methods",
-                                "style": {
-                                    "width": "100%",
-                                    "padding": "12px",
-                                    "backgroundColor": "#ffffff",
-                                    "border": "1px solid #eeeeee",
-                                    "borderRadius": "8px",
-                                    "marginBottom": "10px",
-                                    "fontSize": "14px",
-                                    "color": "#333333"
-                                }
-                            },
-                            {
-                                "id": "btn-settings",
-                                "type": "button",
-                                "content": "Settings",
-                                "style": {
-                                    "width": "100%",
-                                    "padding": "12px",
-                                    "backgroundColor": "#ffffff",
-                                    "border": "1px solid #eeeeee",
-                                    "borderRadius": "8px",
-                                    "marginBottom": "10px",
-                                    "fontSize": "14px",
-                                    "color": "#333333"
-                                }
-                            },
-                            {
-                                "id": "btn-logout",
-                                "type": "button",
-                                "content": "Logout",
-                                "style": {
-                                    "width": "100%",
-                                    "padding": "12px",
-                                    "backgroundColor": "#ff7043",
-                                    "border": "none",
-                                    "borderRadius": "8px",
-                                    "fontSize": "14px",
-                                    "color": "#ffffff"
+                                "type": "p",
+                                "content": [
+                                    "Total: $3.27"
+                                ],
+                                "attributes": {
+                                    "id": "total",
+                                    "style": "font-size:16px; color:#5d4037; margin:2px 0; font-weight:bold;"
                                 }
                             }
                         ],
-                        "style": {
-                            "padding": "0 15px",
-                            "marginBottom": "15px"
+                        "attributes": {
+                            "id": "cart-summary",
+                            "style": "padding:15px; border-top:1px solid #eee;"
                         }
                     },
                     {
-                        "id": "referral-banner",
-                        "type": "container",
-                        "children": [
-                            {
-                                "id": "referral-text",
-                                "type": "text",
-                                "content": "Give $5, Get $5",
-                                "style": {
-                                    "fontSize": "16px",
-                                    "fontWeight": "600",
-                                    "color": "#ffffff",
-                                    "textAlign": "center",
-                                    "padding": "10px"
-                                }
-                            }
+                        "type": "button",
+                        "content": [
+                            "Proceed to Checkout"
                         ],
-                        "style": {
-                            "backgroundColor": "#3E8E7E",
-                            "borderRadius": "8px",
-                            "margin": "0 15px"
+                        "attributes": {
+                            "id": "checkout-btn",
+                            "style": "background:#6d4c41; color:#fff; border:none; padding:12px; width:90%; margin:15px auto; display:block; border-radius:5px; font-size:16px; box-shadow:0 2px 4px rgba(0,0,0,0.2);"
                         }
                     }
                 ],
-                "style": {
-                    "backgroundColor": "#f9f9f9",
-                    "height": "100%",
-                    "overflowY": "auto"
+                "attributes": {
+                    "id": "cart-screen-container",
+                    "style": "width:320px; min-height:650px; background:#fffaf0; font-family:'Helvetica', sans-serif; overflow-y:auto; padding-bottom:20px;"
                 }
             }
-        ]
-    }
-]
+        },
+        {
+            "screen": {
+                "name": "Profile/Account Screen",
+                "width": 320,
+                "height": 700
+            },
+            "component": {
+                "type": "div",
+                "content": [
+                    {
+                        "type": "div",
+                        "content": [
+                            {
+                                "type": "div",
+                                "attributes": {
+                                    "id": "avatar-placeholder",
+                                    "style": "width:60px; height:60px; border-radius:50%; background:#deb887; margin-right:15px;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    {
+                                        "type": "h3",
+                                        "content": [
+                                            "Alex"
+                                        ],
+                                        "attributes": {
+                                            "id": "user-name",
+                                            "style": "font-family:'Georgia', serif; font-size:18px; color:#5d4037; margin:2px 0;"
+                                        }
+                                    },
+                                    {
+                                        "type": "button",
+                                        "content": [
+                                            "Edit Profile"
+                                        ],
+                                        "attributes": {
+                                            "id": "edit-profile-btn",
+                                            "style": "background:#6d4c41; color:#fff; border:none; padding:6px 10px; border-radius:5px; font-size:12px;"
+                                        }
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "profile-info",
+                                    "style": "flex:1;"
+                                }
+                            }
+                        ],
+                        "attributes": {
+                            "id": "profile-card",
+                            "style": "background:#fff; border-radius:10px; padding:15px; box-shadow:0 2px 8px rgba(0,0,0,0.1); display:flex; align-items:center; margin-bottom:15px;"
+                        }
+                    },
+                    {
+                        "type": "div",
+                        "content": [
+                            {
+                                "type": "h4",
+                                "content": [
+                                    "Order History"
+                                ],
+                                "attributes": {
+                                    "id": "order-history-title",
+                                    "style": "font-family:'Georgia', serif; font-size:16px; color:#5d4037; margin-bottom:8px;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    "Latte - $4.50"
+                                ],
+                                "attributes": {
+                                    "id": "order-item1",
+                                    "style": "border-bottom:1px solid #eee; padding:8px 0; font-size:12px; color:#4e342e;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    "Cappuccino - $4.00"
+                                ],
+                                "attributes": {
+                                    "id": "order-item2",
+                                    "style": "border-bottom:1px solid #eee; padding:8px 0; font-size:12px; color:#4e342e;"
+                                }
+                            }
+                        ],
+                        "attributes": {
+                            "id": "order-history",
+                            "style": "margin-bottom:15px;"
+                        }
+                    },
+                    {
+                        "type": "div",
+                        "content": [
+                            {
+                                "type": "h4",
+                                "content": [
+                                    "Loyalty Points"
+                                ],
+                                "attributes": {
+                                    "id": "loyalty-title",
+                                    "style": "font-family:'Georgia', serif; font-size:16px; color:#5d4037; margin-bottom:5px;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    "150"
+                                ],
+                                "attributes": {
+                                    "id": "points-counter",
+                                    "style": "font-size:24px; color:#6d4c41; animation:countUp 2s linear;"
+                                }
+                            }
+                        ],
+                        "attributes": {
+                            "id": "loyalty-points",
+                            "style": "margin-bottom:15px; text-align:center; padding:10px; background:#fff; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.1);"
+                        }
+                    },
+                    {
+                        "type": "div",
+                        "content": [
+                            {
+                                "type": "h4",
+                                "content": [
+                                    "Settings"
+                                ],
+                                "attributes": {
+                                    "id": "settings-title",
+                                    "style": "font-family:'Georgia', serif; font-size:16px; color:#5d4037; margin-bottom:10px;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    {
+                                        "type": "span",
+                                        "content": [
+                                            "Notifications"
+                                        ],
+                                        "attributes": {
+                                            "style": "font-size:14px; color:#4e342e;"
+                                        }
+                                    },
+                                    {
+                                        "type": "span",
+                                        "content": [
+                                            "➡"
+                                        ]
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "setting-notifications",
+                                    "style": "display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    {
+                                        "type": "span",
+                                        "content": [
+                                            "Payment"
+                                        ],
+                                        "attributes": {
+                                            "style": "font-size:14px; color:#4e342e;"
+                                        }
+                                    },
+                                    {
+                                        "type": "span",
+                                        "content": [
+                                            "➡"
+                                        ]
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "setting-payment",
+                                    "style": "display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee;"
+                                }
+                            },
+                            {
+                                "type": "div",
+                                "content": [
+                                    {
+                                        "type": "span",
+                                        "content": [
+                                            "Help Center"
+                                        ],
+                                        "attributes": {
+                                            "style": "font-size:14px; color:#4e342e;"
+                                        }
+                                    },
+                                    {
+                                        "type": "span",
+                                        "content": [
+                                            "➡"
+                                        ]
+                                    }
+                                ],
+                                "attributes": {
+                                    "id": "setting-help",
+                                    "style": "display:flex; justify-content:space-between; padding:8px 0;"
+                                }
+                            }
+                        ],
+                        "attributes": {
+                            "id": "settings-section",
+                            "style": "background:#fff; border-radius:10px; padding:15px; box-shadow:0 2px 8px rgba(0,0,0,0.1);"
+                        }
+                    },
+                    {
+                        "type": "style",
+                        "content": [
+                            " @keyframes countUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } "
+                        ]
+                    }
+                ],
+                "attributes": {
+                    "id": "profile-screen-container",
+                    "style": "width:320px; min-height:700px; background:#fdf6e3; font-family:'Helvetica', sans-serif; padding:15px; overflow-y:auto;"
+                }
+            }
+        }
+    ],
+    "message": "Splash Screen: A full-screen image of a cozy coffee shop with warm color tones. Centered at the bottom is the app logo (e.g., 'BrewMate') with a smooth fade-in animation. The background has a slight blur overlay to make the logo pop.\n\nOnboarding Screen 1 - Welcome: Warm-themed background with a translucent container card in the center. Top includes 'Welcome to BrewMate' text in bold. Below is an image of a barista handing a coffee cup. Then, a short informative text: 'Discover the best brews in town. Order ahead and skip the line!'. Bottom navigation buttons: 'Skip' (left), 'Next' (right).\n\nOnboarding Screen 2 - Customization: Same layout with top title 'Your Coffee, Your Way'. Below is an image carousel showing customizable coffee (different toppings, milk options, cup sizes). Text: 'Control every detail of your brew, just the way you like it.'. Navigation buttons: 'Back' (left), 'Next' (right).\n\nOnboarding Screen 3 - Rewards: Title at the top saying 'Sip & Earn'. Image of a coffee cup with loyalty points badges and coins. Text: 'Earn points every time you order. Get free drinks and special treats!'. Buttons: 'Back' and 'Get Started'.\n\nHome Screen: Top app bar includes greeting text ('Good Morning, Alex') and a cart icon on the top right. Hero section has a large coffee of the day card with image, name (e.g., 'Caramel Macchiato'), promo text, and 'Order Now' button. Below, a horizontally scrollable category nav (e.g., Espresso, Cold Brew, Frappé). Under that, a grid layout of popular drinks: each tile includes an image, drink name, price, and mini 'Add to cart' icon.\n\nMenu Screen: Uses a segmented controller to switch between 'Hot', 'Cold', 'Snacks', and 'Seasonal'. List layout under each tab with drink/snack card: thumbnail image on left, description and price in center, and add-to-cart button on the right. Option to click into a detail page by tapping the name or image.\n\nDrink Detail Screen: Large image banner of the drink at the top. Below includes: Name, Star Ratings, Number of Reviews, Description, Price. Followed by customizer widgets: select size (Small, Medium, Large), milk type, sweetness, toppings (checkbox group). Button at bottom: 'Add to Cart'. Smooth slide-in animations for customizer options.\n\nCart Screen: Top title bar 'Your Cart'. List of items with image, name, custom tags (e.g., 'Oat Milk, No Sugar'), and price. Quantity controller (+/-) on the right. Below the list, a summary section with subtotal, tax, total. 'Proceed to Checkout' CTA button at the bottom.\n\nProfile/Account Screen: Top card with user's avatar, name, and 'Edit Profile' button. Sections: Order History (list with past orders), Loyalty Points (animated counter), Settings (notifications, payment, help center). Stylish icons and clean divider lines. Background uses subtle light beige palette to match overall coffee tone.\n\nAll screens use a combination of mocha, beige, and deep brown colors to give a premium, cozy feel. Typography is modern—primary heading uses a rounded serif font, while body text uses a clean sans-serif. Buttons have soft shadows and rounded corners. Transitions between screens are smooth and use material motion patterns.",
+    "imageHolder": [
+        "https://v3.fal.media/files/elephant/Z2_vhHcu4J94RzWhbIELc.png - Image of A cozy coffee shop with warm lighting and wooden textures",
+        "https://v3.fal.media/files/lion/R66RwjYcREqTxK0WwinPl.png - Image of A steaming hot coffee in a ceramic cup with foam art on top",
+        "https://v3.fal.media/files/panda/jyUmDO2hDda3dH9VhyUTA.png - Image of A steaming hot coffee in a ceramic cup with foam art on top",
+        "https://v3.fal.media/files/penguin/Y6VlPIBJ5mxjt2DFtidJe.png - Image of A steaming hot coffee in a ceramic cup with foam art on top",
+        "https://v3.fal.media/files/monkey/8r64qAm_cZFY7Vn508MSe.png - Image of A steaming hot coffee in a ceramic cup with foam art on top"
+    ]
+}

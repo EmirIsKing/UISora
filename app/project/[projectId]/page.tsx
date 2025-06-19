@@ -11,11 +11,24 @@ import {Button} from "@heroui/button";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 // import RDE from "@/components/ResizableMovableElement";
 import {RenderRDE} from "@/components/ResizableMovableElement";
-import {htmltype} from "@/types/types";
+import {HtmlElement, htmltype} from "@/types/types";
 import {RDEmetadata} from "@/types/types";
 import {Hand, SquareMousePointer} from "lucide-react";
 import { Renderer } from "@/components/Renderer";
 import {jsondata} from "@/utils/newtestjson";
+import JsonToHtmlRenderer from "@/components/JsonToHtmlRenderer";
+
+interface JsonToHtmlRendererProps {
+
+    ui: {
+        screen: {
+            height: number;
+            width: number;
+            name: string;
+        },
+        component: HtmlElement;
+    }[]
+}
 
 type ChatItemType = {
     userPrompt: string;
@@ -25,7 +38,7 @@ type ChatItemType = {
 
 export default function Project({ params }: { params: Promise<{ projectId: string }> }) {
     const [prompt, setPrompt] = useState('');
-    const [generatedUI, setGeneratedUI] = useState<MetaData>({ui:[]});
+    const [generatedUI, setGeneratedUI] = useState<JsonToHtmlRendererProps>(jsondata);
     const [chat, setChat] = useState<ChatItemType[]>([]);
     const [chain, setChain] = useState('')
     const [imageHolder, setImageHolder] = useState([]);
@@ -52,7 +65,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
             width: number;
             height: number;
         };
-        component: RDEmetadata[]; // Can be either a component or array of elements
+        component: HtmlElement[]; // Can be either a component or array of elements
     }
 
 // Define interface for the entire test data
@@ -114,10 +127,10 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
 
            // Append the new UI instead of replacing it
-           // setGeneratedUI(prev => ({
-           //     ...prev,
-           //     ui: [...(data.ui || [])]
-           // }));
+           setGeneratedUI(prev => ({
+               ...prev,
+               ui: [...(data.ui || [])]
+           }));
            setImageHolder(data.imageHolder)
            console.log("date.ui: ",data.ui)
            console.log("ImageHolder: ",imageHolder)
@@ -282,7 +295,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                             {/*</div>*/}
                                             {/*prev use*/}
                                             <div className="flex flex-wrap items-start gap-x-[100px] p-4">
-                                                {generatedUI.ui.map((item: ScreenConfig, index: number) => {
+                                                {generatedUI.ui.map((item , index: number) => {
                                                     const screenWidth = item.screen.width || 280;
                                                     const screenHeight = item.screen.height || 540;
 
@@ -295,11 +308,15 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                                                 flexShrink: 0,
                                                                 position: 'relative' // Important for absolute positioning of children
                                                             }}
+                                                            onClick={(e)=>{
+                                                                e.stopPropagation();
+                                                            }}
+                                                            onDoubleClick={(e)=>{
+                                                                e.stopPropagation();
+                                                            }}
                                                         >
                                                             <Screen screen={item.screen}>
-                                                                {item.component.map((element: RDEmetadata) => (
-                                                                    <RenderRDE key={element.id} metadata={element} />
-                                                                ))}
+                                                                    <JsonToHtmlRenderer data={item.component} />
                                                             </Screen>
                                                         </div>
                                                     );

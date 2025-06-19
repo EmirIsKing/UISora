@@ -23,7 +23,13 @@ const Screen = ({ children, screen }:{children:React.ReactNode; screen: { name:s
 
     return (
 
-        <div className={'flex flex-col gap-10'} >
+        <div className={'flex flex-col gap-10'}
+             onClick={(e)=>{
+            e.stopPropagation();
+        }}
+             onDoubleClick={(e)=>{
+                 e.stopPropagation();
+             }} >
             <div>
                 <span>
                     <h4 className={'font-semibold'}>{screen.name}</h4>
@@ -36,7 +42,12 @@ const Screen = ({ children, screen }:{children:React.ReactNode; screen: { name:s
                     width: `${dimensions.width}px`,
                     height: `${dimensions.height}px`,
                 }}
-
+                onClick={(e)=>{
+                    e.stopPropagation();
+                }}
+                onDoubleClick={(e)=>{
+                    e.stopPropagation();
+                }}
             >
                 {children}
             </div>

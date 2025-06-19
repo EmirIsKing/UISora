@@ -94,8 +94,16 @@ export type Screen = {
     component: Component[];
 };
 
-///test end//
 
+export interface HtmlElement {
+    type: string;
+    attributes?: {
+        class?: string;
+        style?: string;
+        id?: string;
+    }
+    content?: Array<string | HtmlElement>;
+}
 
 
 
@@ -119,6 +127,8 @@ interface FigmaFill {
     imageHash?: string;
     scaleMode?: 'FILL' | 'FIT';
 }
+
+
 
 interface FigmaEffect {
     type: 'LAYER_BLUR';

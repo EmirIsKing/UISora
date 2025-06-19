@@ -8,7 +8,11 @@ import convertToJson from "@/actions/convertToJson";
 import HtmlToJson from "@/actions/HtmlToJson";
 
 type UIComponent = {
-    screen: string;
+    screen: {
+        name: string;
+        width: number;
+        height: number;
+    };
     component: string;
     message: string;
 };
@@ -74,7 +78,6 @@ export async function POST(request: Request) {
             ImageContainer = imageHolder;
         }
 
-        const convertedUI: HtmlNode[] = []; // Specify the proper return type from HtmlToJson
         const fattenedPrompt = FattenedPromptJson.ui[0].ui;
         const Response = await UiGeneration(fattenedPrompt, ImageContainer, previousUI);
         const Data = await Response.json();
@@ -82,10 +85,21 @@ export async function POST(request: Request) {
         console.log(uiData);
 
 // Use Promise.all to handle async operations in map
-        await Promise.all(uiData.map(async (item) => {
-            const temp = await HtmlToJson(item.component);
-            convertedUI.push(JSON.parse(temp));
-        }));
+        const convertedUI = await Promise.all(
+            uiData.map(async (item, index) => {
+                // 1. Convert component HTML to JSON
+                const componentData = await HtmlToJson(item.component);
+
+                // 2. Get screen data (assuming Data.screen[index] is an object)
+                const screenData = item.screen
+
+                // 3. Return the structured object
+                return {
+                    screen: screenData, // e.g., { name: "Home", width: 250, height: 500 }
+                    component: JSON.parse(componentData), // Parsed component data
+                };
+            })
+        );
 
 // Now you can use convertedUI
         const compose = {

@@ -56,14 +56,18 @@ export default async function UiGeneration(
                Use colors skillfully and keep the scrollbar small with a transparent background.
                 Add any components that will enhance the UI/UX. 
                 You are free to add any detail or modifications to the ui.
+                Always add simple animations to elements like buttons to identify clicks.
+                Each element has a unique id.
                 Return an array of objects in JSON format with the following structure: 
-                { ui: [ {screen: "Home", component: "<>pure html and css code</>"} ] } 
+                { ui: [ {screen: {name: "Home", width: 250, height: 500}, component: "<>pure html and css code</>"} ] } ,
+                Make the screen long enough or wise enough to fit the content.
+                Freely change the size of the screen but make the minimum height be 500px and minimum width be 270px.
                   Do not use the <Image> tag as it may not function properly.
                    Instead, create a rectangle or a similar shape and use the background style property. 
                    Do not add line breaks inside tags—only break the text itself. 
                    To create a linear background in ReactFigma, use the following format: backgroundColor: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)' 
                    The "component" field should be a valid html component.
-                    **Example output:** { "ui": [ { "screen": "Login", "component": "<div class="container" style={{fontSize:bold}}><h2>Login</h2></div>", "message": "This login screen uses a modern, minimalistic design with a gradient background for a stylish effect. The background gradient gives a soft, welcoming feel, while the 'Login' text is clear and easy to read in the center of the screen.
+                    **Example output:** { "ui": [ { "screen": {name: "login", width: 250, height: 500}, "component": "<div id="unique-id" class="container" style={{fontSize:bold}}><h2 id="unique-id">Login</h2></div>", "message": "This login screen uses a modern, minimalistic design with a gradient background for a stylish effect. The background gradient gives a soft, welcoming feel, while the 'Login' text is clear and easy to read in the center of the screen.
                     The screen is responsive, ensuring accessibility and usability." } 
                     
                     dont use placeholder images use the images below
@@ -73,6 +77,7 @@ export default async function UiGeneration(
                      
                      Ensure: 
                    The primary objective is to create a beautiful UI, so focus on making the design visually appealing.
+                   Each element has a unique id.
                     Maintain the existing UI structure while making necessary modifications based on the new prompt. 
                    The response should be a valid JSON array. 
                    The "component" field should be a string containing valid HTML.

@@ -2,6 +2,10 @@
 import React from 'react';
 import { HtmlElement } from "@/types/types";
 import parse from 'style-to-object'
+import EditableText from "@/components/EditableText";
+import camelcaseKeys from 'camelcase-keys';
+import VoidRenderer from "@/components/VoidRenderer";
+
 
 interface JsonToHtmlRendererProps {
     data: HtmlElement;
@@ -14,10 +18,14 @@ const VOID_ELEMENTS = new Set([
     'source', 'track', 'wbr'
 ]);
 
+const handleSave = (data: any) => {
+
+}
+
 const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data }) => {
     const renderElement = (element: string | HtmlElement, index?: number): React.ReactNode => {
         if (typeof element === 'string') {
-            return element;
+            return (<EditableText key={index} text={element} onSave={handleSave}/>)
         }
 
         const { type, attributes = {}, content = [] } = element;
@@ -25,20 +33,15 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data }) => {
         // Convert style string to object if needed
         const processedAttributes = { ...attributes };
         if (typeof processedAttributes.style === 'string') {
-            processedAttributes.style = parse(processedAttributes.style);
+            const temp = parse(processedAttributes.style);
+            processedAttributes.style = camelcaseKeys(temp as Record<string, unknown>);
+            console.log(processedAttributes.style)
         }
 
         // Handle void elements (no children allowed)
         if (VOID_ELEMENTS.has(type)) {
-            return React.createElement(
-                type,
-                {
-                    key: index,
-                    ...processedAttributes,
-                    className: processedAttributes.class || processedAttributes.className
-                }
-                // No children for void elements
-            );
+            return <VoidRenderer key={index} index={index} processedAttributes={processedAttributes} type={type}/>
+
         }
 
         // Normal elements with children

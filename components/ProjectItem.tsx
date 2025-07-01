@@ -3,12 +3,18 @@ import React from 'react'
 import {  Dropdown,  DropdownTrigger,  DropdownMenu, DropdownItem} from "@heroui/dropdown";
 import {Ellipsis} from 'lucide-react'
 import {Button} from "@heroui/button";
+import {ProjectSettings} from "@/types/types";
+import {useRouter} from "next/navigation";
 
 
+const ProjectItem = ({project}:{project:{id:string; settings: ProjectSettings}}) => {
+    const router = useRouter();
+    const handleClick = () => {
+        router.push(`/projects/${project.id}`);
+    }
 
-const CreateNewProject = () => {
     return (
-        <div className={`flex flex-col w-[190px] h-[150px] shadow-xl border border-slate-400/60 rounded-sm bg-white px-1 py-3 cursor-pointer`}>
+        <div onClick={()=>handleClick()}  className={`flex flex-col w-[190px] h-[150px] shadow-xl border border-slate-400/60 rounded-sm bg-white px-1 py-3 cursor-pointer`}>
             <div className="flex justify-end">
                 <Dropdown className={'bg-black/80 rounded-lg w-30'}>
                     <DropdownTrigger asChild>
@@ -29,11 +35,12 @@ const CreateNewProject = () => {
                 </Dropdown>
             </div>
             <div>
-                <h1 className={`text-xl font-semibold text-wrap truncate`}>Project Name
+                <h1 className={`text-xl font-semibold text-wrap truncate`}>
+                    {project.settings.projectName ? project.settings.projectName : "No name"}
                 </h1>
-                <p className={`text-wrap truncate`}>Description</p>
+                <p className={`text-wrap truncate`}>{project.settings.description ? project.settings.description : "No Description"}</p>
             </div>
         </div>
     )
 }
-export default CreateNewProject
+export default ProjectItem

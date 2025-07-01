@@ -93,13 +93,38 @@ export type Screen = {
     };
     component: Component[];
 };
+export interface JsonToHtmlRendererProps {
+
+    ui: {
+        screen: {
+            height: number;
+            width: number;
+            name: string;
+        },
+        component: HtmlElement;
+    }[]
+}
+
+export interface ProjectSettings {
+    projectName: string;
+    createdBy?: string; // UID or email
+    visibility: 'private' | 'public' | 'unlisted';
+    theme?: 'light' | 'dark';
+    autosave?: boolean;
+    lastOpened?: string; // ISO string or Date
+    description?: string;
+    tags?: string[];
+    framework?: 'react' | 'vue' | 'svelte' | 'none';
+    platform?: 'mobile' | 'web' | 'desktop';
+}
+
 
 
 export interface HtmlElement {
     type: string;
     attributes?: {
         class?: string;
-        style?: string;
+        style?: string | Record<string, unknown>;
         id?: string;
     }
     content?: Array<string | HtmlElement>;

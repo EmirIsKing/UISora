@@ -4,12 +4,13 @@ import {Plus} from 'lucide-react'
 import {Button} from "@heroui/button";
 import { v4 as uuidv4 } from 'uuid';
 import {useRouter} from "next/navigation";
+import {createNewProject} from '@/actions/createNewProject'
 
 const CreateNewProject = () => {
     const router = useRouter();
 
-    const handleCreateProject = () => {
-        const newProjectId = uuidv4(); // Generate a unique UUID
+    const handleCreateProject  = async () => {
+        const newProjectId = await createNewProject();
         console.log('New Project ID:', newProjectId);
         router.push(`/project/${newProjectId}`);
     };

@@ -108,7 +108,7 @@ export interface JsonToHtmlRendererProps {
 export interface ProjectSettings {
     projectName: string;
     createdBy?: string; // UID or email
-    visibility: 'private' | 'public' | 'unlisted';
+    visibility: 'private' | 'public';
     theme?: 'light' | 'dark';
     autosave?: boolean;
     lastOpened?: string; // ISO string or Date
@@ -124,6 +124,7 @@ export interface HtmlElement {
     type: string;
     attributes?: {
         class?: string;
+        className?:string;
         style?: string | Record<string, unknown>;
         id?: string;
     }

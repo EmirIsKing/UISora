@@ -104,9 +104,9 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
            const data = await response.json();
 
-           console.log(response)
-
-           console.log(data)
+           // console.log(response)
+           //
+           // console.log(data)
            // data.ui.forEach((item: {screen: string, ReactFigma: string}) => {
            //     exportData.push({
            //         name: item.screen,
@@ -132,9 +132,9 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                ui: [...(data.ui || [])]
            }));
            setImageHolder(data.imageHolder)
-           console.log("date.ui: ",data.ui)
-           console.log("ImageHolder: ",imageHolder)
-           console.log("data: ",data)
+           // console.log("date.ui: ",data.ui)
+           // console.log("ImageHolder: ",imageHolder)
+           // console.log("data: ",data)
 
            // Clear prompt input
 
@@ -157,7 +157,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
     return (
         <section className={'flex flex-col h-screen'}>
-            <ProjectPageNavigation sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
+            <ProjectPageNavigation projectId={projectId} sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
             <div
                 className={`hidden transition-all duration-300 inset-0 z-[2000] bg-slate-900/20 backdrop-blur-sm
                     data-[state=open]:animate-in data-[state=closed]:animate-out

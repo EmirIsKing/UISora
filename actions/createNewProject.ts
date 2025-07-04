@@ -35,6 +35,7 @@ export async function createNewProject(): Promise<string> {
     const globalProjectRef = doc(db, 'projects', projectId);
     await setDoc(globalProjectRef, {
         id: projectId,
+        owner: user.uid,
         settings
     });
 

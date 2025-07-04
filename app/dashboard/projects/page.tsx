@@ -11,19 +11,31 @@ import {ProjectSettings} from "@/types/types";
 
 
 const Page = () => {
-    const [user] = useAuthState(auth);
+    const [user, userLoading] = useAuthState(auth);
     const [projects, setProjects] = useState<{id:string; settings: ProjectSettings}[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+
 
     useEffect(() => {
+        if (userLoading) return;
+
         const fetchProjects = async () => {
+            setLoading(true);
             if (user) {
-                const data = await getUserProjectSettings();
-                setProjects(data);
+                try {
+                    const data = await getUserProjectSettings();
+                    setProjects(data);
+                } catch (error) {
+                    console.error("Failed to load projects:", error);
+                }
+
             }
+            setLoading(false);
         };
 
         fetchProjects();
-    }, [user]);
+    }, [user, userLoading]);
+
 
 
     return (
@@ -42,12 +54,30 @@ const Page = () => {
         from-white from-30% via-black via-40% to-white to-70%"
             ></div>
 
-            <div className="w-full gap-2 flex flex-wrap overflow-y-auto pb-3">
-                {projects.map((project, index) => (
-                    <ProjectItem key={index} project={project} />
-                ))}
-                {projects.length == 0 && <span className={'w-full flex justify-center items-center font-semibold text-xl'}>You have no Projects.</span>}
+            <div className="w-full gap-3 flex flex-wrap overflow-y-auto pb-3">
+                {loading && (
+                    <div className="w-full flex justify-center items-center py-10">
+                        <div className="loader" />
+                    </div>
+                )}
+
+                {!userLoading && !loading && projects.length === 0 && (
+                    <span className="w-full flex justify-center items-center font-semibold text-xl opacity-70">
+                        You have no Projects.
+                    </span>
+                            )}
+
+                {!loading &&
+                    projects.map((project) => (
+                        <ProjectItem
+                            key={project.id}
+                            project={project}
+                            allProjects={projects}
+                            setProjects={setProjects}
+                        />
+                    ))}
             </div>
+
         </div>
     );
 };

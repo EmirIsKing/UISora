@@ -1,44 +1,87 @@
 'use client'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {DropdownMenu, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuContent, DropdownMenuItem} from "@/components/ui/dropdown-menu";
 import {PanelLeftCloseIcon, PanelLeftOpen} from "lucide-react";
 import {Button} from "@heroui/button";
 import {useExportModal} from "@/store/store";
+import {useRouter} from "next/navigation";
+import ProjectSettings from "@/components/ProjectSettings";
+import {getProjectDetails, ProjectSettingsWithId} from "@/actions/getProjectDetails";
+import { auth } from '@/utils/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 
-const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle}:{sidebarToggle: boolean; setSidebarToggle: (open: boolean) => void;}) => {
+const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sidebarToggle: boolean; setSidebarToggle: (open: boolean) => void; projectId: string;}) => {
 
+    const router = useRouter();
+    const [toggleProject, setToggleProject] = useState(false);
+    const [projectDetails, setProjectDetails] = useState<ProjectSettingsWithId | null>(null)
+    const [projectName, setProjectName] = useState<string>('Loading...');
+    const user = auth.currentUser;
 
     const toggleExportModal = () => {
         useExportModal.getState().setExportModal(!useExportModal.getState().exportModal);
         console.log(useExportModal.getState().exportModal)
     }
 
+    useEffect(() => {
+        if (projectDetails?.settings.projectName) {
+            setProjectName(projectDetails.settings.projectName);
+        }
+    }, [projectDetails]);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const temp = await getProjectDetails(projectId);
+                    setProjectDetails(temp);
+                } catch (error) {
+                    console.error("Error fetching project:", error);
+                }
+            } else {
+                console.error("User not authenticated");
+            }
+        });
+
+        return () => unsubscribe(); // cleanup on unmount
+    }, [projectId]);
+
+
+
+
+
+    const handleGotoDashboard = () => {
+        router.push(`/dashboard/projects`);
+    }
+
+    const handleProjectSettings = () => {
+        setToggleProject(!toggleProject)
+    }
+
 
     return (
-        <div className={'h-12 bg-slate-100/90 flex items-center text-black/90 px-4 z-[3000] shadow-lg'}>
+        <div className={'h-12  flex items-center text-black/90 px-4 z-[3000] shadow-lg'}>
             <div className={'flex'}>
-                <div>
-                    <DropdownMenu>
+                    <DropdownMenu >
                         <DropdownMenuTrigger asChild>
                             <button className="px-4 py-2 rounded-md outline-0 hover:opacity-75 transition-all cursor-pointer">
-                                Project Name ∨
+                                {projectName || 'Loading...'} ∨
                             </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56 bg-slate-900/90 border border-slate-100/90 text-slate-100/90">
+                        <DropdownMenuContent  className="w-56 bg-slate-900 border opacity-100 z-[4000] border-slate-100/90 text-slate-100/90">
                             <DropdownMenuItem>
                                 Credits and info
                             </DropdownMenuItem>
                             <DropdownMenuSeparator className="bg-slate-100/90 h-px" />
-                            <DropdownMenuItem className="hover:bg-slate-800/90">
-                                Go to Dashboard
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="hover:bg-slate-800/90">
+                            <DropdownMenuItem  onClick={()=>handleProjectSettings()} className="hover:bg-slate-800/90 bg-slate-900">
                                 Project Settings
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={()=>handleGotoDashboard()} className="hover:bg-slate-800/90">
+                                Go to Dashboard
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                </div>
                 <button
                     className={'p-1 hover:bg-slate-100/25 rounded-md transition-all cursor-pointer'}
                     onClick={()=>setSidebarToggle(!sidebarToggle)}>{sidebarToggle ? (<PanelLeftCloseIcon />) : (<PanelLeftOpen/>)}
@@ -49,6 +92,11 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle}:{sidebarToggle:
                         Export to Figma
                     </Button>
             </div>
+            {
+                toggleProject && (
+                    <ProjectSettings toggleSettings={handleProjectSettings} setProjectNameOptimistic={setProjectName} projectDetails={projectDetails}/>
+                )
+            }
 
         </div>
     )

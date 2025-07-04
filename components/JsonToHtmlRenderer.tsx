@@ -35,7 +35,7 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data }) => {
         if (typeof processedAttributes.style === 'string') {
             const temp = parse(processedAttributes.style);
             processedAttributes.style = camelcaseKeys(temp as Record<string, unknown>);
-            console.log(processedAttributes.style)
+            // console.log(processedAttributes.style)
         }
 
         // Handle void elements (no children allowed)

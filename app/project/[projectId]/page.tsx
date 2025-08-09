@@ -9,7 +9,7 @@ import {useExportModal} from "@/store/store";
 import {usePanning, useSelectElement} from "@/store/store";
 import {Button} from "@heroui/button";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-// import RDE from "@/components/ResizableMovableElement";
+import {auth} from '@/utils/firebase'
 import {RenderRDE} from "@/components/ResizableMovableElement";
 import {HtmlElement, htmltype} from "@/types/types";
 import {RDEmetadata} from "@/types/types";
@@ -52,6 +52,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [startPan, setStartPan] = useState({ x: 0, y: 0 });
     const containerRef = useRef(null);
     const {setSelected, selection} = useSelectElement()
+    const user = auth.currentUser;
 
 
     console.log("projectId", projectId);
@@ -96,7 +97,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
            const response = await fetch('/api/generate-ui', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ prompt: updatedChain, previousUI: generatedUI, imageHolder}), // Pass previous UI state
+               body: JSON.stringify({ prompt: updatedChain, previousUI: generatedUI, imageHolder,projectId, uid:user?.uid}), // Pass previous UI state
            });
 
 

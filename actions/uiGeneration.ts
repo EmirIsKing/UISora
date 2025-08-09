@@ -11,6 +11,7 @@ type UISuccessResponse = {
     ui: UIComponent[];
     message: string;
     imageHolder: string[];
+    creditUsed: number;
 };
 
 type UIReturn = {
@@ -33,7 +34,8 @@ export default async function UiGeneration(
                 {
                     ui: [],
                     message: 'Prompt is required',
-                    imageHolder: []
+                    imageHolder: [],
+                    creditUsed: 0,
                 },
                 { status: 400 }
             );
@@ -111,6 +113,7 @@ export default async function UiGeneration(
         });
 
         const content = response.choices[0].message.content ?? '{}';
+        const creditUsed = response?.usage?.total_tokens ?? 0;
         const generatedUI: UIReturn = JSON.parse(content);
 
         // Validate the UI components structure
@@ -126,14 +129,15 @@ export default async function UiGeneration(
             return {
                 screen: component.screen,
                 component: component.component,
-                message: component.message
+                message: component.message,
             } as UIComponent;
         });
 
         return NextResponse.json({
             ui: validatedUI,
             message: fattenedPrompt,
-            imageHolder
+            imageHolder,
+            creditUsed,
         });
 
     } catch (error: any) {
@@ -142,9 +146,11 @@ export default async function UiGeneration(
             {
                 ui: [],
                 message: error.message || "Unknown error",
-                imageHolder: []
+                imageHolder: [],
+                creditUsed: 0
             },
             { status: 500 }
         );
     }
 }
+

@@ -9,6 +9,7 @@ import ProjectSettings from "@/components/ProjectSettings";
 import {getProjectDetails, ProjectSettingsWithId} from "@/actions/getProjectDetails";
 import { auth } from '@/utils/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import { getUserCredits } from '@/actions/getUserCredit';
 
 
 const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sidebarToggle: boolean; setSidebarToggle: (open: boolean) => void; projectId: string;}) => {
@@ -17,6 +18,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
     const [toggleProject, setToggleProject] = useState(false);
     const [projectDetails, setProjectDetails] = useState<ProjectSettingsWithId | null>(null)
     const [projectName, setProjectName] = useState<string>('Loading...');
+    const [credits, setCredits] = useState<number | null>(0);
     const user = auth.currentUser;
 
     const toggleExportModal = () => {
@@ -29,6 +31,12 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
             setProjectName(projectDetails.settings.projectName);
         }
     }, [projectDetails]);
+
+    useEffect(() => {
+        getUserCredits().then((credits) => {
+            setCredits(credits);
+        });
+    }, []);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -70,8 +78,9 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent  className="w-56 bg-slate-900 border opacity-100 z-[4000] border-slate-100/90 text-slate-100/90">
-                            <DropdownMenuItem>
-                                Credits and info
+                            <DropdownMenuItem disabled={true}>
+                                Credits remaining: 
+                                <span className='font-bold text-green-500'>{credits}</span>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator className="bg-slate-100/90 h-px" />
                             <DropdownMenuItem  onClick={()=>handleProjectSettings()} className="hover:bg-slate-800/90 bg-slate-900">

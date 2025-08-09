@@ -1,121 +1,178 @@
+'use server';
+
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
-import ImageGeneration from "@/actions/imageGen";
+import { getFirestore, doc, updateDoc, increment, getDoc, runTransaction } from 'firebase/firestore';
+import { db } from '@/utils/firebase';
 import PromptFattening from "@/actions/promptFattening";
+import ImageGeneration from "@/actions/imageGen";
 import UiGeneration from "@/actions/uiGeneration";
-import GetImages from "@/actions/getImages";
-import convertToJson from "@/actions/convertToJson";
 import HtmlToJson from "@/actions/HtmlToJson";
+import { put } from '@vercel/blob';
+import { estimateCredits, checkCredits, calculateActualCredits } from '@/utils/creditCalculator';
 
 type UIComponent = {
-    screen: {
-        name: string;
-        width: number;
-        height: number;
-    };
+    screen: { name: string; width: number; height: number };
     component: string;
     message: string;
 };
 
-interface HtmlNode {
-    type: string;
-    attributes?: {
-        [key: string]: string;
-    };
-    content?: Array<HtmlNode | string>;
-}
-
 export async function POST(request: Request) {
     try {
-        const { prompt, previousUI, imageHolder  } = await request.json();
+        const { prompt, previousUI, imageHolder, uid, projectId } = await request.json();
 
-        const FattenedPromptResponse = await PromptFattening(prompt);
-
-        if (!FattenedPromptResponse) {
-            return NextResponse.json(
-                { message: 'PromptFattening did not return a response' },
-                { status: 500 }
-            );
-        }
-        const FattenedPromptJson = await FattenedPromptResponse.json();
-
-        // console.log(FattenedPromptJson.ui);
-        // console.log(FattenedPromptJson.ui[0].splashImagePrompt);
-        let ImageContainer: string[] = [];
-
-        if (imageHolder.length === 0) {
-
-            const SplashImage = await ImageGeneration(FattenedPromptJson.ui[0].splashImagePrompt, 1);
-            if (!SplashImage) {
-                return NextResponse.json(
-                    { message: 'SplashImageGeneration did not return a response' },
-                    { status: 500 }
-                );
-            }
-            const  SplashImageJson = await SplashImage.json()
-            // console.log(SplashImageJson);
-            const SplashImageString: string = SplashImageJson.images[0].url + ' - Image of ' + SplashImageJson.prompt;
-            ImageContainer.push(SplashImageString);
-
-            const OtherImage = await ImageGeneration(FattenedPromptJson.ui[0].otherImagesPrompt, 4);
-            if (!OtherImage) {
-                return NextResponse.json(
-                    { message: 'OtherImageGeneration did not return a response' },
-                    { status: 500 }
-                );
-            }
-            const  OtherImageJson = await OtherImage.json()
-           // console.log(OtherImageJson);
-            let count = 0;
-            while (count != 4) {
-                const OtherImageString: string = OtherImageJson.images[count].url + ' - Image of ' + OtherImageJson.prompt;
-                ImageContainer.push(OtherImageString);
-                count++;
-            }
-
-           // console.log(ImageContainer);
-        } else {
-            ImageContainer = imageHolder;
+        if (!uid || !projectId) {
+            return NextResponse.json({ message: 'Missing uid or projectId' }, { status: 400 });
         }
 
-        const fattenedPrompt = FattenedPromptJson.ui[0].ui;
-        const Response = await UiGeneration(fattenedPrompt, ImageContainer, previousUI);
-        const Data = await Response.json();
-        const uiData: UIComponent[] = Data.ui;
-        console.log(uiData);
+        // Step 0: Credit Preflight Check
+        const userRef = doc(db, 'users', uid);
+        const userSnap = await getDoc(userRef);
+        
+        if (!userSnap.exists()) {
+            return NextResponse.json({ message: 'User not found' }, { status: 404 });
+        }
 
-// Use Promise.all to handle async operations in map
+        const userData = userSnap.data();
+        const balance = userData.credits || 0;
+
+        // Initial credit estimation
+        const estimated = estimateCredits(prompt, imageHolder, previousUI);
+        const creditCheck = checkCredits(estimated, balance);
+
+        if (!creditCheck.hasEnough) {
+            return NextResponse.json({
+                message: 'Insufficient credits',
+                shortfall: creditCheck.shortfall,
+                estimated: creditCheck.estimated,
+                balance: creditCheck.balance
+            }, { status: 402 });
+        }
+
+        // Reserve credits using transaction
+        const transactionResult = await runTransaction(db, async (transaction) => {
+            const userDoc = await transaction.get(userRef);
+            const currentBalance = userDoc.data()?.credits || 0;
+            
+            if (currentBalance < estimated.total) {
+                throw new Error('Insufficient credits');
+            }
+            
+            // Reserve the estimated credits
+            transaction.update(userRef, {
+                credits: currentBalance - estimated.total
+            });
+            
+            return { reserved: estimated.total, balance: currentBalance };
+        });
+
+        // Step 1: Prompt Fattening
+        const fattenedRes:any = await PromptFattening(prompt);
+        const fattenedJson = await fattenedRes.json();
+
+        // Step 2: Image Generation
+        let images: string[] = imageHolder ?? [];
+
+
+        if (images.length === 0) {
+
+            // @ts-ignore
+            const splashJson = await (await ImageGeneration(fattenedJson.ui[0].splashImagePrompt, 1)).json();
+            images.push(`${splashJson.images[0].url} - Image of ${splashJson.prompt}`);
+
+
+            // @ts-ignore
+            const otherJson = await (await ImageGeneration(fattenedJson.ui[0].otherImagesPrompt, 4)).json();
+            for (let i = 0; i < 4; i++) {
+                images.push(`${otherJson.images[i].url} - Image of ${otherJson.prompt}`);
+            }
+        }
+
+        // Step 3: UI Generation
+        const fattenedPrompt = fattenedJson.ui[0].ui;
+        const response = await UiGeneration(fattenedPrompt, images, previousUI);
+        const data = await response.json();
+        const uiData: UIComponent[] = data.ui;
+
         const convertedUI = await Promise.all(
-            uiData.map(async (item, index) => {
-                // 1. Convert component HTML to JSON
-                const componentData = await HtmlToJson(item.component);
-
-                // 2. Get screen data (assuming Data.screen[index] is an object)
-                const screenData = item.screen
-
-                // 3. Return the structured object
-                return {
-                    screen: screenData, // e.g., { name: "Home", width: 250, height: 500 }
-                    component: JSON.parse(componentData), // Parsed component data
-                };
-            })
+            uiData.map(async item => ({
+                screen: item.screen,
+                component: JSON.parse(await HtmlToJson(item.component))
+            }))
         );
 
-// Now you can use convertedUI
-        const compose = {
+        // Calculate actual credits used
+        const actualCredits = calculateActualCredits(
+            fattenedRes.usage?.total_tokens || 0, // Prompt fattening tokens
+            images.length - (imageHolder?.length || 0), // New images generated
+            data.creditUsed, // UI generation tokens
+            convertedUI.length // HTML to JSON conversions
+        );
+
+        const newEntry = {
+            createdAt: new Date().toISOString(),
+            prompt,
+            creditUsed: actualCredits.total,
             ui: convertedUI,
-            message: Data.message,
-            imageHolder: ImageContainer
+            imageHolder: images
         };
-        console.log(convertedUI);
 
-        console.log(compose);
-        return NextResponse.json(compose);
+        // Step 4: Read existing blob (if it exists)
+        const projectRef = doc(db, 'users', uid, 'projects', projectId);
+        const projectSnap = await getDoc(projectRef);
+        const projectData = projectSnap.data();
+        const blobUrl = projectData?.uiBlobUrl;
+
+        let history: any[] = [];
+
+        if (blobUrl) {
+            try {
+                const blobRes = await fetch(blobUrl);
+                history = JSON.parse(await blobRes.text());
+            } catch (e) {
+                console.warn('Failed to read blob, will overwrite.');
+                history = [];
+            }
+        }
+
+        history.push(newEntry);
+
+        // Step 5: Upload updated blob to Vercel
+        const blob = await put(`project-ui/${projectId}.json`, JSON.stringify(history), {
+            access: 'public'
+        });
+
+        // Step 6: Update Firestore (if first time)
+        await updateDoc(projectRef, {
+            updatedAt: new Date(),
+            lastUsedPrompt: prompt,
+            ...(blobUrl ? {} : { uiBlobUrl: blob.url })
+        });
+
+        // Step 7: Reconcile actual credits used vs reserved
+        const creditDifference = actualCredits.total - transactionResult.reserved;
+        
+        if (creditDifference !== 0) {
+            await updateDoc(doc(db, 'users', uid), {
+                credits: increment(-creditDifference) // Add or subtract the difference
+            });
+        }
+
+        return NextResponse.json({
+            message: data.message,
+            imageHolder: images,
+            ui: convertedUI,
+            creditUsed: actualCredits.total,
+            creditBreakdown: {
+                promptFattening: actualCredits.promptFattening,
+                imageGeneration: actualCredits.imageGeneration,
+                uiGeneration: actualCredits.uiGeneration,
+                htmlToJson: actualCredits.htmlToJson,
+                total: actualCredits.total
+            }
+        });
+
     } catch (error) {
-        console.error(error);
-        return NextResponse.json(
-            { message: 'Error generating UI' },
-            { status: 500 }
-        );
+        console.error('[ERROR]', error);
+        return NextResponse.json({ message: 'Error generating UI' }, { status: 500 });
     }
 }

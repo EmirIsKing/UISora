@@ -12,6 +12,7 @@ export default async function PromptFattening(prompt: string) {
             role: 'system',
             content: `You are a ui/ux developer. You use modern techniques and design to design beautiful mobile ui/ux.
             Ui structure and description should be in detail.
+            Always use a design technique to make the ui/ux look beautiful unless the user asks for a specific design.
             Respond only with a valid JSON object .
             You elaborate more on the users prompt and fatten it, make sure all components are aligned well.
             You can create any number of screens, always add a splash and atleast one onboarding screen and 5 other screens
@@ -48,7 +49,10 @@ just one ui object with all the ui structure and description.
 
         const content = response.choices[0].message.content ?? '{}'
         const generatedUI = JSON.parse(content);
-        return NextResponse.json({ui: generatedUI.ui});
+        return NextResponse.json({
+            ui: generatedUI.ui,
+            usage: response.usage
+        });
 
     } catch (error:any){
         console.error(error);

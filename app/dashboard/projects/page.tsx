@@ -3,17 +3,18 @@
 import React, { useEffect, useState } from 'react';
 import CreateNewProject from '@/components/CreateNewProject';
 import ProjectItem from '@/components/ProjectItem';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/utils/firebase';
+import { useAuth } from '@/contexts/AuthContext';
 import { JsonToHtmlRendererProps } from '@/types/types';
 import {getUserProjectSettings} from "@/actions/getUserProjectSettings";
 import {ProjectSettings} from "@/types/types";
 
 
 const Page = () => {
-    const [user, userLoading] = useAuthState(auth);
+    const { user, loading: userLoading } = useAuth();
     const [projects, setProjects] = useState<{id:string; settings: ProjectSettings}[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+
+
 
 
     useEffect(() => {

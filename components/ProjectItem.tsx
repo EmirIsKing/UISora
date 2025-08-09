@@ -7,7 +7,6 @@ import {ProjectSettings} from "@/types/types";
 import {useRouter} from "next/navigation";
 import {deleteProject} from "@/actions/deleteProject";
 import { auth } from '@/utils/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
 import {getProjectDetails} from "@/actions/getProjectDetails";
 
 
@@ -23,28 +22,24 @@ const ProjectItem = ({project, allProjects, setProjects}:{project:{id:string; se
 
 
     const handleDelete = async (projectId: string) => {
-
         const user = auth.currentUser;
-        if (!user) return console.error("Not logged in");
+        if (!user) {
+            console.error("Not logged in");
+            return;
+        }
 
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                try {
-                    setLoading(true)
-                    await deleteProject(user.uid, projectId);
-                    const updatedProjectsArray = allProjects.filter((project:any) => project.id !== projectId);
-                    setProjects(updatedProjectsArray);
-                    setLoading(false)
-                    alert("Project deleted!");
-                } catch (err) {
-                    console.error(err);
-                }
-            } else {
-                console.error("User not authenticated");
-            }
-        });
-
-        return () => unsubscribe();
+        try {
+            setLoading(true);
+            await deleteProject(user.uid, projectId);
+            const updatedProjectsArray = allProjects.filter((project: any) => project.id !== projectId);
+            setProjects(updatedProjectsArray);
+            alert("Project deleted!");
+        } catch (err: any) {
+            console.error("Delete error:", err);
+            alert(`Failed to delete project: ${err.message}`);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (

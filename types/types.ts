@@ -108,6 +108,7 @@ export interface JsonToHtmlRendererProps {
 export interface ProjectSettings {
     projectName: string;
     createdBy?: string; // UID or email
+    uiBlobUrl?: string;
     visibility: 'private' | 'public';
     theme?: 'light' | 'dark';
     autosave?: boolean;

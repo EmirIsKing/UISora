@@ -42,7 +42,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
-                    const temp = await getProjectDetails(projectId);
+                    const temp = await getProjectDetails(user?.uid, projectId);
                     setProjectDetails(temp);
                 } catch (error) {
                     console.error("Error fetching project:", error);

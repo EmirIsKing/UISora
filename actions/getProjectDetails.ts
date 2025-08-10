@@ -1,26 +1,31 @@
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import { auth } from '@/utils/firebase';
+// actions/getProjectDetails.ts
+'use server';
+
+import { adminDb } from '@/utils/firebaseAdmin';
 import { ProjectSettings } from '@/types/types';
 
 export interface ProjectSettingsWithId {
     id: string;
     settings: ProjectSettings;
+    blobUrl: string;
 }
 
-export async function getProjectDetails(projectId: string): Promise<ProjectSettingsWithId | null> {
-    const user = auth.currentUser;
-    if (!user) throw new Error('User not authenticated');
+export async function getProjectDetails(
+    uid: string,
+    projectId: string
+): Promise<ProjectSettingsWithId | null> {
+    if (!uid) throw new Error('User ID is required');
 
-    const db = getFirestore();
-    const projectRef = doc(db, 'users', user.uid, 'projects', projectId);
-    const projectSnap = await getDoc(projectRef);
+    const projectRef = adminDb.doc(`users/${uid}/projects/${projectId}`);
+    const projectSnap = await projectRef.get();
 
-    if (!projectSnap.exists()) return null;
+    if (!projectSnap.exists) return null;
 
     const data = projectSnap.data();
 
     return {
         id: projectSnap.id,
-        settings: data.settings as ProjectSettings,
+        settings: data?.settings as ProjectSettings,
+        blobUrl: data?.uiBlobUrl as string
     };
 }

@@ -1,8 +1,7 @@
 'use server';
 
 import { NextResponse } from 'next/server';
-import { getFirestore, doc, updateDoc, increment, getDoc, runTransaction } from 'firebase/firestore';
-import { db } from '@/utils/firebase';
+import { adminDb, adminIncrement } from '@/utils/firebaseAdmin'; // ✅ using Admin SDK now
 import PromptFattening from "@/actions/promptFattening";
 import ImageGeneration from "@/actions/imageGen";
 import UiGeneration from "@/actions/uiGeneration";
@@ -25,17 +24,16 @@ export async function POST(request: Request) {
         }
 
         // Step 0: Credit Preflight Check
-        const userRef = doc(db, 'users', uid);
-        const userSnap = await getDoc(userRef);
+        const userRef = adminDb.doc(`users/${uid}`);
+        const userSnap = await userRef.get();
         
-        if (!userSnap.exists()) {
+        if (!userSnap.exists) {
             return NextResponse.json({ message: 'User not found' }, { status: 404 });
         }
 
         const userData = userSnap.data();
-        const balance = userData.credits || 0;
+        const balance = userData?.credits || 0;
 
-        // Initial credit estimation
         const estimated = estimateCredits(prompt, imageHolder, previousUI);
         const creditCheck = checkCredits(estimated, balance);
 
@@ -49,7 +47,7 @@ export async function POST(request: Request) {
         }
 
         // Reserve credits using transaction
-        const transactionResult = await runTransaction(db, async (transaction) => {
+        const transactionResult = await adminDb.runTransaction(async (transaction) => {
             const userDoc = await transaction.get(userRef);
             const currentBalance = userDoc.data()?.credits || 0;
             
@@ -57,7 +55,6 @@ export async function POST(request: Request) {
                 throw new Error('Insufficient credits');
             }
             
-            // Reserve the estimated credits
             transaction.update(userRef, {
                 credits: currentBalance - estimated.total
             });
@@ -72,15 +69,12 @@ export async function POST(request: Request) {
         // Step 2: Image Generation
         let images: string[] = imageHolder ?? [];
 
-
         if (images.length === 0) {
-
-            // @ts-ignore
+            //@ts-ignore
             const splashJson = await (await ImageGeneration(fattenedJson.ui[0].splashImagePrompt, 1)).json();
             images.push(`${splashJson.images[0].url} - Image of ${splashJson.prompt}`);
 
-
-            // @ts-ignore
+            //@ts-ignore
             const otherJson = await (await ImageGeneration(fattenedJson.ui[0].otherImagesPrompt, 4)).json();
             for (let i = 0; i < 4; i++) {
                 images.push(`${otherJson.images[i].url} - Image of ${otherJson.prompt}`);
@@ -102,10 +96,10 @@ export async function POST(request: Request) {
 
         // Calculate actual credits used
         const actualCredits = calculateActualCredits(
-            fattenedRes.usage?.total_tokens || 0, // Prompt fattening tokens
-            images.length - (imageHolder?.length || 0), // New images generated
-            data.creditUsed, // UI generation tokens
-            convertedUI.length // HTML to JSON conversions
+            fattenedRes.usage?.total_tokens || 0,
+            images.length - (imageHolder?.length || 0),
+            data.creditUsed,
+            convertedUI.length
         );
 
         const newEntry = {
@@ -117,8 +111,8 @@ export async function POST(request: Request) {
         };
 
         // Step 4: Read existing blob (if it exists)
-        const projectRef = doc(db, 'users', uid, 'projects', projectId);
-        const projectSnap = await getDoc(projectRef);
+        const projectRef = adminDb.doc(`users/${uid}/projects/${projectId}`);
+        const projectSnap = await projectRef.get();
         const projectData = projectSnap.data();
         const blobUrl = projectData?.uiBlobUrl;
 
@@ -128,8 +122,7 @@ export async function POST(request: Request) {
             try {
                 const blobRes = await fetch(blobUrl);
                 history = JSON.parse(await blobRes.text());
-            } catch (e) {
-                console.warn('Failed to read blob, will overwrite.');
+            } catch {
                 history = [];
             }
         }
@@ -137,12 +130,12 @@ export async function POST(request: Request) {
         history.push(newEntry);
 
         // Step 5: Upload updated blob to Vercel
-        const blob = await put(`project-ui/${projectId}.json`, JSON.stringify(history), {
+        const blob = await put(`${projectId}.json`, JSON.stringify(history), {
             access: 'public'
         });
 
         // Step 6: Update Firestore (if first time)
-        await updateDoc(projectRef, {
+        await projectRef.update({
             updatedAt: new Date(),
             lastUsedPrompt: prompt,
             ...(blobUrl ? {} : { uiBlobUrl: blob.url })
@@ -152,8 +145,8 @@ export async function POST(request: Request) {
         const creditDifference = actualCredits.total - transactionResult.reserved;
         
         if (creditDifference !== 0) {
-            await updateDoc(doc(db, 'users', uid), {
-                credits: increment(-creditDifference) // Add or subtract the difference
+            await userRef.update({
+                credits: adminIncrement(-creditDifference)
             });
         }
 

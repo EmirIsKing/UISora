@@ -5,6 +5,7 @@ import EditableText from "@/components/EditableText";
 import camelcaseKeys from 'camelcase-keys';
 import NormalRenderer from "@/components/NormalRenderer";
 import VoidRenderer from "@/components/VoidRenderer";
+import { cleanStyleConflicts } from "@/utils/styleUtils";
 
 const VOID_ELEMENTS = new Set([
     'area', 'base', 'br', 'col', 'embed', 'hr',
@@ -23,17 +24,39 @@ export const renderElement = (element: string | HtmlElement, index?: number): Re
 
     const { type, attributes = {}, content = [] } = element;
 
-    // Convert style string to object if needed
-    const processedAttributes = { ...attributes };
+    // Filter out event handlers and convert style string to object if needed
+    const processedAttributes: Record<string, any> = {};
+    for (const [key, value] of Object.entries(attributes)) {
+        // Skip event handlers (onclick, onClick, onchange, etc.)
+        if (key.toLowerCase().startsWith('on')) {
+            continue;
+        }
+        processedAttributes[key] = value;
+    }
+    
     if (typeof processedAttributes.style === 'string') {
         const temp = parse(processedAttributes.style);
-        processedAttributes.style = camelcaseKeys(temp as Record<string, unknown>);
+        const camelCaseStyle = camelcaseKeys(temp as Record<string, unknown>);
+        processedAttributes.style = cleanStyleConflicts(camelCaseStyle);
         console.log(processedAttributes.style)
     }
 
     // Handle void elements (no children allowed)
     if (VOID_ELEMENTS.has(type)) {
         return <VoidRenderer key={index} index={index} processedAttributes={processedAttributes} type={type}/>
+    }
+
+    // Handle form elements that need value/defaultValue instead of children
+    if (type === 'textarea' || type === 'input' || type === 'select') {
+        const elementValue = content.length > 0 ? content[0] : '';
+        return React.createElement(
+            type,
+            {
+                key: index,
+                ...processedAttributes,
+                defaultValue: elementValue
+            }
+        );
     }
 
     // Normal elements with children

@@ -1,5 +1,6 @@
 import React from "react";
 import { Rnd } from "react-rnd";
+import { cleanStyleConflicts } from "@/utils/styleUtils";
 
 interface Node {
     type: string;
@@ -17,9 +18,11 @@ const voidTags = new Set([
     "input", "link", "meta", "param", "source", "track", "wbr"
 ]);
 
+
+
 function parseStyleString(styleString?: string): React.CSSProperties {
     if (!styleString) return {};
-    return styleString.split(";").reduce((acc, stylePair) => {
+    const parsed = styleString.split(";").reduce((acc, stylePair) => {
         const [key, value] = stylePair.split(":").map(s => s.trim());
         if (key && value) {
             const camelKey = key.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
@@ -27,17 +30,22 @@ function parseStyleString(styleString?: string): React.CSSProperties {
         }
         return acc;
     }, {} as React.CSSProperties);
+    
+    return cleanStyleConflicts(parsed);
 }
 
 export function Renderer({ node }: RendererProps) {
     const { type, attributes, children = [] } = node;
     const style = parseStyleString(attributes.style);
 
-    // Copy attributes, rename 'class' to 'className'
+    // Copy attributes, rename 'class' to 'className', skip event handlers
     const reactAttrs: { [key: string]: any } = {};
     for (const key in attributes) {
         if (key === "class") {
             reactAttrs["className"] = attributes[key];
+        } else if (key.toLowerCase().startsWith('on')) {
+            // Skip event handlers
+            continue;
         } else if (key !== "style") {
             reactAttrs[key] = attributes[key];
         }

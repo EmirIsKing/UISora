@@ -9,7 +9,6 @@ import {useExportModal} from "@/store/store";
 import {usePanning, useSelectElement} from "@/store/store";
 import {Button} from "@heroui/button";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import {auth} from '@/utils/firebase'
 import {RenderRDE} from "@/components/ResizableMovableElement";
 import {HtmlElement, htmltype} from "@/types/types";
 import {RDEmetadata} from "@/types/types";
@@ -17,6 +16,9 @@ import {Hand, SquareMousePointer} from "lucide-react";
 import { Renderer } from "@/components/Renderer";
 import {jsondata} from "@/utils/newtestjson";
 import JsonToHtmlRenderer from "@/components/JsonToHtmlRenderer";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { useAuth } from "@/contexts/AuthContext";
+import { getProjectDetails } from '@/actions/getProjectDetails';
 
 interface JsonToHtmlRendererProps {
 
@@ -52,7 +54,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [startPan, setStartPan] = useState({ x: 0, y: 0 });
     const containerRef = useRef(null);
     const {setSelected, selection} = useSelectElement()
-    const user = auth.currentUser;
+    const { user } = useAuth();
 
 
     console.log("projectId", projectId);
@@ -78,6 +80,25 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     interface MetaData {
         ui: ScreenConfig[];
     }
+
+    useEffect(() => {
+        const fetchProjectDetails = async () => {
+            if (user?.uid) {
+                const projectDetails = await getProjectDetails(user?.uid, projectId);
+                console.log(projectDetails);
+                if (projectDetails?.blobUrl) {
+                    const blobRes = await fetch(projectDetails?.blobUrl);
+                    const blobData = await blobRes.json();
+                    setGeneratedUI(blobData[0]);
+                    console.log(blobData[0]);
+                    console.log(jsondata);
+                }
+
+            }
+        };
+        fetchProjectDetails();
+    }, [projectId, user?.uid]);
+
 
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -157,7 +178,8 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
 
     return (
-        <section className={'flex flex-col h-screen'}>
+        <ProtectedRoute redirectTo="/auth/sign-in">
+            <section className={'flex flex-col h-screen'}>
             <ProjectPageNavigation projectId={projectId} sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
             <div
                 className={`hidden transition-all duration-300 inset-0 z-[2000] bg-slate-900/20 backdrop-blur-sm
@@ -359,5 +381,6 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 )
             }
         </section>
+        </ProtectedRoute>
     );
 }

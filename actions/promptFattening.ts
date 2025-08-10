@@ -14,6 +14,7 @@ export default async function PromptFattening(prompt: string) {
             Ui structure and description should be in detail.
             Always use a design technique to make the ui/ux look beautiful unless the user asks for a specific design.
             Respond only with a valid JSON object .
+            Make sure to always keep in mind the dimensions of the screen.
             You elaborate more on the users prompt and fatten it, make sure all components are aligned well.
             You can create any number of screens, always add a splash and atleast one onboarding screen and 5 other screens
             

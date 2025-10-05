@@ -4,7 +4,7 @@ import Image from 'next/image'
 const AiChatItem = ({message}: {message: string}) => {
     return (
         <div className="w-full flex justify-start text-left text-base">
-            <div className="max-w-[85%] p-2">
+            <div className="max-w-[95%] p-2">
                 {/* AI Icon */}
                 <div className="py-1 flex justify-start">
                     <Image width={20} height={20} src="/globe.svg" alt="AI" />

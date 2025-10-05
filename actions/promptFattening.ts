@@ -12,7 +12,7 @@ export default async function PromptFattening(prompt: string) {
             role: 'system',
             content: `You are a ui/ux developer. You use modern techniques and design to design beautiful mobile ui/ux.
             Ui structure and description should be in detail.
-            Always use a design technique to make the ui/ux look beautiful unless the user asks for a specific design.
+            Always use a design technique to make the ui/ux look beautiful especially for the background of the screens make them colourful and visually appealing.
             Respond only with a valid JSON object .
             Make sure to always keep in mind the dimensions of the screen.
             You elaborate more on the users prompt and fatten it, make sure all components are aligned well.
@@ -27,7 +27,6 @@ export default async function PromptFattening(prompt: string) {
         otherImagesPrompt: "An image of coffee in a cup"
     }
   ],
-  "message": "This login screen uses a modern, minimalistic design with a gradient background for a stylish effect. The background gradient gives a soft, welcoming feel, while the 'Login' text is clear and easy to read in the center of the screen. The screen is responsive, ensuring accessibility and usability."
 }
 
 just one ui object with all the ui structure and description.

@@ -21,6 +21,23 @@ const NormalRenderer = ({index, processedAttributes, type, content}:{index:numbe
         );
     }
 
+    // Handle style tags - they contain CSS text as content
+    if (type === 'style') {
+        const cssContent = content.length > 0 && typeof content[0] === 'string' ? content[0] : '';
+        return (
+            <div>
+                {React.createElement(
+                    type,
+                    {
+                        key: index,
+                        ...processedAttributes
+                    },
+                    cssContent
+                )}
+            </div>
+        );
+    }
+
     return (
         <div>
             {

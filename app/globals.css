@@ -3,6 +3,20 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+
+/* Prevent text selection highlight from being captured */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.no-highlight * {
+  user-select: none !important;
+  outline: none !important;
+}
+
+
+
 .loader {
   width: 48px;
   height: 48px;

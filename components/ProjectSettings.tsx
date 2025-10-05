@@ -32,9 +32,9 @@ const ProjectSettings = ({toggleSettings, projectDetails, setProjectNameOptimist
 
 
     return (
-        <div onClick={toggleSettings}  className={'absolute flex  top-0  backdrop-blur-xs justify-center items-center h-screen w-full '}>
-            <div className=" relative flex justify-center items-center w-full h-full">
-                <div onClick={(e) => e.stopPropagation()} className={'p-5 bg-white rounded-xl shadow-md gap-5 border-black border w-1/4'}>
+        <div onClick={toggleSettings}  className={'absolute flex top-0 backdrop-blur-xs justify-center items-center h-screen w-full '}>
+            <div className="relative flex justify-center items-center w-full h-full">
+                <div onClick={(e) => e.stopPropagation()} className={'p-5 bg-white rounded-xl shadow-md gap-5 border-black border w-1/4 max-md:w-[80%]'}>
                     <h2 className="text-xl text-center font-bold text-gray-800">Project Settings</h2>
 
                     <div className="grid gap-6 w-full max-w-xl mx-auto mt-3">

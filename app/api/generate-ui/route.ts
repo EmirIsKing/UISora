@@ -105,6 +105,7 @@ export async function POST(request: Request) {
         const newEntry = {
             createdAt: new Date().toISOString(),
             prompt,
+            aiResponse: data.message || "No response generated",
             creditUsed: actualCredits.total,
             ui: convertedUI,
             imageHolder: images
@@ -130,7 +131,7 @@ export async function POST(request: Request) {
         history.push(newEntry);
 
         // Step 5: Upload updated blob to Vercel
-        const blob = await put(`${projectId}.json`, JSON.stringify(history), {
+        const blob = await put(`project-ui/${projectId}.json`, JSON.stringify(history), {
             access: 'public'
         });
 

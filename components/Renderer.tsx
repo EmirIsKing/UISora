@@ -58,6 +58,25 @@ export function Renderer({ node }: RendererProps) {
     // For void tags, no children allowed in React.createElement
     const isVoid = voidTags.has(type.toLowerCase());
 
+    // Handle style tags specially - they contain CSS text
+    if (type === 'style') {
+        const cssContent = children.length > 0 && typeof children[0] === 'string' ? children[0] : '';
+        return (
+            <Rnd
+                bounds="parent"
+                default={{
+                    x: left,
+                    y: top,
+                    width,
+                    height,
+                }}
+                style={{ ...style, border: "1px solid #ddd", padding: 8, boxSizing: "border-box" }}
+            >
+                {React.createElement(type, reactAttrs, cssContent)}
+            </Rnd>
+        );
+    }
+
     // Recursively render children if not void tag
     const renderedChildren = isVoid
         ? undefined

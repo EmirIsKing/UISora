@@ -1,13 +1,15 @@
 import React from 'react'
 import Image from "next/image";
 
-const UserChatItem = ({message}: {message: string}) => {
+const UserChatItem = ({message, email}: {message: string, email: string}) => {
     return (
         <div className="w-full flex justify-end text-left">
-            <div className="max-w-[70%] p-2">
+            <div className="max-w-[90%] p-2">
                 {/* User Icon */}
-                <div className="py-1 flex justify-end">
-                    <Image width={20} height={20} src="/globe.svg" alt="user" />
+                <div className='flex justify-end py-1'>
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-medium">
+                        {email?.charAt(0).toUpperCase()}
+                    </div>
                 </div>
 
                 {/* Chat Bubble */}

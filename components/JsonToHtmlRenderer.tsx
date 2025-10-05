@@ -30,14 +30,19 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data }) => {
 
         const { type, attributes = {}, content = [] } = element;
 
-        // Filter out event handlers and convert style string to object if needed
+        // Filter out event handlers and convert HTML attributes to React format
         const processedAttributes: Record<string, any> = {};
         for (const [key, value] of Object.entries(attributes)) {
             // Skip event handlers (onclick, onClick, onchange, etc.)
             if (key.toLowerCase().startsWith('on')) {
                 continue;
             }
-            processedAttributes[key] = value;
+            // Convert class to className
+            if (key === 'class') {
+                processedAttributes.className = value;
+            } else {
+                processedAttributes[key] = value;
+            }
         }
         
         if (typeof processedAttributes.style === 'string') {
@@ -61,9 +66,21 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data }) => {
                 {
                     key: index,
                     ...processedAttributes,
-                    className: processedAttributes.class || processedAttributes.className,
                     defaultValue: elementValue
                 }
+            );
+        }
+
+        // Handle style tags - they contain CSS text as content
+        if (type === 'style') {
+            const cssContent = content.length > 0 && typeof content[0] === 'string' ? content[0] : '';
+            return React.createElement(
+                type,
+                {
+                    key: index,
+                    ...processedAttributes
+                },
+                cssContent
             );
         }
 
@@ -72,8 +89,7 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data }) => {
             type,
             {
                 key: index,
-                ...processedAttributes,
-                className: processedAttributes.class || processedAttributes.className
+                ...processedAttributes
             },
             content.map((child, i) => renderElement(child, i))
         );

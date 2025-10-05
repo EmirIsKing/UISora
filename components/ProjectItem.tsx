@@ -65,10 +65,19 @@ const ProjectItem = ({project, allProjects, setProjects}:{project:{id:string; se
                 </Dropdown>
             </div>
             <div>
-                <h1 className={`text-xl font-semibold text-wrap truncate`}>
+                <h1 className={`text-xl font-semibold text-wrap truncate block`}>
                     {project.settings.projectName ? project.settings.projectName : "No name"}
                 </h1>
-                <p className={`text-wrap truncate`}>{project.settings.description ? project.settings.description : "No Description"}</p>
+                <div className="relative group w-40">
+                    <p className="truncate overflow-hidden whitespace-nowrap block">
+                        {project.settings.description || "No Description"}
+                    </p>
+
+                    {/* Tooltip */}
+                    <div className="absolute bottom-full left-0 mb-2 hidden w-max max-w-xs rounded bg-gray-800 px-2 py-1 text-xs text-white group-hover:block z-10">
+                        {project.settings.description || "No Description"}
+                    </div>
+                    </div>
             </div>
         </div>
     )

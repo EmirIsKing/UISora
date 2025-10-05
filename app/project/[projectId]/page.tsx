@@ -19,6 +19,9 @@ import JsonToHtmlRenderer from "@/components/JsonToHtmlRenderer";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
 import { getProjectDetails } from '@/actions/getProjectDetails';
+import AssetExport from '@/components/AssetExport';
+import UiExport from '@/components/UiExport';
+
 
 interface JsonToHtmlRendererProps {
 
@@ -55,6 +58,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const containerRef = useRef(null);
     const {setSelected, selection} = useSelectElement()
     const { user } = useAuth();
+    const screenshotRef = useRef<HTMLDivElement>(null)
 
 
     console.log("projectId", projectId);
@@ -87,11 +91,42 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 const projectDetails = await getProjectDetails(user?.uid, projectId);
                 console.log(projectDetails);
                 if (projectDetails?.blobUrl) {
-                    const blobRes = await fetch(projectDetails?.blobUrl);
-                    const blobData = await blobRes.json();
-                    setGeneratedUI(blobData[0]);
-                    console.log(blobData[0]);
-                    console.log(jsondata);
+                    try {
+                        const blobRes = await fetch(projectDetails?.blobUrl);
+                        if (!blobRes.ok) {
+                            console.error('Failed to fetch blob data:', blobRes.status, blobRes.statusText);
+                            return;
+                        }
+                        const blobData = await blobRes.json();
+                    
+                        // Load the full history
+                        if (blobData && blobData.length > 0) {
+                            // Set the latest UI
+                            setGeneratedUI(blobData[blobData.length - 1]);
+                            
+                            // Populate chat history from all entries
+                            const chatHistory = blobData.map((entry: any) => ({
+                                userPrompt: entry.prompt,
+                                AiResponse: entry.aiResponse || "No response generated"
+                            }));
+                            setChat(chatHistory);
+                            
+                            // Set the chain from the last entry if it exists
+                            if (blobData.length > 1) {
+                                const lastEntry = blobData[blobData.length - 1];
+                                setChain(lastEntry.prompt);
+                            }
+                            
+                            // Set image holder from the latest entry
+                            if (blobData[blobData.length - 1].imageHolder) {
+                                setImageHolder(blobData[blobData.length - 1].imageHolder);
+                            }
+                        }
+                        
+                        console.log('Loaded blob data:', blobData);
+                    } catch (error) {
+                        console.error('Error loading project data:', error);
+                    }
                 }
 
             }
@@ -107,38 +142,21 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
        try {
            if (!prompt.trim()) return; // Prevent empty messages
 
-           // Append the new prompt to the chain
-           const updatedChain = chain ? `${chain} → ${prompt}` : prompt;
-           setChain(updatedChain);
+           // Store the current prompt before clearing
+           const currentPrompt = prompt;
+           setPrompt('');
 
            // Add user input to chat with a temporary AI response
-           setChat((prevChat) => [...prevChat, { userPrompt: prompt, AiResponse: "Generating" }]);
-           setPrompt('');
-           // Send request to AI API with chained context
+           setChat((prevChat) => [...prevChat, { userPrompt: currentPrompt, AiResponse: "Generating..." }]);
+           
+           // Send request to AI API with the current prompt (not chained)
            const response = await fetch('/api/generate-ui', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ prompt: updatedChain, previousUI: generatedUI, imageHolder,projectId, uid:user?.uid}), // Pass previous UI state
+               body: JSON.stringify({ prompt: currentPrompt, previousUI: generatedUI, imageHolder, projectId, uid: user?.uid }),
            });
 
-
-           //const exportData: {name: string, ui: string}[] = [];
-
            const data = await response.json();
-
-           // console.log(response)
-           //
-           // console.log(data)
-           // data.ui.forEach((item: {screen: string, ReactFigma: string}) => {
-           //     exportData.push({
-           //         name: item.screen,
-           //         ui: item.ReactFigma // Assuming you want "component" as "ui" in your store
-           //     });
-           // });
-           //
-           // useExportData.getState().setExport(exportData);
-           //
-           // console.log('exportData', useExportData.getState().exportData);
 
            // Update chat with actual AI response
            setChat((prevChat) =>
@@ -147,25 +165,18 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                )
            );
 
-
-           // Append the new UI instead of replacing it
-           setGeneratedUI(prev => ({
-               ...prev,
-               ui: [...(data.ui || [])]
-           }));
-           setImageHolder(data.imageHolder)
-           // console.log("date.ui: ",data.ui)
-           // console.log("ImageHolder: ",imageHolder)
-           // console.log("data: ",data)
-
-           // Clear prompt input
+           // Update the UI with the new generated UI
+           setGeneratedUI(data.ui || jsondata);
+           setImageHolder(data.imageHolder || []);
 
        } catch (error) {
            console.log(error);
-           setChat((prevChat) => [
-               ...prevChat,
-               { userPrompt: prompt, AiResponse: "Error: Unable to generate UI. Please try again later." },
-           ]);       }
+           setChat((prevChat) =>
+               prevChat.map((item, index) =>
+                   index === prevChat.length - 1 ? { ...item, AiResponse: "Error: Unable to generate UI. Please try again later." } : item
+               )
+           );
+       }
     };
 
     const bottomOfChatRef = useRef<HTMLDivElement>(null);
@@ -206,14 +217,14 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                     {/* Chat History */}
                     <div
                         className={`flex-1 flex-grow flex flex-col w-full h-full
-                            overflow-y-auto pt-3 px-3 pb-24 scrollbar-transparent scroll-smooth overscroll-y-contain
+                            overflow-y-auto pt-3 px-3 pb-24 max-md:pt-12 scrollbar-transparent scroll-smooth overscroll-y-contain
                             ${sidebarToggle ? "" : "hidden"}
                             `}
                         ref={bottomOfChatRef}
                     >
                         {chat.map((chatItem, index) => (
                             <div key={index} className={''}>
-                                <UserChatItem message={chatItem.userPrompt}/>
+                                <UserChatItem message={chatItem.userPrompt} email={user?.email || 'User'}/>
                                 <AiChatItem message={chatItem.AiResponse}/>
                             </div>
                         ))}
@@ -279,8 +290,10 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                             setPanning(true)
                                             setSelected("none");
                                         }}
+                                        
                                     >
                                         <div
+                                            
                                             className="absolute"
                                             style={{
                                                 top: '50%',
@@ -317,7 +330,8 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                             {/*    })}*/}
                                             {/*</div>*/}
                                             {/*prev use*/}
-                                            <div className="flex flex-wrap items-start gap-x-[100px] p-4">
+                                            <div  ref={screenshotRef} className='no-highlight'>
+                                            <div  className="flex flex-wrap items-start gap-x-[100px] p-4">
                                                 {generatedUI.ui.map((item , index: number) => {
                                                     const screenWidth = item.screen.width || 280;
                                                     const screenHeight = item.screen.height || 540;
@@ -345,6 +359,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                                     );
                                                 })}
                                             </div>
+                                            </div>
 
                                             {/*{uiElements.map((item, i) => (*/}
                                             {/*    <RDE key={i} metadata={item}/>*/}
@@ -365,16 +380,9 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                     <div
                         onClick={()=>setExportModal(false)}
                         className={'fixed inset-0 flex w-full h-full justify-center items-center backdrop-blur-xs z-[9999]'}>
-                        <div className="p-5 bg-white rounded-xl shadow-md w-80 space-y-4">
-                            <h2 className="text-lg font-semibold text-gray-800">Export to Figma in 3 Steps</h2>
-
-                            <ol className="list-decimal list-inside text-sm text-gray-700 space-y-1">
-                                <li>Copy the JSON syntax using the button below</li>
-                                <li>Install the “Design Forge” Figma plugin</li>
-                                <li>Paste the JSON in the plugin and render</li>
-                            </ol>
-
-                            <Button className="w-full mt-2 bg-black/90 rounded-md text-white py-2">Copy</Button>
+                        <div className="bg-white rounded-xl shadow-md w-80 flex items-center justify-center gap-4 p-12">
+                            <AssetExport assets={imageHolder}/>
+                            <UiExport screenRef={screenshotRef}/>
                         </div>
 
                     </div>

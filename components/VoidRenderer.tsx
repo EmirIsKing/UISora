@@ -1,10 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const VoidRenderer = ({index, processedAttributes, type,}:{index:number|undefined, processedAttributes:{
-        class?: string
-        style?: string | Record<string, unknown>
-        id?: string
-    }, type:string}) => {
+const VoidRenderer = ({index, processedAttributes, type,}:{index:number|undefined, processedAttributes:Record<string, any>, type:string}) => {
 
     return (
         <div>
@@ -14,7 +10,6 @@ const VoidRenderer = ({index, processedAttributes, type,}:{index:number|undefine
                     {
                         key: index,
                         ...processedAttributes,
-                        className: processedAttributes.class || processedAttributes.className,
                     },
                 )
             }

@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react'
 import DashboardTabs from "@/components/DashboardTabs";
 import UserProfile from "@/components/auth/UserProfile";
+import FeedbackButton from './FeedbackButton';
 
 
 const DashboardNavigationBar = () => {
@@ -10,7 +11,8 @@ const DashboardNavigationBar = () => {
             <div className={`w-[80%] flex justify-center items-center`}>
                 <DashboardTabs/>
             </div>
-            <div className={'w-auto justify-end items-center'}>
+            <div className={'w-auto flex gap-3 max-md:gap-1 justify-end items-center'}>
+                <FeedbackButton/>
                 <UserProfile />
             </div>
         </div>

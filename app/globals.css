@@ -50,6 +50,67 @@
   }
 }
 
+
+.h3 {
+  font-size: 56px;
+  font-weight: bold;
+}
+
+@media (max-width: 46rem) {
+  .h3 {
+    font-size: 48px;
+  }
+}
+
+.h2 {
+  font-size: 40px;
+  font-weight: 600;
+}
+
+@media (max-width: 46rem) {
+  .h2 {
+    font-size: 34px;
+  }
+}
+
+.h1 {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+@media (max-width: 46rem) {
+  .h1 {
+    font-size: 24px;
+  }
+}
+
+.body {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+@media (max-width: 46rem) {
+  .body {
+    font-size: 16px;
+  }
+}
+
+.caption {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+@media (max-width: 46rem) {
+  .caption {
+    font-size: 12px;
+  }
+}
+
+.custom-shadow {
+  box-shadow: 0px 8px 24px 1px rgba(84, 60, 243, 0.17);
+}
+
+
 .grid-background {
   background-color: #ffffff;
   background-image: url("data:image/svg+xml,\

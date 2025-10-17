@@ -1,11 +1,25 @@
 import React from 'react'
 import Link from 'next/link'
 import SignUp from './SignUp'
+import { Navbar03 } from '../ui/shadcn-io/navbar-03'
 
 const NavBar = () => {
 
+  interface Navbar03NavItem {
+    href?: string;
+    label: string;
+    active?: boolean;
+  }
+  
+  const NavigationLinks: Navbar03NavItem[] = [
+    { href: '/', label: 'Home', active: true },
+    { href: '#features', label: 'Features' },
+    { href: '#how-it-works', label: 'How it Works' },
+    { href: '#pricing', label: 'Pricing' },
+  ];
 
   return (
+    /*
     <nav className='w-full top-0 z-50 h-14 bg-white border-b border-[#e5e7eb] flex items-center justify-between px-14
     backdrop-blur-sm bg-opacity-90 max-md:px-4'>
         <span>Design Forge</span>
@@ -17,6 +31,8 @@ const NavBar = () => {
             <SignUp/>
         </div>
     </nav>
+    */
+   <Navbar03 signInHref='/sign-in' ctaHref='/sign-up' navigationLinks={NavigationLinks} logoHref='/'/>
   )
 }
 

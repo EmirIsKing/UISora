@@ -5,6 +5,9 @@ import { useAuth } from '@/contexts/AuthContext'
 import Link from 'next/link'
 import NavBar from '@/components/landingPage/NavBar'
 import Hero from '@/components/landingPage/Hero'
+import {HeroShowcase} from '@/components/landingPage/NewHero'
+import Caroussel from '@/components/landingPage/Carousel'
+import HeroExampleCards from '@/components/landingPage/HeroExampleCards'
 
 const Page = () => {
     const router = useRouter();
@@ -32,10 +35,10 @@ const Page = () => {
     }
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen max-md:overflow-x-hidden">
         <NavBar/>
-        <Hero/>
-        
+        <HeroShowcase/>
+        here
         </div>
     );
 }

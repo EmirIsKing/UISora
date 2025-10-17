@@ -1,8 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+    images: {
+        remotePatterns: [
+          {
+            protocol: "https",
+            hostname: "res.cloudinary.com",
+          },
+        ],
+      },
     webpack: (config) => {
         config.experiments = { asyncWebAssembly: true, layers: true }; // ✅ Enable WASM
+        
 
         // Grab the existing rule that handles SVG imports
         const fileLoaderRule = config.module.rules.find((rule: any) =>
@@ -23,6 +32,7 @@ const nextConfig: NextConfig = {
                 resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] }, // exclude if *.svg?url
                 use: ['@svgr/webpack'],
             },
+            
         )
 
         // Modify the file loader rule to ignore *.svg, since we have it handled now.

@@ -110,6 +110,20 @@
   box-shadow: 0px 8px 24px 1px rgba(84, 60, 243, 0.17);
 }
 
+.carousel-group{
+  animation: CarouselScroll 10s linear infinite;
+}
+
+
+@keyframes CarouselScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
 
 .grid-background {
   background-color: #ffffff;

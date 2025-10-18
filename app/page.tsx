@@ -6,8 +6,15 @@ import Link from 'next/link'
 import NavBar from '@/components/landingPage/NavBar'
 import Hero from '@/components/landingPage/Hero'
 import {HeroShowcase} from '@/components/landingPage/NewHero'
-import Caroussel from '@/components/landingPage/Carousel'
-import HeroExampleCards from '@/components/landingPage/HeroExampleCards'
+import ProblemSolution from '@/components/landingPage/ProblemSolution'
+import Features from '@/components/landingPage/Features'
+import Lenis from "lenis"
+import HowItWorks from '@/components/landingPage/HowItWorks'
+import SocialProof from '@/components/landingPage/SocialProof'
+import Pricing from '@/components/landingPage/Pricing'
+import Examples from '@/components/landingPage/Examples'
+import FAQ from '@/components/landingPage/FAQ'
+import Footer from '@/components/landingPage/Footer'
 
 const Page = () => {
     const router = useRouter();
@@ -19,12 +26,32 @@ const Page = () => {
         }
     }, [user, loading, router]);
 
+    useEffect(() => {
+      const lenis = new Lenis();
+      
+      // Expose Lenis instance globally for navbar access
+      (window as any).lenis = lenis;
+      
+      function raf(time: any) {
+        lenis.raf(time);
+        requestAnimationFrame(raf)
+      }
+      requestAnimationFrame(raf)
+      
+      // Cleanup
+      return () => {
+        delete (window as any).lenis;
+        lenis.destroy();
+      }
+    }, [])
+    
+
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="min-h-screen flex items-center justify-center bg-background">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+                    <p className="mt-4 text-muted-foreground">Loading...</p>
                 </div>
             </div>
         );
@@ -38,7 +65,14 @@ const Page = () => {
         <div className="min-h-screen max-md:overflow-x-hidden">
         <NavBar/>
         <HeroShowcase/>
-        here
+        <ProblemSolution/>
+        <Features/>
+        <HowItWorks/>
+        <SocialProof/>
+        <Pricing/>
+        <Examples/>
+        <FAQ/>
+        <Footer/>
         </div>
     );
 }

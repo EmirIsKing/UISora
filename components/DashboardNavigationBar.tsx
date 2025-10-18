@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react'
 import DashboardTabs from "@/components/DashboardTabs";
 import UserProfile from "@/components/auth/UserProfile";
 import FeedbackButton from './FeedbackButton';
+import { SimpleThemeToggle } from '@/components/ThemeToggle';
 
 
 const DashboardNavigationBar = () => {
@@ -12,6 +13,7 @@ const DashboardNavigationBar = () => {
                 <DashboardTabs/>
             </div>
             <div className={'w-auto flex gap-3 max-md:gap-1 justify-end items-center'}>
+                <SimpleThemeToggle />
                 <FeedbackButton/>
                 <UserProfile />
             </div>

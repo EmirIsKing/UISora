@@ -43,7 +43,7 @@ export function HeroShowcase({
 }: HeroShowcaseProps) {
   return (
     <>
-      <main className="relative max-md:pt-4 bg-gradient-to-b from-white to-[#CACAF2]">
+      <main className="relative max-md:pt-4 bg-gradient-to-b from-background to-background/50" id="Hero">
         <AnimatedGroup>
         <div className='absolute inset-0'>
             <div className='absolute w-[50px] h-[50px]  top-[285px] left-[124px] rounded-full bg-[#543CF3] opacity-[9%]'></div>

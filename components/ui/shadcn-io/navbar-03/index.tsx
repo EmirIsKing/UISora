@@ -5,6 +5,8 @@ import { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import SignUp from '@/components/landingPage/SignUp';
 import Link from 'next/link';
+import Lenis from 'lenis';
+import { SimpleThemeToggle } from '@/components/ThemeToggle';
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -97,7 +99,7 @@ export interface Navbar03Props extends React.HTMLAttributes<HTMLElement> {
 // Default navigation links
 const defaultNavigationLinks: Navbar03NavItem[] = [
   { href: '#', label: 'Home', active: true },
-  { href: '#', label: 'Features' },
+  { href: '#features', label: 'Features' },
   { href: '#', label: 'Pricing' },
   { href: '#', label: 'About' },
 ];
@@ -121,6 +123,27 @@ export const Navbar03 = React.forwardRef<HTMLElement, Navbar03Props>(
   ) => {
     const [isMobile, setIsMobile] = useState(false);
     const containerRef = useRef<HTMLElement>(null);
+
+    // Smooth scroll function using Lenis
+    const handleSmoothScroll = (href: string) => {
+      if (!href.startsWith("#")) return;
+    
+      const target = document.getElementById(href.slice(1));
+      if (!target) return;
+    
+      const offset = -80; // Adjust for fixed navbar
+    
+      // Use Lenis if available
+      const lenis = (window as any)?.lenis;
+      if (lenis) {
+        lenis.scrollTo(target, { offset, duration: 1.2 });
+      } else {
+        // Simple fallback using native smooth scroll
+        const top = target.getBoundingClientRect().top + window.scrollY + offset;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    };
+    
 
     useEffect(() => {
       const checkWidth = () => {
@@ -181,7 +204,7 @@ export const Navbar03 = React.forwardRef<HTMLElement, Navbar03Props>(
                       {navigationLinks.map((link, index) => (
                         <NavigationMenuItem key={index} className="w-full">
                           <button
-                            onClick={(e) => e.preventDefault()}
+                            onClick={() => handleSmoothScroll(link.href || '#')}
                             className={cn(
                               'flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer no-underline',
                               link.active && 'bg-accent text-accent-foreground'
@@ -215,7 +238,7 @@ export const Navbar03 = React.forwardRef<HTMLElement, Navbar03Props>(
                       <NavigationMenuItem key={index}>
                         <NavigationMenuLink
                           href={link.href}
-                          onClick={(e) => e.preventDefault()}
+                          onClick={() => handleSmoothScroll(link.href || '#')}
                           className={cn(
                             'group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 cursor-pointer relative',
                             'before:absolute before:bottom-0 before:left-0 before:right-0 before:h-0.5 before:bg-primary before:scale-x-0 before:transition-transform before:duration-300 hover:before:scale-x-100',
@@ -234,6 +257,7 @@ export const Navbar03 = React.forwardRef<HTMLElement, Navbar03Props>(
           </div>
           {/* Right side */}
           <div className="flex items-center gap-3">
+            <SimpleThemeToggle />
             <Link href='/sign-in'>
               <Button
                 variant="ghost"

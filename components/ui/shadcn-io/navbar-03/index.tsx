@@ -189,22 +189,22 @@ export const Navbar03 = React.forwardRef<HTMLElement, Navbar03Props>(
             {/* Mobile menu trigger */}
             {isMobile && (
               <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    className="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
-                    variant="ghost"
-                    size="icon"
-                  >
-                    <HamburgerIcon />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent align="start" className="w-64 p-1">
-                  <NavigationMenu className="max-w-none">
-                    <NavigationMenuList className="flex-col items-start gap-0">
-                      {navigationLinks.map((link, index) => (
-                        <NavigationMenuItem key={index} className="w-full">
+              <PopoverTrigger asChild>
+                <Button
+                  className="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
+                  variant="ghost"
+                  size="icon"
+                >
+                  <HamburgerIcon />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="start" className="w-64 p-1">
+                <NavigationMenu className="max-w-none">
+                  <NavigationMenuList className="flex-col items-start gap-0">
+                    {navigationLinks.map((link, index) => (
+                      <NavigationMenuItem key={index} className="w-full">
+                        <Link href={link.href || "#"}>
                           <button
-                            onClick={() => handleSmoothScroll(link.href || '#')}
                             className={cn(
                               'flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer no-underline',
                               link.active && 'bg-accent text-accent-foreground'
@@ -212,12 +212,13 @@ export const Navbar03 = React.forwardRef<HTMLElement, Navbar03Props>(
                           >
                             {link.label}
                           </button>
-                        </NavigationMenuItem>
-                      ))}
-                    </NavigationMenuList>
-                  </NavigationMenu>
-                </PopoverContent>
-              </Popover>
+                        </Link>
+                      </NavigationMenuItem>
+                    ))}
+                  </NavigationMenuList>
+                </NavigationMenu>
+              </PopoverContent>
+            </Popover>
             )}
             {/* Main nav */}
             <div className="flex items-center gap-6">
@@ -228,7 +229,6 @@ export const Navbar03 = React.forwardRef<HTMLElement, Navbar03Props>(
                 <div className="text-2xl">
                   {logo}
                 </div>
-                <span className="hidden font-bold text-xl sm:inline-block">shadcn.io</span>
               </button>
               {/* Navigation menu */}
               {!isMobile && (

@@ -1,4 +1,5 @@
 import { Sparkles } from "lucide-react";
+import Logo from "../Logo";
 
 const Footer = () => {
   return (
@@ -7,11 +8,8 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold">Design Forge</span>
+            <div>
+            <Logo variant="gradient"/>
             </div>
             <p className="text-sm text-muted-foreground">
               Transform ideas into beautiful mobile UIs with AI-powered generation.

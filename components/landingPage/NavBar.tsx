@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import SignUp from './SignUp'
 import { Navbar03 } from '../ui/shadcn-io/navbar-03'
+import Logo from '../Logo'
 
 const NavBar = () => {
 
@@ -32,7 +33,7 @@ const NavBar = () => {
         </div>
     </nav>
     */
-   <Navbar03 signInHref='/sign-in' ctaHref='/sign-up' navigationLinks={NavigationLinks} logoHref='/'/>
+   <Navbar03 signInHref='/sign-in' ctaHref='/sign-up' navigationLinks={NavigationLinks} logoHref='/' logo={<Logo variant='gradient'/>}/>
   )
 }
 

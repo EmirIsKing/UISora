@@ -15,7 +15,8 @@ const ProblemSolution = () => {
                 <div className='flex flex-col justify-center items-center gap-3'>
                     <div className='flex justify-center items-center gap-3'>
                         <span className='h1 text-center text-foreground'>Hours of manual work</span>
-                        <Image src={"/passage-time.webp"} alt='passage-time' height={50} width={50}/>
+                        <Image src={"/passage-time-white.webp"} className='hidden dark:block' alt='passage-time' height={50} width={50}/>
+                        <Image src={"/passage-time-black.webp"} className='block dark:hidden' alt='passage-time' height={50} width={50}/>
                     </div>
                     <div className="h-[320px] flex justify-center items-center overflow-hidden">
                         <Image
@@ -34,7 +35,7 @@ const ProblemSolution = () => {
                     </div>
                     <div className="h-[320px] flex justify-center items-center overflow-hidden">
                         <Image
-                            src="/completeUi2.jpg"
+                            src="/completeUi.png"
                             alt="completeUi"
                             width={220}
                             height={420}

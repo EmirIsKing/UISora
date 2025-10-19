@@ -89,6 +89,7 @@ const Pricing = () => {
                 [&_[role=slider]]:border-[#8b5cf6]
               "
             />
+            
           </div>
         </div>
       </div>

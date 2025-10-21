@@ -21,6 +21,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getProjectDetails } from '@/actions/getProjectDetails';
 import AssetExport from '@/components/AssetExport';
 import UiExport from '@/components/UiExport';
+import { Send } from 'lucide-react';
 
 
 interface JsonToHtmlRendererProps {
@@ -200,15 +201,15 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 onClick={() => setSidebarToggle(false)}
             ></div>
 
-            <div className="h-screen bg-gray-100 flex text-black overflow-hidden">
+            <div className="h-screen bg-[#212121] flex text-black overflow-hidden">
                 {/* Sidebar */}
                 <div
                     className={`transition-all duration-300 ease-in-out 
               ${sidebarToggle ? "w-1/3 max-w-sm" : "w-0"} 
-              bg-gray-100/90 border-black text-black/80 
-              relative flex flex-col shadow-lg justify-between 
+              bg-[#212121] border-w hite 
+              relative flex flex-col shadow-lg shadow-r-white justify-between 
               max-md:fixed max-md:bottom-0 max-md:h-full max-md:mt-12 
-              max-md:bg-white/100 z-[2001] 
+            z-[2001] 
               ${sidebarToggle ? "max-md:w-[308px]" : "max-md:w-0"}`}
                     style={{
                         transitionProperty: "width, transform",
@@ -216,7 +217,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                     }}>
                     {/* Chat History */}
                     <div
-                        className={`flex-1 flex-grow flex flex-col w-full h-full
+                        className={`flex-1 flex-grow flex border flex-col w-full h-full
                             overflow-y-auto pt-3 px-3 pb-24 max-md:pt-12 scrollbar-transparent scroll-smooth overscroll-y-contain
                             ${sidebarToggle ? "" : "hidden"}
                             `}
@@ -232,18 +233,18 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
                     {/* Fixed Input Box */}
                     <div
-                        className={`flex w-full ${sidebarToggle ? "" : "hidden"} transition-all duration-300 justify-center item-center pb-5 scrollbar-transparent`}>
-                        <form onSubmit={handleSubmit} className="flex w-[70%]">
+                        className={`flex w-full ${sidebarToggle ? "" : "hidden"} transition-all duration-300 justify-center item-center pb-5 scrollbar-transparent max-md:pt-3`}>
+                        <form onSubmit={handleSubmit} className="flex w-[75%] max-md:w-[83%]">
                           <textarea
                               onChange={(e) => setPrompt(e.target.value)}
                               value={prompt}
-                              className="rounded-md w-full bg-gray-200 p-4 resize-none focus:outline-none scrollbar-transparent"
+                              className="rounded-md w-full bg-[#303030] p-4 resize-none focus:outline-none scrollbar-transparent text-white"
                               placeholder="Type your prompt here..."
                           />
                             <div className="flex flex-col justify-end ml-3">
                                 <button type="submit"
-                                        className="w-8 h-8 rounded-full border flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-600 hover:bg-slate-600">
-                                    ∧
+                                        className="w-[36px] cursor-pointer h-[36px] rounded-full border flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-600 hover:bg-slate-600">
+                                    <Send className='text-white w-[20px]'/>
                                 </button>
                             </div>
                         </form>
@@ -284,7 +285,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                     contentClass={'grid-background active:cursor-grabbing'}
                                 >
                                     <div
-                                        className="relative"
+                                        className="relative bg-[#1e1e1e]"
                                         style={{ width: '1000000px', height: '1000000px' }}
                                         onClick={()=> {
                                             setPanning(true)

@@ -68,6 +68,12 @@ export default function UserProfile() {
               <div className="text-green-600 text-xs mt-1">✓ Email verified</div>
             )}
           </div>
+          <button
+            onClick={() => router.push('/profile')}
+            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+          >
+            Profile
+          </button>
           
           <button
             onClick={() => router.push('/dashboard/billing')}

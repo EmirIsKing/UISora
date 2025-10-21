@@ -265,6 +265,14 @@
     backgroundPosition: 350% 50%, 350% 50%;
     }
   }
+  @keyframes aurora {
+  from {
+    backgroundPosition: 50% 50%, 50% 50%;
+    }
+  to {
+    backgroundPosition: 350% 50%, 350% 50%;
+    }
+  }
 }
 
 @layer base {

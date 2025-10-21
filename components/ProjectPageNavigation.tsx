@@ -69,7 +69,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
 
 
     return (
-        <div className={'h-12  flex items-center text-black/90 px-4 z-[3000] shadow-lg'}>
+        <div className={'h-12  flex items-center text-white bg-[#303030] px-4 z-[3000] shadow-lg'}>
             <div className={'flex'}>
                     <DropdownMenu >
                         <DropdownMenuTrigger asChild>
@@ -97,7 +97,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
                 </button>
             </div>
             <div className={'flex justify-end flex-1 items-end'}>
-                    <Button onPress={()=>toggleExportModal()} className={'bg-white rounded-full px-2 text-black/80 cursor-pointer hover:px-3 transition-all ease-in-out duration-300'}>
+                    <Button onPress={()=>toggleExportModal()} className={'border border-white text-white rounded-full px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300'}>
                         Export
                     </Button>
             </div>

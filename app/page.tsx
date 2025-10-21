@@ -22,7 +22,7 @@ const Page = () => {
 
     useEffect(() => {
         if (!loading && user) {
-           // router.push('/dashboard/projects');
+           router.push('/dashboard/projects');
         }
     }, [user, loading, router]);
 

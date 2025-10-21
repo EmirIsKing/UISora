@@ -5,7 +5,6 @@ import { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import SignUp from '@/components/landingPage/SignUp';
 import Link from 'next/link';
-import Lenis from 'lenis';
 import { SimpleThemeToggle } from '@/components/ThemeToggle';
 import {
   NavigationMenu,

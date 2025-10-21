@@ -1,85 +1,113 @@
 'use client'
-import React, {useState} from 'react'
-import {  Dropdown,  DropdownTrigger,  DropdownMenu, DropdownItem} from "@heroui/dropdown";
-import {Ellipsis} from 'lucide-react'
-import {Button} from "@heroui/button";
-import {ProjectSettings} from "@/types/types";
-import {useRouter} from "next/navigation";
-import {deleteProject} from "@/actions/deleteProject";
-import { auth } from '@/utils/firebase';
-import {getProjectDetails} from "@/actions/getProjectDetails";
+import React, { useState } from 'react'
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown"
+import { Ellipsis, Trash2 } from 'lucide-react'
+import { Button } from "@heroui/button"
+import { ProjectSettings } from "@/types/types"
+import { useRouter } from "next/navigation"
+import { deleteProject } from "@/actions/deleteProject"
+import { auth } from '@/utils/firebase'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
+const ProjectItem = ({
+  project,
+  allProjects,
+  setProjects
+}: {
+  project: { id: string; settings: ProjectSettings }
+  allProjects: any
+  setProjects: any
+}) => {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
 
-const ProjectItem = ({project, allProjects, setProjects}:{project:{id:string; settings: ProjectSettings}; allProjects:any; setProjects:any}) => {
-    const router = useRouter();
-    const [loading, setLoading] = useState(false)
+  const handleClick = () => {
+    router.push(`/project/${project.id}`)
+  }
 
+  const handleDelete = async (projectId: string) => {
+    const user = auth.currentUser
+    if (!user) return alert("You must be logged in to delete projects")
 
-    const handleClick = () => {
-        router.push(`/project/${project.id}`);
+    try {
+      setLoading(true)
+      await deleteProject(user.uid, projectId)
+      const updatedProjects = allProjects.filter((p: any) => p.id !== projectId)
+      setProjects(updatedProjects)
+      alert("Project deleted!")
+    } catch (err: any) {
+      alert(`Failed to delete project: ${err.message}`)
+    } finally {
+      setLoading(false)
     }
+  }
 
+  return (
+    <div
+      onClick={handleClick}
+      className={`group relative flex flex-col justify-between w-[200px] max-md:w-[190px] h-[160px] rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#0F172A] shadow-sm hover:shadow-lg transition-all duration-200 cursor-pointer p-4 hover:bg-gradient-to-br hover:from-slate-50 hover:to-slate-100 dark:hover:from-[#1E293B] dark:hover:to-[#0F172A]`}
+    >
+      {/* Dropdown Menu */}
+      <div className="absolute top-2 right-2 z-10">
+        <Dropdown>
+          <DropdownTrigger asChild>
+            <Button
+              isIconOnly
+              size="sm"
+              className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-300 dark:border-slate-600 bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              <Ellipsis size={16} />
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="Project Actions">
+            <DropdownItem
+              key="delete"
+              className="flex items-center gap-2 text-red-500 font-medium hover:bg-red-500/10 transition-colors"
+              onPress={() => handleDelete(project.id)}
+            >
+              <Trash2 size={14} />
+              {loading ? "Deleting..." : "Delete Project"}
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </div>
 
+      {/* Project Details */}
+      <div>
+        <h1 className="text-lg font-semibold text-slate-800 dark:text-white truncate mb-1">
+          {project.settings.projectName || "Untitled Project"}
+        </h1>
 
-    const handleDelete = async (projectId: string) => {
-        const user = auth.currentUser;
-        if (!user) {
-            console.error("Not logged in");
-            return;
-        }
+        {/* Tooltip Description */}
 
-        try {
-            setLoading(true);
-            await deleteProject(user.uid, projectId);
-            const updatedProjectsArray = allProjects.filter((project: any) => project.id !== projectId);
-            setProjects(updatedProjectsArray);
-            alert("Project deleted!");
-        } catch (err: any) {
-            console.error("Delete error:", err);
-            alert(`Failed to delete project: ${err.message}`);
-        } finally {
-            setLoading(false);
-        }
-    };
+        <TooltipProvider>
+        <Tooltip>
+            <TooltipTrigger asChild>
+            <p
+                className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2 cursor-help"
+            >
+                {project.settings.description || "No Description"}
+            </p>
+            </TooltipTrigger>
+            <TooltipContent className="bg-[#1E1E1E] text-white dark:bg-white dark:text-black">
+            {project.settings.description || "No Description"}
+            </TooltipContent>
+        </Tooltip>
+        </TooltipProvider>
 
-    return (
-        <div onClick={()=>handleClick()}  className={`flex flex-col w-[190px] h-[150px] shadow-xl border border-slate-400/60 rounded-sm bg-white px-1 py-3 cursor-pointer`}>
-            <div className="flex justify-end">
-                <Dropdown className={'bg-black/80 rounded-lg w-30'}>
-                    <DropdownTrigger asChild>
-                        <Button className={'rounded-sm border h-6 px-1 flex justify-center items-center border-slate-400/70 cursor-pointer'}>
-                            <Ellipsis />
-                        </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu aria-label="Static Actions">
-                        <DropdownItem
-                            key="delete"
-                            className={`w-full text-white flex items-center gap-2 px-1 py-1 hover:bg-red-800/70 bg-red-800/80 
-                            rounded-md transition-all`}
-                            color="danger"
-                            onPress={()=>handleDelete(project.id)}
-                        >
-                            <span className="text-sm font-medium leading-none">{loading ?'loading...':'Delete'}</span>
-                        </DropdownItem>
-                    </DropdownMenu>
-                </Dropdown>
-            </div>
-            <div>
-                <h1 className={`text-xl font-semibold text-wrap truncate block`}>
-                    {project.settings.projectName ? project.settings.projectName : "No name"}
-                </h1>
-                <div className="relative group w-40">
-                    <p className="truncate overflow-hidden whitespace-nowrap block">
-                        {project.settings.description || "No Description"}
-                    </p>
+      </div>
 
-                    {/* Tooltip */}
-                    <div className="absolute bottom-full left-0 mb-2 hidden w-max max-w-xs rounded bg-gray-800 px-2 py-1 text-xs text-white group-hover:block z-10">
-                        {project.settings.description || "No Description"}
-                    </div>
-                    </div>
-            </div>
-        </div>
-    )
+      {/* Footer / Timestamp */}
+      <div className="text-xs text-slate-400 dark:text-slate-500 mt-3">
+        Last updated: {new Date().toLocaleDateString()}
+      </div>
+    </div>
+  )
 }
+
 export default ProjectItem

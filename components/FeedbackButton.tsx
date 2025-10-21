@@ -65,20 +65,20 @@ const FeedbackButton = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Feedbackbutton className='p-2 max-md:px-4 max-md:py-0 rounded-full border border-black cursor-pointer hover:opacity-70'>
+        <Feedbackbutton className='p-2 max-md:px-2 max-md:py-0 max-md:w-[36px] max-md:h-[36px] rounded-md border border-black dark:border-white cursor-pointer hover:opacity-70'>
             <span className='flex max-md:hidden'>Feedback</span>
             <span className='hidden max-md:flex'><MdFeedback/></span>
         </Feedbackbutton>
       </DialogTrigger>
-      <DialogContent className="max-md:max-w-[85%] rounded-md">
+      <DialogContent className="max-md:max-w-[85%] rounded-md bg-white dark:bg-[#1E1E1E]">
         <DialogHeader>
           <DialogTitle>We’d love your feedback</DialogTitle>
         </DialogHeader>
         <Tabs value={tab} onValueChange={setTab}>
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="feedback">Feedback</TabsTrigger>
-              <TabsTrigger value="bug">Bug Report</TabsTrigger>
-              <TabsTrigger value="suggestion">Suggestion</TabsTrigger>
+              <TabsTrigger value="feedback" className='dark:shadow-white/70'>Feedback</TabsTrigger>
+              <TabsTrigger value="bug" className='dark:shadow-white/70'>Bug Report</TabsTrigger>
+              <TabsTrigger value="suggestion" className='dark:shadow-white/70'>Suggestion</TabsTrigger>
             </TabsList>
 
             {/* Feedback Form */}
@@ -86,7 +86,7 @@ const FeedbackButton = () => {
               <form onSubmit={handleSubmit} className="space-y-3">
                 <input type="hidden" name="type" value="feedback" />
                 <Textarea name="feedback" placeholder="Share your thoughts..." required />
-                <Button type="submit" disabled={loading} className='bg-purple-blue'>
+                <Button type="submit" disabled={loading} className='bg-purple-blue text-white'>
                   {loading ? "Submitting..." : "Submit Feedback"}
                 </Button>
               </form>
@@ -99,7 +99,7 @@ const FeedbackButton = () => {
                 <Input name="bugTitle" placeholder="Short bug title" required />
                 <Textarea name="bugDetails" placeholder="Describe the issue..." required />
                 <Input name="screenshot" type="url" placeholder="Screenshot link (optional)" />
-                <Button type="submit" disabled={loading} className='bg-purple-blue'>
+                <Button type="submit" disabled={loading} className='bg-purple-blue text-white'>
                   {loading ? "Submitting..." : "Report Bug"}
                 </Button>
               </form>
@@ -110,7 +110,7 @@ const FeedbackButton = () => {
               <form onSubmit={handleSubmit} className="space-y-3">
                 <input type="hidden" name="type" value="suggestion" />
                 <Textarea name="suggestion" placeholder="What feature or improvement do you suggest?" required />
-                <Button type="submit" disabled={loading} className='bg-purple-blue'>
+                <Button type="submit" disabled={loading} className='bg-purple-blue text-white'>
                   {loading ? "Submitting..." : "Submit Suggestion"}
                 </Button>
               </form>

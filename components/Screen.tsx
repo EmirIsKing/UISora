@@ -1,6 +1,7 @@
+"use client"
 import React, { useRef, useEffect, useState } from 'react';
 import {Rnd} from "react-rnd";
-
+import DeviceMockup from "@/components/DeviceMockup";
 
 const Screen = ({ children, screen }:{children:React.ReactNode; screen: { name:string; width: number; height: number; }}) => {
     const screenRef = useRef<HTMLDivElement>(null);
@@ -32,25 +33,25 @@ const Screen = ({ children, screen }:{children:React.ReactNode; screen: { name:s
              }} >
             <div>
                 <span>
-                    <h4 className={'font-semibold'}>{screen.name}</h4>
+                    <h4 className={'font-semibold text-white'}>{screen.name}</h4>
                 </span>
             </div>
-            <div
-                ref={screenRef}
-                className="relative rounded-lg border-black overflow-hidden border-4"
-                style={{
-                    width: `${dimensions.width}px`,
-                    height: `${dimensions.height}px`,
-                }}
-                onClick={(e)=>{
-                    e.stopPropagation();
-                }}
-                onDoubleClick={(e)=>{
-                    e.stopPropagation();
-                }}
-            >
-                {children}
-            </div>
+                <div
+                    ref={screenRef}
+                    className={`relative rounded-lg bg-[#252525] border border-black shadow-[5px_5px_0px_0px_rgba(255,255,255,0.5)] overflow-hidden transform-gpu h-auto min-h-[${dimensions.height}px]`}
+                    style={{
+                        width: `${dimensions.width}px`,
+                    }}
+
+                    onClick={(e)=>{
+                        e.stopPropagation();
+                    }}
+                    onDoubleClick={(e)=>{
+                        e.stopPropagation();
+                    }}
+                >
+                    {children}
+                </div>
         </div>
     );
 };

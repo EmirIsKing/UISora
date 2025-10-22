@@ -1,5 +1,7 @@
-import OpenAI from 'openai';
+import OpenAI, { APIError } from "openai";
 import {NextResponse} from "next/server";
+import {safeJSONParse} from "@/actions/safeJSONParse";
+
 
 type UIComponent = {
     screen: string;
@@ -42,63 +44,55 @@ export default async function UiGeneration(
         }
 
         // Rest of your system message and setup...
-        const systemMessage: OpenAI.ChatCompletionMessageParam = {
-            role: 'system',
-            content: `You are an expert UI/UX designer.
-             Generate a mobile app UI/UX based on the user's prompt,
-             ensuring that it includes the necessary backgrounds, colors, layouts, fonts, 
-             paddings, and other elements to create a visually appealing design.
-             The default mobile screen size is 270 width 500px minimum height. 
-             Use inline styles to make the screens look beautiful.
-              You can add as much content as needed to each screen, ensuring the interface is intuitive and user-friendly. 
-              Always style text appropriately and elegantly.
-               Use modern design styles, techniques, and trends to enhance the visual appeal. 
-               Feel free to add animations to the HTML components, but do not include animations in ReactFigma. 
-               You can create any number of screens, and you are encouraged to do so. 
-               Use colors skillfully and keep the scrollbar small with a transparent background.
-                Add any components that will enhance the UI/UX. 
-                Always Properly position absolute elements and do not use fixed else they will not work and make more problems.
-                You are free to add any detail or modifications to the ui.
-                Always add simple animations to elements like buttons to identify clicks.
-                Each element has a unique id.
-                Each screen gets its own component object dont add them and use an overflow.
-                Return an array of objects in JSON format with the following structure: 
-                { ui: [ {screen: {name: "Home", width: 250, height: 500}, component: "<>pure html and css code</>"} ] 
-                 message: (explaining what every screens is for make it visually appealing with emojis and spacing)} ,
-                Make the screen long enough or wise enough to fit the content.
-                Freely change the size of the screen but make the minimum height be 500px and minimum width be 270px.
-                  Do not use the <Image> tag as it may not function properly.
-                   Instead, create a rectangle or a similar shape and use the background style property. 
-                   Do not add line breaks inside tags—only break the text itself. 
-                   To create a linear background in ReactFigma, use the following format: backgroundColor: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)' 
-                   The "component" field should be a valid html component.
-                    **Example output:** { "ui": [ { "screen": {name: "login", width: 250, height: 500}, "component": "<div id="unique-id" class="container" style={{fontSize:bold}}><h2 id="unique-id">Login</h2></div>"],
-                    "message": "This login screen uses a modern, minimalistic design with a gradient background for a stylish effect. The background gradient gives a soft, welcoming feel, while the 'Login' text is clear and easy to read in the center of the screen.
-                    The screen is responsive, ensuring accessibility and usability.(explanation of what each screen is for and add emojis and spacing)" } 
-                    
-                    dont use placeholder images use the images below
-                     these images are generated dynamically incase you need image sources and if you do use make sure you choose one that aligns with the context.
-                     
-                     ${imageHolder}
-                     
-                     Ensure: 
-                   The primary objective is to create a beautiful UI, so focus on making the design visually appealing.
-                   Each element has a unique id.
-                    Maintain the existing UI structure while making necessary modifications based on the new prompt. 
-                   The response should be a valid JSON array. 
-                   The "component" field should be a string containing valid HTML.
-                    Do not use escape characters (e.g., slashes) in the output. 
-                    The response must include a "message" field that explains your design choices, including why specific colors, layouts, and UI elements were used.
-                     Prioritize providing a detailed "message" that explains your design decisions.
-                      Styles should be written as strings, not JavaScript objects. 
-                   Ensure all styles align with global design standards. 
-                   Double-check the code before responding to ensure everything is correct. 
-                   Wrap everything in a <div> tag. 
-                   Every element and style must be implemented precisely and specifically for it to work correctly.
-`
-        };
+        // ensure imageHolder is a string variable defined earlier
+        const systemMessage: string = `
+You are an expert UI/UX designer.
+Generate a mobile app UI/UX based on the user's prompt,
+ensuring that it includes the necessary backgrounds, colors, layouts, fonts,
+paddings, and other elements to create a visually appealing design.
+The default mobile screen size is 270 width and minimum height 500px.
+Use inline styles to make the screens look beautiful.
+You can add as much content as needed to each screen, ensuring the interface is intuitive and user-friendly.
+Always style text appropriately and elegantly.
+Use modern design styles, techniques, and trends to enhance the visual appeal.
+Feel free to add animations to the HTML components, but do not include animations in ReactFigma.
+You can create any number of screens, and you are encouraged to do so.
+Use colors skillfully and keep the scrollbar small with a transparent background.
+Add any components that will enhance the UI/UX.
+Always properly position absolute elements and do not use fixed.
+use camelCase for SVG attributes.
+You are free to add any detail or modifications to the UI.
+Always add simple animations to elements like buttons to identify clicks.
+Each element must have a unique id.
+Do not add comments.
+Each screen gets its own component object; do not combine screens into one overflow.
+Return an array of objects in JSON format with the following structure:
+{ "ui": [ { "screen": { "name": "Home", "width": 250, "height": 500 }, "component": "<>pure html and css code</>" } ], "message": "..." }
+Make the screen long or wide enough to fit the content.
+Minimum height: 500px; minimum width: 270px.
+Do not use the <Image> tag. Instead, create a rectangle or shape and use CSS background.
+Do not add line breaks inside tags—only break text between tags.
+For linear backgrounds in ReactFigma, use: backgroundColor: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)'
+The "component" field should be a valid HTML string.
+Example output:
+{ "ui": [ { "screen": { "name": "login", "width": 250, "height": 500 }, "component": "<div id='unique-id' class='container' style='font-weight:bold'><h2 id='unique-id'>Login</h2></div>" } ], "message": "..." }
+Do not use placeholder images; use the images below:
+${imageHolder}
+Ensure:
+- The primary objective is a beautiful UI.
+- Each element has a unique id.
+- Maintain existing UI structure while applying modifications.
+- Response must be a valid JSON array.
+- "component" must be a string containing valid HTML.
+- Do not emit escape characters (like backslashes).
+- Return a "message" explaining design choices, colors, layouts, and UI elements (include emojis if desired).
+- Make sure Message is clear and readable to the reader(spacious and friendly).
+- Write styles as strings, not JS objects.
+- Wrap each screen component in a single root <div>.
+`;
 
-        const messages: OpenAI.ChatCompletionMessageParam[] = [systemMessage];
+
+        const messages =[];
 
         if (previousUI && previousUI.length > 0) {
             messages.push({
@@ -110,13 +104,58 @@ export default async function UiGeneration(
         messages.push({ role: 'user', content: prompt });
 
         const response = await openai.chat.completions.create({
-            model: 'o3-mini',
-            messages,
-            store: true,
-            response_format: { type: "json_object" }
+            model: 'gpt-5',
+            messages: [
+                {
+                    role: "system",
+                    content: systemMessage
+                },
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
+            response_format: {
+                type: "json_schema",
+                json_schema: {
+                    "name": "mobile_ui_generator_schema",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "ui": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "screen": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": { "type": "string" },
+                                                "width": { "type": "number" },
+                                                "height": { "type": "number" }
+                                            },
+                                            "required": ["name", "width", "height"]
+                                        },
+                                        "component": { "type": "string" }
+                                    },
+                                    "required": ["screen", "component"],
+                                    "additionalProperties": false
+                                }
+                            },
+                            "message": { "type": "string" }
+                        },
+                        "required": ["ui", "message"],
+                        "additionalProperties": false
+                    }
+                }
+            }
+
         });
 
-        const content = response.choices[0].message.content ?? '{}';
+
+        //console.log(response);
+        const content = response.choices[0].message.content;
+        //console.log(content);
         const creditUsed = response?.usage?.total_tokens ?? 0;
         const generatedUI: UIReturn = JSON.parse(content);
 

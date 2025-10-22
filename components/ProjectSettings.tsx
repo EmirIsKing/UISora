@@ -15,7 +15,14 @@ const ProjectSettings = ({toggleSettings, projectDetails, setProjectNameOptimist
     const saveSettings = async () => {
         try {
             setLoading(true)
-            const response = await setProjectSettings(projectDetails?.id ?? '', {projectName, visibility: projectVisibility, description: projectDescription});
+            const response = await setProjectSettings(
+                projectDetails?.id ?? '',
+                {
+                    projectName: projectName || "New Project",
+                    visibility: projectVisibility,
+                    description: projectDescription || "No Description",
+                }
+            );
             setLoading(false)
             setProjectNameOptimistic(projectName)
             toggleSettings();
@@ -32,7 +39,7 @@ const ProjectSettings = ({toggleSettings, projectDetails, setProjectNameOptimist
 
 
     return (
-        <div onClick={toggleSettings}  className={'absolute flex top-0 backdrop-blur-xs justify-center items-center h-screen w-full '}>
+        <div onClick={toggleSettings}  className={'absolute flex top-0 backdrop-blur-xs justify-center items-center h-screen w-full text-black'}>
             <div className="relative flex justify-center items-center w-full h-full">
                 <div onClick={(e) => e.stopPropagation()} className={'p-5 bg-white rounded-xl shadow-md gap-5 border-black border w-1/4 max-md:w-[80%]'}>
                     <h2 className="text-xl text-center font-bold text-gray-800">Project Settings</h2>

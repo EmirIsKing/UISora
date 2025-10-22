@@ -30,6 +30,10 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data }) => {
 
         const { type, attributes = {}, content = [] } = element;
 
+        if (!type || type === "#comment") {
+            return null;
+        }
+
         // Filter out event handlers and convert HTML attributes to React format
         const processedAttributes: Record<string, any> = {};
         for (const [key, value] of Object.entries(attributes)) {

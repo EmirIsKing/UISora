@@ -33,9 +33,9 @@ export async function createNewProject(userId?: string): Promise<string> {
         projectName: "New Project",
         visibility: "private"
     };
-
-    // 1. Upload uiJson to Firebase Storage
-    const uiJsonUrl = await uploadUiJson(emptyUiJson, uid, projectId);
+    //
+    // // 1. Upload uiJson to Firebase Storage
+    // const uiJsonUrl = await uploadUiJson(emptyUiJson, uid, projectId);
 
     const db = getFirestore();
 
@@ -45,7 +45,6 @@ export async function createNewProject(userId?: string): Promise<string> {
         id: projectId,
         chat: { user: [], ai: [] },
         settings,
-        uiJsonUrl,
         createdAt: new Date(),
         updatedAt: new Date()
     });

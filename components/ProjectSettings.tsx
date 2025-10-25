@@ -1,4 +1,5 @@
-import React,{useState} from 'react'
+"use client"
+import React,{useState, useEffect} from 'react'
 import {setProjectSettings} from "@/actions/setProjectSettings";
 import {Button} from "@heroui/button";
 import { ProjectSettingsWithId} from "@/actions/getProjectDetails";
@@ -9,7 +10,10 @@ const ProjectSettings = ({toggleSettings, projectDetails, setProjectNameOptimist
 
     const [projectName, setProjectName] = useState(projectDetails?.settings?.projectName ?? '');
     const [projectDescription, setProjectDescription] = useState(projectDetails?.settings.description);
-    const [projectVisibility, setProjectVisibility] = useState(projectDetails?.settings.visibility ?? 'private');
+    const [projectVisibility, setProjectVisibility] = useState<"private" | "public">(
+  projectDetails?.settings?.visibility === 'public' ? 'public' : 'private'
+);
+
     const [loading, setLoading] = useState(false)
 
     const saveSettings = async () => {
@@ -37,12 +41,18 @@ const ProjectSettings = ({toggleSettings, projectDetails, setProjectNameOptimist
         saveSettings();
     }
 
+    useEffect(() => {
+    if (projectDetails?.settings?.visibility) {
+        setProjectVisibility(projectDetails.settings.visibility);
+    }
+    }, [projectDetails]);
+
 
     return (
         <div onClick={toggleSettings}  className={'absolute flex top-0 backdrop-blur-xs justify-center items-center h-screen w-full text-black'}>
             <div className="relative flex justify-center items-center w-full h-full">
-                <div onClick={(e) => e.stopPropagation()} className={'p-5 bg-white rounded-xl shadow-md gap-5 border-black border w-1/4 max-md:w-[80%]'}>
-                    <h2 className="text-xl text-center font-bold text-gray-800">Project Settings</h2>
+                <div onClick={(e) => e.stopPropagation()} className={'p-5 bg-white dark:bg-[#1E1E1E] dark:text-white rounded-xl shadow-md gap-5 border-black border w-1/4 max-md:w-[80%]'}>
+                    <h2 className="text-xl text-center font-bold text-gray-800 dark:text-white">Project Settings</h2>
 
                     <div className="grid gap-6 w-full max-w-xl mx-auto mt-3">
                         {/* Project Name */}
@@ -75,7 +85,7 @@ const ProjectSettings = ({toggleSettings, projectDetails, setProjectNameOptimist
                                         type="radio"
                                         name="visibility"
                                         value="private"
-                                        checked={projectVisibility !== "public"}
+                                        checked={projectVisibility === "private"}
                                         onChange={() => setProjectVisibility("private")}
                                         className="border-gray-300"
                                     />

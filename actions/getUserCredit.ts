@@ -11,7 +11,6 @@ export async function getUserCredits(): Promise<number | null> {
 
     if (snapshot.exists()) {
         const credit = snapshot.get('credits');
-        console.log(credit);
         return credit as number;
     } else {
         console.error("No document found!");

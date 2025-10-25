@@ -18,6 +18,8 @@ import { getProjectDetails } from '@/actions/getProjectDetails';
 import AssetExport from '@/components/AssetExport';
 import UiExport from '@/components/UiExport';
 import { Send } from 'lucide-react';
+import ProjectViewNavigation from "@/components/projectView/ProjectViewNavigation";
+import {getProjectViewDetails} from "@/components/projectView/actions/getProjectViewDetails";
 
 
 interface JsonToHtmlRendererProps {
@@ -38,11 +40,9 @@ type ChatItemType = {
 };
 
 
-export default function Project({ params }: { params: Promise<{ projectId: string }> }) {
-    const [prompt, setPrompt] = useState('');
+export default function ProjectView({ params }: { params: Promise<{ projectId: string }> }) {
     const [generatedUI, setGeneratedUI] = useState<JsonToHtmlRendererProps>(jsondata);
     const [chat, setChat] = useState<ChatItemType[]>([]);
-    const [chain, setChain] = useState('')
     const [imageHolder, setImageHolder] = useState([]);
     const [sidebarToggle, setSidebarToggle] = useState<boolean>(true);
     const { projectId } = use(params);
@@ -56,11 +56,6 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const {setSelected, selection} = useSelectElement()
     const { user } = useAuth();
     const screenshotRef = useRef<HTMLDivElement>(null)
-
-
-    console.log("projectId", projectId);
-
-
 
 
     interface ScreenConfig {
@@ -84,97 +79,64 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
     useEffect(() => {
         const fetchProjectDetails = async () => {
-            if (user?.uid) {
-                const projectDetails = await getProjectDetails(user?.uid, projectId);
-                console.log(projectDetails);
-                if (projectDetails?.blobUrl) {
-                    try {
-                        const blobRes = await fetch(projectDetails?.blobUrl);
-                        if (!blobRes.ok) {
-                            console.error('Failed to fetch blob data:', blobRes.status, blobRes.statusText);
-                            return;
-                        }
-                        const blobData = await blobRes.json();
-                    
-                        // Load the full history
-                        if (blobData && blobData.length > 0) {
-                            // Set the latest UI
-                            setGeneratedUI(blobData[blobData.length - 1]);
-                            
-                            // Populate chat history from all entries
-                            const chatHistory = blobData.map((entry: any) => ({
-                                userPrompt: entry.prompt,
-                                AiResponse: entry.aiResponse || "No response generated"
-                            }));
-                            setChat(chatHistory);
-                            
-                            // Set the chain from the last entry if it exists
-                            if (blobData.length > 1) {
-                                const lastEntry = blobData[blobData.length - 1];
-                                setChain(lastEntry.prompt);
-                            }
-                            
-                            // Set image holder from the latest entry
-                            if (blobData[blobData.length - 1].imageHolder) {
-                                setImageHolder(blobData[blobData.length - 1].imageHolder);
-                            }
-                        }
-                        
-                        console.log('Loaded blob data:', blobData);
-                    } catch (error) {
-                        console.error('Error loading project data:', error);
-                    }
+            try {
+                const projectDetails = await getProjectViewDetails(projectId);
+
+                if (!projectDetails) {
+                    console.error("Project not found.");
+                    return;
                 }
 
+                if (projectDetails && "settings" in projectDetails) {
+                    const visibility = projectDetails.settings?.visibility;
+                    const blobUrl = projectDetails.blobUrl;
+                    if (visibility === "public" || blobUrl) {
+                        const blobRes = await fetch(blobUrl);
+                        if (!blobRes.ok) {
+                            console.error("Failed to fetch blob data:", blobRes.status, blobRes.statusText);
+                            return;
+                        }
+
+                        const blobData = await blobRes.json();
+
+                        if (Array.isArray(blobData) && blobData.length > 0) {
+                            // Set the latest UI
+                            setGeneratedUI(blobData[blobData.length - 1]);
+
+                            // Populate chat history
+                            const chatHistory = blobData.map((entry: any) => ({
+                                userPrompt: entry.prompt,
+                                AiResponse: entry.aiResponse || "No response generated",
+                            }));
+                            setChat(chatHistory);
+
+                            // Set image holder from latest entry if exists
+                            const latestEntry = blobData[blobData.length - 1];
+                            if (latestEntry.imageHolder) {
+                                setImageHolder(latestEntry.imageHolder);
+                            }
+                        }
+
+                        console.log("Loaded blob data:", blobData);
+                    } else {
+                        console.error("Project is private or cannot be found.");
+                    }
+                    }
+
+
+
+                // Allow fetch if blobUrl exists OR project is public
+
+            } catch (error) {
+                console.error("Error loading project:", error);
             }
         };
-        fetchProjectDetails();
-    }, [projectId, user?.uid]);
+
+        if (projectId) fetchProjectDetails();
+    }, [projectId]);
 
 
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-       try {
-           if (!prompt.trim()) return; // Prevent empty messages
-
-           // Store the current prompt before clearing
-           const currentPrompt = prompt;
-           setPrompt('');
-
-           // Add user input to chat with a temporary AI response
-           setChat((prevChat) => [...prevChat, { userPrompt: currentPrompt, AiResponse: "Generating..." }]);
-           
-           // Send request to AI API with the current prompt (not chained)
-           const response = await fetch('/api/generate-ui', {
-               method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ prompt: currentPrompt, previousUI: generatedUI, imageHolder, projectId, uid: user?.uid }),
-           });
-
-           const data = await response.json();
-
-           // Update chat with actual AI response
-           setChat((prevChat) =>
-               prevChat.map((item, index) =>
-                   index === prevChat.length - 1 ? { ...item, AiResponse: data.message || "No response generated" } : item
-               )
-           );
-
-           // Update the UI with the new generated UI
-           setGeneratedUI(data.ui || jsondata);
-           setImageHolder(data.imageHolder || []);
-
-       } catch (error) {
-           console.log(error);
-           setChat((prevChat) =>
-               prevChat.map((item, index) =>
-                   index === prevChat.length - 1 ? { ...item, AiResponse: "Error: Unable to generate UI. Please try again later." } : item
-               )
-           );
-       }
-    };
 
     const bottomOfChatRef = useRef<HTMLDivElement>(null);
 
@@ -182,13 +144,12 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
         if (bottomOfChatRef.current) {
             bottomOfChatRef.current.scrollTop = bottomOfChatRef.current.scrollHeight;
         }
-    }, [ chat, prompt, generatedUI, sidebarToggle ]);
+    }, [ chat, generatedUI, sidebarToggle ]);
 
 
     return (
-        <ProtectedRoute redirectTo={`/project/view/${projectId}`}>
             <section className={'flex flex-col h-screen'}>
-            <ProjectPageNavigation projectId={projectId} sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
+            <ProjectViewNavigation projectId={projectId} sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
             <div
                 className={`hidden transition-all duration-300 inset-0 z-[2000] bg-slate-900/20 backdrop-blur-sm
                     data-[state=open]:animate-in data-[state=closed]:animate-out
@@ -227,24 +188,6 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                         ))}
                     </div>
 
-                    {/* Fixed Input Box */}
-                    <div
-                        className={`flex w-full ${sidebarToggle ? "" : "hidden"} transition-all duration-300 justify-center item-center pb-5 scrollbar-transparent max-md:pt-3`}>
-                        <form onSubmit={handleSubmit} className="flex w-[75%] max-md:w-[83%]">
-                          <textarea
-                              onChange={(e) => setPrompt(e.target.value)}
-                              value={prompt}
-                              className="rounded-md w-full bg-[#303030] p-4 resize-none focus:outline-none scrollbar-transparent text-white"
-                              placeholder="Type your prompt here..."
-                          />
-                            <div className="flex flex-col justify-end ml-3">
-                                <button type="submit"
-                                        className="w-[36px] cursor-pointer h-[36px] rounded-full border flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-600 hover:bg-slate-600">
-                                    <Send className='text-white w-[20px]'/>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
                 </div>
 
                 {/* Main Content */}
@@ -386,6 +329,5 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 )
             }
         </section>
-        </ProtectedRoute>
     );
 }

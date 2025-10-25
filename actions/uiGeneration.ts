@@ -1,6 +1,5 @@
-import OpenAI, { APIError } from "openai";
+import OpenAI from "openai";
 import {NextResponse} from "next/server";
-import {safeJSONParse} from "@/actions/safeJSONParse";
 
 
 type UIComponent = {
@@ -76,8 +75,6 @@ For linear backgrounds in ReactFigma, use: backgroundColor: 'linear-gradient(135
 The "component" field should be a valid HTML string.
 Example output:
 { "ui": [ { "screen": { "name": "login", "width": 250, "height": 500 }, "component": "<div id='unique-id' class='container' style='font-weight:bold'><h2 id='unique-id'>Login</h2></div>" } ], "message": "..." }
-Do not use placeholder images; use the images below:
-${imageHolder}
 Ensure:
 - The primary objective is a beautiful UI.
 - Each element has a unique id.
@@ -112,7 +109,7 @@ Ensure:
                 },
                 {
                     role: "user",
-                    content: prompt
+                    content: prompt + ` Do not use placeholder images; use the images below: ${imageHolder}`
                 }
             ],
             response_format: {
@@ -153,7 +150,7 @@ Ensure:
         });
 
 
-        //console.log(response);
+        console.log(response);
         const content = response.choices[0].message.content;
         //console.log(content);
         const creditUsed = response?.usage?.total_tokens ?? 0;

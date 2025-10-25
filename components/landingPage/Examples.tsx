@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ShoppingBag, MessageCircle, ListChecks, Camera, Heart, TrendingUp } from "lucide-react";
+import Link from "next/link";
 
 const examples = [
   {
@@ -7,36 +8,42 @@ const examples = [
     category: "E-Commerce",
     prompt: "Create a modern e-commerce app with product grid and cart",
     color: "from-blue-500 to-cyan-500",
+    link: "/project/view/9ecd2747-6b1f-402d-8247-dff51fd0c3a9"
   },
   {
     icon: MessageCircle,
     category: "Social Media",
     prompt: "Design a chat app with stories and messaging features",
     color: "from-purple-500 to-pink-500",
+    link: "#"
   },
   {
     icon: ListChecks,
     category: "Productivity",
     prompt: "Build a task manager with kanban board and calendar",
     color: "from-green-500 to-emerald-500",
+    link: "#"
   },
   {
     icon: Camera,
     category: "Photo Sharing",
     prompt: "Create an Instagram-like app with photo feed and filters",
     color: "from-orange-500 to-red-500",
+    link: "#"
   },
   {
     icon: Heart,
     category: "Health & Fitness",
     prompt: "Design a workout tracking app with progress charts",
     color: "from-rose-500 to-pink-500",
+    link: "#"
   },
   {
     icon: TrendingUp,
     category: "Finance",
     prompt: "Build a crypto trading app with real-time charts",
     color: "from-indigo-500 to-purple-500",
+    link: "#"
   },
 ];
 
@@ -68,9 +75,9 @@ const Examples = () => {
                 <h3 className="text-xl font-semibold mb-2">{example.category}</h3>
                 <p className="text-sm text-muted-foreground mb-4">{example.prompt}</p>
                 
-                <div className="flex items-center text-sm text-primary group-hover:translate-x-2 transition-transform duration-300">
+                <Link href={example.link} className="flex items-center text-sm text-primary group-hover:translate-x-2 transition-transform duration-300">
                   View Example →
-                </div>
+                </Link>
               </CardContent>
             </Card>
           ))}

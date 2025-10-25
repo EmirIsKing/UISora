@@ -24,15 +24,18 @@ export default function UserProfile() {
     }
   };
 
-  if (!user) {
-    return null;
-  }
+useEffect(() => {
+  if (!user) return; 
 
-  useEffect(() => {
-      getUserCredits().then((credits) => {
-          setCredits(credits);
-      });
-  }, []);
+  getUserCredits().then((credits) => {
+    setCredits(credits);
+  });
+}, [user]);
+
+if (!user) {
+  return null;
+}
+
 
   
 

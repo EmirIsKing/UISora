@@ -18,7 +18,7 @@ import { getProjectDetails } from '@/actions/getProjectDetails';
 import AssetExport from '@/components/AssetExport';
 import UiExport from '@/components/UiExport';
 import { Send } from 'lucide-react';
-
+import StyleSelector from '@/components/StyleSelector';
 
 interface JsonToHtmlRendererProps {
 
@@ -56,11 +56,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const {setSelected, selection} = useSelectElement()
     const { user } = useAuth();
     const screenshotRef = useRef<HTMLDivElement>(null)
-
-
-    console.log("projectId", projectId);
-
-
+    const [selectedStyle, setSelectedStyle] = useState<string | null>("");
 
 
     interface ScreenConfig {
@@ -140,7 +136,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
            if (!prompt.trim()) return; // Prevent empty messages
 
            // Store the current prompt before clearing
-           const currentPrompt = prompt;
+           const currentPrompt = prompt + (selectedStyle ? ` Use style: ${selectedStyle}` : "");
            setPrompt('');
 
            // Add user input to chat with a temporary AI response
@@ -228,8 +224,12 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                     </div>
 
                     {/* Fixed Input Box */}
+                    <div className='w-full flex text-white'>
+                        <StyleSelector selectedStyle={selectedStyle} setSelectedStyle={setSelectedStyle}/>
+                    </div>
                     <div
                         className={`flex w-full ${sidebarToggle ? "" : "hidden"} transition-all duration-300 justify-center item-center pb-5 scrollbar-transparent max-md:pt-3`}>
+                            
                         <form onSubmit={handleSubmit} className="flex w-[75%] max-md:w-[83%]">
                           <textarea
                               onChange={(e) => setPrompt(e.target.value)}

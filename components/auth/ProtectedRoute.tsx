@@ -3,6 +3,7 @@
 import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePathname } from 'next/navigation';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -15,12 +16,23 @@ export default function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!loading && !user) {
       router.push(redirectTo);
     }
   }, [user, loading, router, redirectTo]);
+
+  useEffect(() => {
+    if(pathname == "/verify") return;
+    
+    if (user && !user.emailVerified) {
+      router.push("/verify");
+    }
+    
+  }, [user, router])
+  
 
   // Show loading while checking authentication
   if (loading) {

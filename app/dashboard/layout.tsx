@@ -21,7 +21,7 @@ export default function RootLayout({
             <section
                 className={`antialiased h-screen flex flex-col flex-1`}
             >
-                <DashboardNavigationBar/>
+                {/*<DashboardNavigationBar/>*/}
             <div className={`flex flex-1 h-screen w-screen justify-center`}>
                 {children}
             </div>

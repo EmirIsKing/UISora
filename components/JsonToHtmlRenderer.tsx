@@ -50,10 +50,24 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data }) => {
         }
         
         if (typeof processedAttributes.style === 'string') {
-            const temp = parse(processedAttributes.style);
-            const camelCaseStyle = camelcaseKeys(temp as Record<string, unknown>);
-            processedAttributes.style = cleanStyleConflicts(camelCaseStyle);
-            // console.log(processedAttributes.style)
+            const parsed = parse(processedAttributes.style) || {};
+            const base: Record<string, unknown> = (parsed && typeof parsed === 'object') ? parsed as Record<string, unknown> : {};
+            const camelCaseStyle: Record<string, unknown> = camelcaseKeys(base) || {};
+
+            const normalizeVendorKey = (key: string): string => {
+                if (key.startsWith('webkit')) return 'Webkit' + key.slice(6);
+                if (key.startsWith('moz')) return 'Moz' + key.slice(3);
+                if (key.startsWith('ms')) return 'ms' + key.slice(2).replace(/^./, (c) => c.toUpperCase());
+                if (key.startsWith('o')) return 'O' + key.slice(1);
+                return key;
+            };
+
+            const normalizedStyle: Record<string, unknown> = {};
+            for (const [k, v] of Object.entries(camelCaseStyle)) {
+                normalizedStyle[normalizeVendorKey(k)] = v;
+            }
+
+            processedAttributes.style = cleanStyleConflicts(normalizedStyle);
         }
 
         // Handle void elements (no children allowed)

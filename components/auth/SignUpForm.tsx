@@ -65,6 +65,11 @@ export default function SignUpForm() {
       
       if (response.success) {
         setSuccessMessage('Account created successfully! Please check your email for verification.');
+        await fetch("/api/newsletterSubscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
         setTimeout(() => {
           router.push('/dashboard/projects');
         }, 2000);

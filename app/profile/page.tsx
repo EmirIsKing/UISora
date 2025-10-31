@@ -25,6 +25,7 @@ import ResetPassword from "@/components/auth/ResetPassword"
 import UploadProfilePicture from "@/components/profile/UploadProfilePicture";
 import Image from "next/image"
 import ProtectedRoute from "@/components/auth/ProtectedRoute"
+import { Spinner } from "@/components/ui/spinner"
 
 const Page = () => {
   const router = useRouter()
@@ -40,6 +41,9 @@ const Page = () => {
   const [userId, setUserId] = useState("")
   const [isOpen, setIsOpen] = useState(false)
   const [photoUrl, setPhotoUrl] = useState("");
+  const [customerId, setCustomerId] = useState("")
+  const [subStatus, setSubStatus] = useState("")
+  const [manageSubLoader, setManageSubLoader] = useState(false);
   
 
   // ✅ Fetch user details once when authenticated
@@ -75,6 +79,8 @@ const Page = () => {
     setDepartment(details.department || "")
     setUserId(details.uid)
     setPhotoUrl(details.photoURL || "")
+    setCustomerId(details.subscription.customerId || "")
+    setSubStatus(details.subscription.status || "")
     setLoading(false)
 
   }, [details])
@@ -87,6 +93,26 @@ const Page = () => {
     setPreferences({newsletter: value})
     setUserDetail(userId,{preferences: {newsletter: preferences.newsletter}})
   }
+
+  const handleManageSub = async () => {
+  try {
+    setManageSubLoader(true)
+    const response = await fetch("/api/lemonSqueezy/customerPortal", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ customerId })
+    });
+
+    const { url } = await response.json();
+    console.log(url)
+    window.open(url, "_blank");
+  } catch (error) {
+    console.error("Failed to get portal link:", error);
+  } finally{
+    setManageSubLoader(false)
+  }
+};
+
 
   return (
       <ProtectedRoute redirectTo="/sign-in">
@@ -135,12 +161,34 @@ const Page = () => {
             <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-5 flex flex-col items-center text-center">
               <span className="text-gray-500 text-sm">Your Credits</span>
               <span className="text-4xl font-bold text-blue-400 mt-1">{credits}</span>
-              <Button
+              <div className="flex gap-2">
+                {
+                  subStatus === "Active" ? 
+                  (<Button
+                    variant="outline"
+                    className="mt-3 border-blue-400 text-blue-400 hover:bg-blue-400/10 cursor-pointer hover:scale-[0.98] active:scale-[0.97]"
+                    onClick={()=>handleManageSub()}
+                  >
+                    {manageSubLoader ? <Spinner/> : "Manage subscription"}
+                  </Button>
+                  ):
+                  (
+                    <Button
+                      variant="outline"
+                      className="mt-3 border-blue-400 text-blue-400 hover:bg-blue-400/10 cursor-pointer hover:scale-[0.98] active:scale-[0.97]"
+                    >
+                     Choose Plan
+                    </Button>
+                  )
+
+                }
+                <Button
                 variant="outline"
                 className="mt-3 border-blue-400 text-blue-400 hover:bg-blue-400/10 cursor-pointer hover:scale-[0.98] active:scale-[0.97]"
               >
                 Buy More
               </Button>
+              </div>
             </div>
           </div>
         </div>

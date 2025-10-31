@@ -4,9 +4,44 @@ import { useState } from "react"
 import { motion } from "motion/react"
 
 import PriceFlow from "@/components/smoothui/ui/PriceFlow"
+import { Spinner } from "./ui/spinner"
 
-export function PricingCreative() {
-  const [isAnnual, setIsAnnual] = useState(true)
+
+export function PricingCreative({userId, email}:{userId?:string; email?:string}) {
+  const [isAnnual, setIsAnnual] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const checkout = async () => {
+    if (!userId) return;
+
+    console.log(email)
+    console.log(userId)
+
+  
+    try {
+      setLoading(true)
+      const response = await fetch("/api/lemonSqueezy/purchasePlan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: isAnnual ? "1065511" : "1065510",
+          userId,
+          email,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      window.open(data.checkoutUrl, "_blank");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false)
+    }
+  };
+  
 
   return (
     <section>
@@ -161,8 +196,10 @@ export function PricingCreative() {
                     <button
                       type="button"
                       className="bg-black text-white dark:bg-white dark:text-black hover:bg-black/90 hover:dark:bg-white/90 focus-visible:ring-ring mb-6 inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+                      onClick={checkout}
+                      disabled={loading}
                     >
-                      Get Started
+                      {loading ? <Spinner/> : "Get Started"}
                     </button>
 
                     {/* Description */}

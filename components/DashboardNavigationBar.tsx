@@ -10,7 +10,7 @@ const DashboardNavigationBar = () => {
     return (
         <div className={'flex w-full py-2 px-2 items-center justify-center'}>
             <div className={`w-[80%] flex justify-center items-center`}>
-                <DashboardTabs/>
+                {/* <DashboardTabs/> */}
             </div>
             <div className={'w-auto flex gap-3 max-md:gap-1 justify-end items-center'}>
                 <SimpleThemeToggle />

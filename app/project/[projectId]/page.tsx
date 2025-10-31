@@ -142,25 +142,66 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
            // Add user input to chat with a temporary AI response
            setChat((prevChat) => [...prevChat, { userPrompt: currentPrompt, AiResponse: "Generating..." }]);
            
-           // Send request to AI API with the current prompt (not chained)
+           // Send request to AI API with the current prompt (streaming)
            const response = await fetch('/api/generate-ui', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify({ prompt: currentPrompt, previousUI: generatedUI, imageHolder, projectId, uid: user?.uid }),
            });
 
-           const data = await response.json();
+           if (!response.body) {
+             throw new Error('No response body');
+           }
 
-           // Update chat with actual AI response
-           setChat((prevChat) =>
-               prevChat.map((item, index) =>
-                   index === prevChat.length - 1 ? { ...item, AiResponse: data.message || "No response generated" } : item
-               )
-           );
+           // Prepare fresh UI container for this generation
+           setGeneratedUI({ ui: [], message: '' } as any);
 
-           // Update the UI with the new generated UI
-           setGeneratedUI(data.ui || jsondata);
-           setImageHolder(data.imageHolder || []);
+           const reader = response.body.getReader();
+           const decoder = new TextDecoder('utf-8');
+           let buffered = '';
+
+           const processLines = (text: string) => {
+             buffered += text;
+             const lines = buffered.split('\n');
+             buffered = lines.pop() || '';
+             for (const line of lines) {
+               if (!line.trim()) continue;
+               try {
+                 const evt = JSON.parse(line);
+                 if (evt.type === 'status') {
+                   setChat((prevChat) =>
+                     prevChat.map((item, index) => index === prevChat.length - 1 ? { ...item, AiResponse: evt.message } : item)
+                   );
+                 } else if (evt.type === 'images') {
+                   setImageHolder(evt.images || []);
+                 } else if (evt.type === 'screen') {
+                   setGeneratedUI((prev:any) => ({
+                     ...(prev || { ui: [], message: '' }),
+                     ui: [ ...(prev?.ui || []), { screen: evt.screen, component: evt.component } ]
+                   }));
+                 } else if (evt.type === 'done') {
+                   setChat((prevChat) =>
+                     prevChat.map((item, index) => index === prevChat.length - 1 ? { ...item, AiResponse: evt.message || 'Done' } : item)
+                   );
+                 } else if (evt.type === 'error') {
+                   setChat((prevChat) =>
+                     prevChat.map((item, index) => index === prevChat.length - 1 ? { ...item, AiResponse: `Error: ${evt.message}` } : item)
+                   );
+                 }
+               } catch (e) {
+                 // ignore parse errors for partial lines
+               }
+             }
+           };
+
+           while (true) {
+             const { done, value } = await reader.read();
+             if (done) break;
+             processLines(decoder.decode(value, { stream: true }));
+           }
+           if (buffered) {
+             processLines('\n');
+           }
 
        } catch (error) {
            console.log(error);

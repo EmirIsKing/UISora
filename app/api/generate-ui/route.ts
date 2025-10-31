@@ -62,106 +62,136 @@ export async function POST(request: Request) {
             return { reserved: estimated.total, balance: currentBalance };
         });
 
-        // Step 1: Prompt Fattening
-        const fattenedRes:any = await PromptFattening(prompt);
-        const fattenedJson = await fattenedRes.json();
+        const encoder = new TextEncoder();
+        const stream = new ReadableStream({
+            start: async (controller) => {
+                const write = (obj: any) => controller.enqueue(encoder.encode(JSON.stringify(obj) + "\n"));
+                try {
+                    // Step 1: Prompt Fattening
+                    write({ type: 'status', message: 'Fattening prompt…' });
+                    const fattenedRes:any = await PromptFattening(prompt);
+                    const fattenedJson = await fattenedRes.json();
 
-        // Step 2: Image Generation
-        let images: string[] = imageHolder ?? [];
+                    // Step 2: Image Generation
+                    let images: string[] = imageHolder ?? [];
+                    if (images.length === 0) {
+                        write({ type: 'status', message: 'Generating images…' });
+                        //@ts-ignore
+                        const splashJson = await (await ImageGeneration(fattenedJson.ui[0].splashImagePrompt, 1)).json();
+                        images.push(`${splashJson.images[0].url} - Image of ${splashJson.prompt}`);
+                        //@ts-ignore
+                        const otherJson = await (await ImageGeneration(fattenedJson.ui[0].otherImagesPrompt, 4)).json();
+                        for (let i = 0; i < 4; i++) {
+                            images.push(`${otherJson.images[i].url} - Image of ${otherJson.prompt}`);
+                        }
+                        write({ type: 'images', images });
+                    } else {
+                        write({ type: 'images', images });
+                    }
 
-        if (images.length === 0) {
-            //@ts-ignore
-            const splashJson = await (await ImageGeneration(fattenedJson.ui[0].splashImagePrompt, 1)).json();
-            images.push(`${splashJson.images[0].url} - Image of ${splashJson.prompt}`);
+                    // Step 3: UI Generation
+                    write({ type: 'status', message: 'Generating UI…' });
+                    const fattenedPrompt = fattenedJson.ui[0].ui;
+                    const response = await UiGeneration(fattenedPrompt, images, previousUI);
+                    const data = await response.json();
+                    const uiData: UIComponent[] = data.ui;
 
-            //@ts-ignore
-            const otherJson = await (await ImageGeneration(fattenedJson.ui[0].otherImagesPrompt, 4)).json();
-            for (let i = 0; i < 4; i++) {
-                images.push(`${otherJson.images[i].url} - Image of ${otherJson.prompt}`);
+                    // Convert and stream each screen as it finishes
+                    let convertedCount = 0;
+                    for (const item of uiData) {
+                        const converted = JSON.parse(await HtmlToJson(item.component));
+                        write({ type: 'screen', screen: item.screen, component: converted });
+                        convertedCount += 1;
+                    }
+
+                    // Calculate actual credits used
+                    write({ type: 'status', message: 'Finalizing…' });
+                    const actualCredits = calculateActualCredits(
+                        // @ts-ignore
+                        fattenedRes.usage?.total_tokens || 0,
+                        images.length - (imageHolder?.length || 0),
+                        data.creditUsed,
+                        convertedCount
+                    );
+
+                    const newEntry = {
+                        createdAt: new Date().toISOString(),
+                        prompt,
+                        aiResponse: data.message || "No response generated",
+                        creditUsed: actualCredits.total,
+                        // Will be reconstructed client-side; we still persist fully here
+                        ui: await Promise.all(
+                            uiData.map(async ui => ({
+                                screen: ui.screen,
+                                component: JSON.parse(await HtmlToJson(ui.component))
+                            }))
+                        ),
+                        imageHolder: images
+                    };
+
+                    // Step 4: Read existing blob (if it exists)
+                    const projectRef = adminDb.doc(`users/${uid}/projects/${projectId}`);
+                    const projectSnap = await projectRef.get();
+                    const projectData = projectSnap.data();
+                    const blobUrl = projectData?.uiBlobUrl;
+
+                    let history: any[] = [];
+                    if (blobUrl) {
+                        try {
+                            const blobRes = await fetch(blobUrl);
+                            history = JSON.parse(await blobRes.text());
+                        } catch {
+                            history = [];
+                        }
+                    }
+                    history.push(newEntry);
+
+                    // Step 5: Upload updated blob to Vercel
+                    const blob = await put(`project-ui/${projectId}.json`, JSON.stringify(history), {
+                        access: 'public'
+                    });
+
+                    // Step 6: Update Firestore (if first time)
+                    await projectRef.update({
+                        updatedAt: new Date(),
+                        lastUsedPrompt: prompt,
+                        ...(blobUrl ? {} : { uiBlobUrl: blob.url })
+                    });
+
+                    // Step 7: Reconcile actual credits used vs reserved
+                    const creditDifference = actualCredits.total - transactionResult.reserved;
+                    if (creditDifference !== 0) {
+                        await userRef.update({
+                            credits: adminIncrement(-creditDifference)
+                        });
+                    }
+
+                    write({
+                        type: 'done',
+                        message: data.message,
+                        images,
+                        creditUsed: actualCredits.total,
+                        creditBreakdown: {
+                            promptFattening: actualCredits.promptFattening,
+                            imageGeneration: actualCredits.imageGeneration,
+                            uiGeneration: actualCredits.uiGeneration,
+                            htmlToJson: actualCredits.htmlToJson,
+                            total: actualCredits.total
+                        }
+                    });
+                } catch (err:any) {
+                    write({ type: 'error', message: err?.message || 'Error generating UI' });
+                } finally {
+                    controller.close();
+                }
             }
-        }
-
-        // Step 3: UI Generation
-        const fattenedPrompt = fattenedJson.ui[0].ui;
-        const response = await UiGeneration(fattenedPrompt, images, previousUI);
-        const data = await response.json();
-        const uiData: UIComponent[] = data.ui;
-
-        const convertedUI = await Promise.all(
-            uiData.map(async item => ({
-                screen: item.screen,
-                component: JSON.parse(await HtmlToJson(item.component))
-            }))
-        );
-
-        // Calculate actual credits used
-        const actualCredits = calculateActualCredits(
-            fattenedRes.usage?.total_tokens || 0,
-            images.length - (imageHolder?.length || 0),
-            data.creditUsed,
-            convertedUI.length
-        );
-
-        const newEntry = {
-            createdAt: new Date().toISOString(),
-            prompt,
-            aiResponse: data.message || "No response generated",
-            creditUsed: actualCredits.total,
-            ui: convertedUI,
-            imageHolder: images
-        };
-
-        // Step 4: Read existing blob (if it exists)
-        const projectRef = adminDb.doc(`users/${uid}/projects/${projectId}`);
-        const projectSnap = await projectRef.get();
-        const projectData = projectSnap.data();
-        const blobUrl = projectData?.uiBlobUrl;
-
-        let history: any[] = [];
-
-        if (blobUrl) {
-            try {
-                const blobRes = await fetch(blobUrl);
-                history = JSON.parse(await blobRes.text());
-            } catch {
-                history = [];
-            }
-        }
-
-        history.push(newEntry);
-
-        // Step 5: Upload updated blob to Vercel
-        const blob = await put(`project-ui/${projectId}.json`, JSON.stringify(history), {
-            access: 'public'
         });
 
-        // Step 6: Update Firestore (if first time)
-        await projectRef.update({
-            updatedAt: new Date(),
-            lastUsedPrompt: prompt,
-            ...(blobUrl ? {} : { uiBlobUrl: blob.url })
-        });
-
-        // Step 7: Reconcile actual credits used vs reserved
-        const creditDifference = actualCredits.total - transactionResult.reserved;
-        
-        if (creditDifference !== 0) {
-            await userRef.update({
-                credits: adminIncrement(-creditDifference)
-            });
-        }
-
-        return NextResponse.json({
-            message: data.message,
-            imageHolder: images,
-            ui: convertedUI,
-            creditUsed: actualCredits.total,
-            creditBreakdown: {
-                promptFattening: actualCredits.promptFattening,
-                imageGeneration: actualCredits.imageGeneration,
-                uiGeneration: actualCredits.uiGeneration,
-                htmlToJson: actualCredits.htmlToJson,
-                total: actualCredits.total
+        return new Response(stream, {
+            headers: {
+                'Content-Type': 'application/x-ndjson; charset=utf-8',
+                'Cache-Control': 'no-cache, no-transform',
+                'Connection': 'keep-alive'
             }
         });
 

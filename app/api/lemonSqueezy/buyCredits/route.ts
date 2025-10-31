@@ -14,13 +14,14 @@ export async function POST(req: Request) {
         data: {
             type: "checkouts",
             attributes: {
+              custom_price: data.amount*100,
               product_options: {
                     redirect_url: "http://localhost:3000/profile"
                 },
               checkout_data: {
                 email: data.email,
                 custom: {
-                    type: "subscription",
+                    type: "CreditBuy",
                     user_id: data.userId.toString()
                 }
               }  

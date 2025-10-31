@@ -26,6 +26,7 @@ import UploadProfilePicture from "@/components/profile/UploadProfilePicture";
 import Image from "next/image"
 import ProtectedRoute from "@/components/auth/ProtectedRoute"
 import { Spinner } from "@/components/ui/spinner"
+import BuyCreditModal from "@/components/profile/BuyCreditModal"
 
 const Page = () => {
   const router = useRouter()
@@ -114,6 +115,7 @@ const Page = () => {
 };
 
 
+
   return (
       <ProtectedRoute redirectTo="/sign-in">
     <AuroraBackground className="min-h-screen flex justify-center items-center px-4 py-10">
@@ -182,12 +184,7 @@ const Page = () => {
                   )
 
                 }
-                <Button
-                variant="outline"
-                className="mt-3 border-blue-400 text-blue-400 hover:bg-blue-400/10 cursor-pointer hover:scale-[0.98] active:scale-[0.97]"
-              >
-                Buy More
-              </Button>
+                <BuyCreditModal userId={userId} email={email}/>
               </div>
             </div>
           </div>

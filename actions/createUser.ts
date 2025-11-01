@@ -3,6 +3,8 @@
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
+import {nanoid} from 'nanoid';
+
 
 // Initialize Firebase Admin
 if (getApps().length === 0) {
@@ -32,7 +34,8 @@ export async function createUser(email: string, password: string, name?: string)
             email: userRecord.email,
             name: userRecord.displayName,
             createdAt: new Date(),
-            credits: 10000,
+            credits: 2000,
+            notifications: [{id: nanoid(), date: new Date(), message: "Welcome to UISora 🎉 You’ve been awarded 2,000 free credits to start generating beautiful UIs. Let’s build something amazing! 🚀"}]
         });
 
         return {

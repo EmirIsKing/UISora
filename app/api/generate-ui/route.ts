@@ -56,7 +56,7 @@ export async function POST(request: Request) {
             }
             
             transaction.update(userRef, {
-                credits: currentBalance - estimated.total
+                credits: currentBalance - (estimated.total / 10)
             });
             
             return { reserved: estimated.total, balance: currentBalance };
@@ -107,6 +107,8 @@ export async function POST(request: Request) {
             data.creditUsed,
             convertedUI.length
         );
+
+        console.log(actualCredits.total);
 
         const promptArray = Array.isArray(prompt) ? prompt : [prompt];
         const aiResponseArray = Array.isArray(data.message)
@@ -178,7 +180,7 @@ export async function POST(request: Request) {
         
         if (creditDifference !== 0) {
             await userRef.update({
-                credits: adminIncrement(-creditDifference)
+                credits: adminIncrement(-creditDifference / 10)
             });
         }
 

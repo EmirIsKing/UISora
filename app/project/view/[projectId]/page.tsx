@@ -91,7 +91,7 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                     const visibility = projectDetails.settings?.visibility;
                     const blobUrl = projectDetails.blobUrl;
                     if (visibility === "public" || blobUrl) {
-                        const blobRes = await fetch(blobUrl);
+                        const blobRes = await fetch(blobUrl, {cache: 'no-store'});
                         if (!blobRes.ok) {
                             console.error("Failed to fetch blob data:", blobRes.status, blobRes.statusText);
                             return;
@@ -103,11 +103,23 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                             // Set the latest UI
                             setGeneratedUI(blobData[blobData.length - 1]);
 
-                            // Populate chat history
-                            const chatHistory = blobData.map((entry: any) => ({
-                                userPrompt: entry.prompt,
-                                AiResponse: entry.aiResponse || "No response generated",
-                            }));
+                            // Populate chat history by pairing prompt[i] with aiResponse[i]
+                            const chatHistory: ChatItemType[] = [];
+                            for (const entry of blobData) {
+                                const prompts = Array.isArray(entry.prompt)
+                                    ? entry.prompt
+                                    : [entry.prompt].filter(Boolean);
+                                const responses = Array.isArray(entry.aiResponse)
+                                    ? entry.aiResponse
+                                    : [entry.aiResponse].filter(Boolean);
+                                const count = Math.min(prompts.length, responses.length);
+                                for (let i = 0; i < count; i++) {
+                                    chatHistory.push({
+                                        userPrompt: prompts[i],
+                                        AiResponse: responses[i] ?? "No response generated",
+                                    });
+                                }
+                            }
                             setChat(chatHistory);
 
                             // Set image holder from latest entry if exists

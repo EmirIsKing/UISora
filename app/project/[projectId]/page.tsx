@@ -57,6 +57,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const { user } = useAuth();
     const screenshotRef = useRef<HTMLDivElement>(null)
     const [selectedStyle, setSelectedStyle] = useState<string | null>("");
+    const [HTMLData, setHTMLData] = useState<string[]>([])
 
 
     interface ScreenConfig {
@@ -85,7 +86,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 console.log(projectDetails);
                 if (projectDetails?.blobUrl) {
                     try {
-                        const blobRes = await fetch(projectDetails?.blobUrl);
+                        const blobRes = await fetch(projectDetails?.blobUrl, {cache: 'no-store'});
                         if (!blobRes.ok) {
                             console.error('Failed to fetch blob data:', blobRes.status, blobRes.statusText);
                             return;
@@ -96,20 +97,35 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                         if (blobData && blobData.length > 0) {
                             // Set the latest UI
                             setGeneratedUI(blobData[blobData.length - 1]);
-                            
-                            // Populate chat history from all entries
-                            const chatHistory = blobData.map((entry: any) => ({
-                                userPrompt: entry.prompt,
-                                AiResponse: entry.aiResponse || "No response generated"
-                            }));
+
+                            // Populate chat history by pairing prompt[i] with aiResponse[i]
+                            const chatHistory: ChatItemType[] = [];
+                            for (const entry of blobData) {
+                                const prompts = Array.isArray(entry.prompt)
+                                    ? entry.prompt
+                                    : [entry.prompt].filter(Boolean);
+                                const responses = Array.isArray(entry.aiResponse)
+                                    ? entry.aiResponse
+                                    : [entry.aiResponse].filter(Boolean);
+                                const count = Math.min(prompts.length, responses.length);
+                                for (let i = 0; i < count; i++) {
+                                    chatHistory.push({
+                                        userPrompt: prompts[i],
+                                        AiResponse: responses[i] ?? "No response generated",
+                                    });
+                                }
+                            }
                             setChat(chatHistory);
-                            
+
                             // Set the chain from the last entry if it exists
                             if (blobData.length > 1) {
                                 const lastEntry = blobData[blobData.length - 1];
-                                setChain(lastEntry.prompt);
+                                const lastPromptArray = Array.isArray(lastEntry.prompt)
+                                    ? lastEntry.prompt
+                                    : [lastEntry.prompt].filter(Boolean);
+                                setChain(lastPromptArray[lastPromptArray.length - 1] || "");
                             }
-                            
+
                             // Set image holder from the latest entry
                             if (blobData[blobData.length - 1].imageHolder) {
                                 setImageHolder(blobData[blobData.length - 1].imageHolder);
@@ -128,6 +144,11 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     }, [projectId, user?.uid]);
 
 
+    useEffect(() => {
+      console.log(generatedUI)
+      console.log(HTMLData)
+    }, [generatedUI, HTMLData])
+    
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -142,66 +163,32 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
            // Add user input to chat with a temporary AI response
            setChat((prevChat) => [...prevChat, { userPrompt: currentPrompt, AiResponse: "Generating..." }]);
            
-           // Send request to AI API with the current prompt (streaming)
+           // Send request to AI API with the current prompt (not chained)
+
+           const ui = (HTMLData ? "Here is the previous ui in string[] form "+HTMLData : "")
+
            const response = await fetch('/api/generate-ui', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
-               body: JSON.stringify({ prompt: currentPrompt, previousUI: generatedUI, imageHolder, projectId, uid: user?.uid }),
+               body: JSON.stringify({ prompt: currentPrompt, previousUI: ui, imageHolder, projectId, uid: user?.uid }),
            });
 
-           if (!response.body) {
-             throw new Error('No response body');
-           }
+           const data = await response.json();
 
-           // Prepare fresh UI container for this generation
-           setGeneratedUI({ ui: [], message: '' } as any);
+           // Update chat with actual AI response (normalize array or string)
+           const aiMessage = Array.isArray(data.message)
+               ? (data.message[data.message.length - 1] || "No response generated")
+               : (data.message || "No response generated");
+           setChat((prevChat) =>
+               prevChat.map((item, index) =>
+                   index === prevChat.length - 1 ? { ...item, AiResponse: aiMessage } : item
+               )
+           );
 
-           const reader = response.body.getReader();
-           const decoder = new TextDecoder('utf-8');
-           let buffered = '';
-
-           const processLines = (text: string) => {
-             buffered += text;
-             const lines = buffered.split('\n');
-             buffered = lines.pop() || '';
-             for (const line of lines) {
-               if (!line.trim()) continue;
-               try {
-                 const evt = JSON.parse(line);
-                 if (evt.type === 'status') {
-                   setChat((prevChat) =>
-                     prevChat.map((item, index) => index === prevChat.length - 1 ? { ...item, AiResponse: evt.message } : item)
-                   );
-                 } else if (evt.type === 'images') {
-                   setImageHolder(evt.images || []);
-                 } else if (evt.type === 'screen') {
-                   setGeneratedUI((prev:any) => ({
-                     ...(prev || { ui: [], message: '' }),
-                     ui: [ ...(prev?.ui || []), { screen: evt.screen, component: evt.component } ]
-                   }));
-                 } else if (evt.type === 'done') {
-                   setChat((prevChat) =>
-                     prevChat.map((item, index) => index === prevChat.length - 1 ? { ...item, AiResponse: evt.message || 'Done' } : item)
-                   );
-                 } else if (evt.type === 'error') {
-                   setChat((prevChat) =>
-                     prevChat.map((item, index) => index === prevChat.length - 1 ? { ...item, AiResponse: `Error: ${evt.message}` } : item)
-                   );
-                 }
-               } catch (e) {
-                 // ignore parse errors for partial lines
-               }
-             }
-           };
-
-           while (true) {
-             const { done, value } = await reader.read();
-             if (done) break;
-             processLines(decoder.decode(value, { stream: true }));
-           }
-           if (buffered) {
-             processLines('\n');
-           }
+           // Update the UI with the new generated UI
+           // Ensure data.ui is wrapped in the expected structure { ui: [...] }
+           setGeneratedUI(data.ui ? { ui: data.ui } : jsondata);
+           setImageHolder(data.imageHolder || []);
 
        } catch (error) {
            console.log(error);
@@ -391,7 +378,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                                             }}
                                                         >
                                                             <Screen screen={item.screen}>
-                                                                    <JsonToHtmlRenderer data={item.component} />
+                                                                    <JsonToHtmlRenderer data={item.component} setHTMLData={setHTMLData} screen={item.screen.name} HTMLData={HTMLData}/>
                                                             </Screen>
                                                         </div>
                                                     );

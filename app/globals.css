@@ -50,6 +50,7 @@
   border-color: #543cf3 transparent;
 }
 
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

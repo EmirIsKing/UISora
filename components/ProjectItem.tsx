@@ -19,7 +19,7 @@ const ProjectItem = ({
   allProjects,
   setProjects
 }: {
-  project: { id: string; settings: ProjectSettings }
+  project: { id: string; createdAt: {seconds: number; nanoseconds: number}; settings: ProjectSettings }
   allProjects: any
   setProjects: any
 }) => {
@@ -46,6 +46,8 @@ const ProjectItem = ({
       setLoading(false)
     }
   }
+
+  const date = new Date(project.createdAt.seconds * 1000 + project.createdAt.nanoseconds / 1e6);
 
   return (
     <div
@@ -104,7 +106,7 @@ const ProjectItem = ({
 
       {/* Footer / Timestamp */}
       <div className="text-xs text-slate-400 dark:text-slate-500 mt-3">
-        Last updated: {new Date().toLocaleDateString()}
+        Created At: {date.toISOString().split("T")[0]}
       </div>
     </div>
   )

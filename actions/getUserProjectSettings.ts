@@ -21,6 +21,7 @@ export async function getUserProjectSettings(): Promise<ProjectSettingsWithId[]>
         const data = doc.data();
         return {
             id: doc.id,
+            createdAt: data.createdAt,
             settings: data.settings as ProjectSettings,
         };
     });

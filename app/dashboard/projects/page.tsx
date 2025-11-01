@@ -11,7 +11,7 @@ import {ProjectSettings} from "@/types/types";
 
 const Page = () => {
     const { user, loading: userLoading } = useAuth();
-    const [projects, setProjects] = useState<{id:string; settings: ProjectSettings}[]>([]);
+    const [projects, setProjects] = useState<{id:string; createdAt: {seconds: number; nanoseconds: number}; settings: ProjectSettings}[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
 
@@ -36,6 +36,11 @@ const Page = () => {
 
         fetchProjects();
     }, [user, userLoading]);
+
+    useEffect(() => {
+      console.log(projects)
+    }, [projects])
+    
 
 
 

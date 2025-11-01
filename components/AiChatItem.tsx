@@ -1,5 +1,6 @@
 import React from 'react'
 import Logo from './Logo'
+import GenerateLoader from './GenerateLoader'
 
 const AiChatItem = ({message}: {message: string}) => {
     return (
@@ -12,7 +13,7 @@ const AiChatItem = ({message}: {message: string}) => {
 
                 {/* Chat Bubble */}
                 <div className="bg-white/2 rounded-md p-2 max-w-full break-words whitespace-pre-wrap text-white min-h-[50px] flex items-center justify-center">
-                    {message === "Generating" ? (<span className="loader"></span>) : message}
+                    {message === "Generating..." ? (<GenerateLoader/>) : message}
                 </div>
             </div>
         </div>

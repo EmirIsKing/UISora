@@ -13,19 +13,24 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import BasicToast from './smoothui/ui/BasicToast'
+import { AnimatePresence } from 'framer-motion'
 
 const ProjectItem = ({
   project,
   allProjects,
-  setProjects
+  setProjects,
+  handleShowToast,
 }: {
   project: { id: string; createdAt: {seconds: number; nanoseconds: number}; settings: ProjectSettings }
-  allProjects: any
-  setProjects: any
+  allProjects: any;
+  setProjects: any;
+  handleShowToast: (type:string,message:string)=>void
 }) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
+  
   const handleClick = () => {
     router.push(`/project/${project.id}`)
   }
@@ -39,9 +44,9 @@ const ProjectItem = ({
       await deleteProject(user.uid, projectId)
       const updatedProjects = allProjects.filter((p: any) => p.id !== projectId)
       setProjects(updatedProjects)
-      alert("Project deleted!")
+      handleShowToast("success", "Project deleted!")
     } catch (err: any) {
-      alert(`Failed to delete project: ${err.message}`)
+      handleShowToast("warning", "Failed to delete project!")
     } finally {
       setLoading(false)
     }

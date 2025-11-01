@@ -9,7 +9,7 @@ import { Button } from "../ui/button"
 import { AnimatedGroup } from "./animated-group"
 import { AnimatedText } from "./animated-text"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
-import Caroussel from "./Carousel"
+import Marquee from "./Marquee"
 import HeroExampleCards from "./HeroExampleCards"
 
 
@@ -136,11 +136,11 @@ export function HeroShowcase({
           </div>
           {/* Mobile: show carousel */}
           <div className="sm:hidden">
-            <Caroussel/>
+            <Marquee/>
           </div>
           {/* Desktop/tablet: show stationary cards */}
           <div className="hidden sm:flex items-center justify-center gap-4 px-6 pb-12">
-            <Caroussel/>
+            <Marquee/>
           </div>
         </motion.section>
       </main>

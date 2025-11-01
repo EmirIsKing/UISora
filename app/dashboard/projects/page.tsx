@@ -7,15 +7,24 @@ import { useAuth } from '@/contexts/AuthContext';
 import { JsonToHtmlRendererProps } from '@/types/types';
 import {getUserProjectSettings} from "@/actions/getUserProjectSettings";
 import {ProjectSettings} from "@/types/types";
+import { AnimatePresence } from 'framer-motion';
+import BasicToast from '@/components/smoothui/ui/BasicToast';
 
 
 const Page = () => {
     const { user, loading: userLoading } = useAuth();
     const [projects, setProjects] = useState<{id:string; createdAt: {seconds: number; nanoseconds: number}; settings: ProjectSettings}[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [showToast, setShowToast] = useState(false)
+    const [toastType, setToastType] = useState("success")
+    const [message, setMessage] = useState("")
 
 
-
+    const handleShowToast = (type:string, message:string) => {
+        setMessage(message)
+        setToastType(type)
+        setShowToast(true)
+    }
 
     useEffect(() => {
         if (userLoading) return;
@@ -80,9 +89,20 @@ const Page = () => {
                             project={project}
                             allProjects={projects}
                             setProjects={setProjects}
+                            handleShowToast={handleShowToast}
                         />
                     ))}
             </div>
+            <AnimatePresence>
+                {showToast && (
+                <BasicToast
+                    message={message}
+                    type={toastType}
+                    duration={3000}
+                    onClose={() => setShowToast(false)}
+                />
+                )}
+            </AnimatePresence>
 
         </div>
     );

@@ -1,7 +1,7 @@
 import React from 'react'
 import { ThreeDMarquee } from '../ui/shadcn-io/3d-marquee'
 
-const Carousel = () => {
+const Marquee = () => {
 
 
   const images = [
@@ -43,4 +43,4 @@ const Carousel = () => {
   )
 }
 
-export default Carousel
+export default Marquee

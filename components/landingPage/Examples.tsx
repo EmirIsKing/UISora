@@ -15,35 +15,35 @@ const examples = [
     category: "Social Media",
     prompt: "Design a chat app with stories and messaging features",
     color: "from-purple-500 to-pink-500",
-    link: "#"
+    link: "/project/view/91a151b7-7283-4037-a860-cde7c48a1cb7"
   },
   {
     icon: ListChecks,
     category: "Productivity",
     prompt: "Build a task manager with kanban board and calendar",
     color: "from-green-500 to-emerald-500",
-    link: "#"
+    link: "/project/view/7bc963c6-92f6-4308-9105-7c7ff09d1bba"
   },
   {
     icon: Camera,
     category: "Photo Sharing",
     prompt: "Create an Instagram-like app with photo feed and filters",
     color: "from-orange-500 to-red-500",
-    link: "#"
+    link: "/project/view/35c20f37-7436-4596-8c26-ef60d70a377b"
   },
   {
     icon: Heart,
     category: "Health & Fitness",
     prompt: "Design a workout tracking app with progress charts",
     color: "from-rose-500 to-pink-500",
-    link: "#"
+    link: "/project/view/da81c142-599b-404d-9670-8a1d1e5684bf"
   },
   {
     icon: TrendingUp,
     category: "Finance",
     prompt: "Build a crypto trading app with real-time charts",
     color: "from-indigo-500 to-purple-500",
-    link: "#"
+    link: "/project/view/38f8abcc-1af9-405a-993d-dd2fe526adf2"
   },
 ];
 

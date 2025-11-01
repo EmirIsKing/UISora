@@ -207,8 +207,8 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                 <TransformWrapper
                     minScale={0.1}
                     maxScale={6}
-                    initialScale={1}
-                    wheel={{ step: 0.2 }}
+                    initialScale={0.3}
+                    wheel={{ smoothStep: 0.0001, step: 0.02 }}
                     panning={{disabled: panning}}
                     doubleClick={{ disabled: true }}
                     zoomAnimation={{

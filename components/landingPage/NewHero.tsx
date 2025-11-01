@@ -140,9 +140,7 @@ export function HeroShowcase({
           </div>
           {/* Desktop/tablet: show stationary cards */}
           <div className="hidden sm:flex items-center justify-center gap-4 px-6 pb-12">
-            <HeroExampleCards image="/ex1.png"/>
-            <HeroExampleCards image="/ex2.png"/>
-            <HeroExampleCards image="/ex3.png"/>
+            <Caroussel/>
           </div>
         </motion.section>
       </main>

@@ -44,18 +44,18 @@ export function PricingCreative({userId, email}:{userId?:string; email?:string})
   
 
   return (
-    <section>
-      <div className="bg-muted/50 relative py-16 md:py-32">
+    <section id="pricing">
+      <div className="bg-muted/50 relative py-12 md:py-16">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold text-balance md:text-4xl lg:text-5xl lg:tracking-tight">
             Choose the right plan for you
             </h2>
-            <p className="text-foreground/70 mx-auto mt-4 max-w-xl text-lg text-balance">
+            <p className="text-foreground/70 mx-auto mt-4 max-w-xl text-lg text-balance mb-4">
               Scale with advanced features and
               priority support
             </p>
-            <div className="my-12">
+            <div className="my-12 hidden">
               <div
                 data-period={isAnnual ? "annually" : "monthly"}
                 className="bg-white dark:bg-black relative mx-auto grid w-fit grid-cols-2 rounded-full border p-1 *:block *:h-8 *:w-24 *:rounded-full *:text-sm *:hover:opacity-75"
@@ -87,7 +87,7 @@ export function PricingCreative({userId, email}:{userId?:string; email?:string})
           </div>
           <div className="container">
             <div className="mx-auto max-w-5xl">
-              <div className="grid grid-cols-2 gap-6 *:p-8">
+              <div className="grid grid-cols-2 max-md:grid-cols-1 max-md:grid-rows-2 gap-6 *:p-8">
                 {/* Free Plan */}
                 <motion.div
                   initial={{ opacity: 0, y: 40 }}

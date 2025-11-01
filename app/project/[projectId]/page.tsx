@@ -252,7 +252,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                     </div>
 
                     {/* Fixed Input Box */}
-                    <div className='w-full flex text-white'>
+                    <div className={`w-full ${sidebarToggle ? "" : "hidden"} flex text-white`}>
                         <StyleSelector selectedStyle={selectedStyle} setSelectedStyle={setSelectedStyle}/>
                     </div>
                     <div
@@ -280,8 +280,8 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 <TransformWrapper
                     minScale={0.1}
                     maxScale={6}
-                    initialScale={1}
-                    wheel={{ step: 0.2 }}
+                    initialScale={0.3}
+                    wheel={{ smoothStep: 0.0001, step: 0.02 }}
                     panning={{disabled: panning}}
                     doubleClick={{ disabled: true }}
                     zoomAnimation={{

@@ -15,7 +15,7 @@ import Pricing from '@/components/landingPage/Pricing'
 import Examples from '@/components/landingPage/Examples'
 import FAQ from '@/components/landingPage/FAQ'
 import Footer from '@/components/landingPage/Footer'
-import ScrollToHash from '@/components/ScrolltoHash'
+import ScrollToHash from '@/components/ScrollToHash'
 
 const Page = () => {
     const router = useRouter();

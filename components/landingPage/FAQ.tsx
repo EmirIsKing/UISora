@@ -16,7 +16,7 @@ import {
     },
     {
       question: "How many credits do I get with the free plan?",
-      answer: "We do not offer plans. You get 5000 credits for creating an account for testing and more can be bought if needed",
+      answer: "You get 2000 credits for creating an account for testing and more can be bought if needed. Check pricing section for more info.",
     },
     {
       question: "Can I customize the generated UIs?",
@@ -33,7 +33,7 @@ import {
               Frequently Asked Questions
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Everything you need to know about Design Forge
+              Everything you need to know about UISora
             </p>
           </div>
   

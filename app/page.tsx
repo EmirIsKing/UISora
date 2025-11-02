@@ -15,6 +15,7 @@ import Pricing from '@/components/landingPage/Pricing'
 import Examples from '@/components/landingPage/Examples'
 import FAQ from '@/components/landingPage/FAQ'
 import Footer from '@/components/landingPage/Footer'
+import ScrollToHash from '@/components/ScrolltoHash'
 
 const Page = () => {
     const router = useRouter();
@@ -65,6 +66,7 @@ const Page = () => {
         <div className="min-h-screen max-md:overflow-x-hidden">
         <NavBar/>
         <HeroShowcase/>
+        <ScrollToHash/>
         <ProblemSolution/>
         <Features/>
         <HowItWorks/>

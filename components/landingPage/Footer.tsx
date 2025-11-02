@@ -1,16 +1,17 @@
 import { Sparkles } from "lucide-react";
 import Logo from "../Logo";
+import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="bg-card/50 border-t border-border py-12" id="footer">
+    <footer className="bg-card/50 border-t border-border py-5" id="footer">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <div>
-            <Logo variant="gradient"/>
-            </div>
+            <Link href="/">
+              <Logo variant="gradient"/>
+            </Link>
             <p className="text-sm text-muted-foreground">
               Transform ideas into beautiful mobile UIs with AI-powered generation.
             </p>
@@ -20,9 +21,9 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Product</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#features" className="hover:text-primary transition-colors">Features</a></li>
-              <li><a href="#pricing" className="hover:text-primary transition-colors">Pricing</a></li>
-              <li><a href="#examples" className="hover:text-primary transition-colors">Examples</a></li>
+              <li><Link scroll={true} href={`/#features`}  className="hover:text-primary transition-colors">Features</Link></li>
+              <li><Link scroll={true} href={`/#pricing`} className="hover:text-primary transition-colors">Pricing</Link></li>
+              <li><Link scroll={true} href={`/#examples`} className="hover:text-primary transition-colors">Examples</Link></li>
             </ul>
           </div>
 
@@ -30,8 +31,8 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-primary transition-colors">About</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Blog</a></li>
+              <li><a href="/about" className="hover:text-primary transition-colors">About</a></li>
+              <li><a href="/blog" className="hover:text-primary transition-colors">Blog</a></li>
             </ul>
           </div>
 
@@ -39,16 +40,16 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Legal</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Cookie Policy</a></li>
+              <li><a href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</a></li>
+              <li><a href="/terms-of-service" className="hover:text-primary transition-colors">Terms of Service</a></li>
+              <li><a href="/cookie-policy" className="hover:text-primary transition-colors">Cookie Policy</a></li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2025 Design Forge. All rights reserved.
+            © 2025 UISora. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-muted-foreground">
             <a href="#" className="hover:text-primary transition-colors">Twitter</a>

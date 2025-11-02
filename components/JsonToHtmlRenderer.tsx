@@ -22,7 +22,7 @@ const VOID_ELEMENTS = new Set([
   'source', 'track', 'wbr'
 ]);
 
-const handleSave = (data: any) => {};
+//const handleSave = (data: any) => {};
 
 // ✅ Convert JSON → HTML string
 const elementToHTML = (element: string | HtmlElement): string => {
@@ -44,7 +44,7 @@ const elementToHTML = (element: string | HtmlElement): string => {
   return `${openTag}${content.map(elementToHTML).join("")}</${type}>`;
 };
 
-const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data, setHTMLData, HTMLData = [], screen = "" }) => {
+const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data, setHTMLData, screen = "" }) => {
 
   // ✅ Save the HTML result ONCE per screen change
   useEffect(() => {
@@ -63,7 +63,7 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data, setHTMLDa
   // ✅ React Renderer (keeps editable content)
   const renderElement = (element: string | HtmlElement, index?: number): React.ReactNode => {
     if (typeof element === 'string') {
-      return (<EditableText key={index} text={element} onSave={handleSave}/>);
+      return (<EditableText key={index} text={element}/>);
     }
 
     const { type, attributes = {}, content = [] } = element;

@@ -4,7 +4,7 @@ import Screen from "@/components/Screen";
 import UserChatItem from "@/components/UserChatItem";
 import AiChatItem from "@/components/AiChatItem";
 import ProjectPageNavigation from "@/components/ProjectPageNavigation";
-import {useExportData} from "@/store/store";
+//import {useExportData} from "@/store/store";
 import {useExportModal} from "@/store/store";
 import {usePanning, useSelectElement} from "@/store/store";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -42,17 +42,17 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [prompt, setPrompt] = useState('');
     const [generatedUI, setGeneratedUI] = useState<JsonToHtmlRendererProps>(jsondata);
     const [chat, setChat] = useState<ChatItemType[]>([]);
-    const [chain, setChain] = useState('')
+    //const [chain, setChain] = useState('')
     const [imageHolder, setImageHolder] = useState([]);
     const [sidebarToggle, setSidebarToggle] = useState<boolean>(true);
     const { projectId } = use(params);
     const { exportModal, setExportModal } = useExportModal();
-    const [zoom, setZoom] = useState(1);
-    const [offset, setOffset] = useState({ x: 0, y: 0 });
+    // const [zoom, setZoom] = useState(1);
+    // const [offset, setOffset] = useState({ x: 0, y: 0 });
     const {panning, togglePanning, setPanning} = usePanning();
-    const [panningOn, setPanningOn] = useState()
-    const [startPan, setStartPan] = useState({ x: 0, y: 0 });
-    const containerRef = useRef(null);
+    // const [panningOn, setPanningOn] = useState()
+    // const [startPan, setStartPan] = useState({ x: 0, y: 0 });
+    // const containerRef = useRef(null);
     const {setSelected, selection} = useSelectElement()
     const { user } = useAuth();
     const screenshotRef = useRef<HTMLDivElement>(null)
@@ -60,24 +60,24 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [HTMLData, setHTMLData] = useState<string[]>([])
 
 
-    interface ScreenConfig {
-        screen: {
-            name: string;
-            width: number;
-            height: number;
-        };
-        component: HtmlElement[]; // Can be either a component or array of elements
-    }
+    // interface ScreenConfig {
+    //     screen: {
+    //         name: string;
+    //         width: number;
+    //         height: number;
+    //     };
+    //     component: HtmlElement[]; // Can be either a component or array of elements
+    // }
 
 // Define interface for the entire test data
-    interface TestData {
-        ui: ScreenConfig[];
-        message: string;
-    }
+    // interface TestData {
+    //     ui: ScreenConfig[];
+    //     message: string;
+    // }
 
-    interface MetaData {
-        ui: ScreenConfig[];
-    }
+    // interface MetaData {
+    //     ui: ScreenConfig[];
+    // }
 
     useEffect(() => {
         const fetchProjectDetails = async () => {
@@ -118,13 +118,13 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                             setChat(chatHistory);
 
                             // Set the chain from the last entry if it exists
-                            if (blobData.length > 1) {
-                                const lastEntry = blobData[blobData.length - 1];
-                                const lastPromptArray = Array.isArray(lastEntry.prompt)
-                                    ? lastEntry.prompt
-                                    : [lastEntry.prompt].filter(Boolean);
-                                setChain(lastPromptArray[lastPromptArray.length - 1] || "");
-                            }
+                            // if (blobData.length > 1) {
+                            //     const lastEntry = blobData[blobData.length - 1];
+                            //     const lastPromptArray = Array.isArray(lastEntry.prompt)
+                            //         ? lastEntry.prompt
+                            //         : [lastEntry.prompt].filter(Boolean);
+                            //     setChain(lastPromptArray[lastPromptArray.length - 1] || "");
+                            // }
 
                             // Set image holder from the latest entry
                             if (blobData[blobData.length - 1].imageHolder) {
@@ -291,7 +291,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                     centerOnInit={true}
                     limitToBounds={false}
                 >
-                    {({ zoomIn, zoomOut, resetTransform, centerView }) =>
+                    {({ zoomIn, zoomOut, centerView }) =>
                         (
                             <div className={'relative w-full h-full'}>
                                 <div className="absolute top-4 left-4 z-50 flex gap-2">

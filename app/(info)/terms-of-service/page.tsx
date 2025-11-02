@@ -11,8 +11,8 @@ export default function TermsOfService() {
           <section className="mb-12">
             <h2 className="text-2xl font-semibold mb-4">1. Agreement to Terms</h2>
             <p className="mb-4">
-              By accessing or using UISora (the "Service"), you agree to be bound by these Terms of Service 
-              ("Terms"). If you disagree with any part of these terms, you may not access the Service.
+              By accessing or using UISora (the &ldquo;Service&ldquo;), you agree to be bound by these Terms of Service 
+              (&ldquo;Terms&ldquo;). If you disagree with any part of these terms, you may not access the Service.
             </p>
           </section>
 
@@ -83,8 +83,8 @@ export default function TermsOfService() {
               <li>Violate any laws in your jurisdiction</li>
               <li>Transmit malicious code, viruses, or harmful software</li>
               <li>Attempt to gain unauthorized access to the Service or its systems</li>
-              <li>Interfere with or disrupt the Service's operation</li>
-              <li>Generate content that is illegal, harmful, offensive, or violates others' rights</li>
+              <li>Interfere with or disrupt the Service&apos;s operation</li>
+              <li>Generate content that is illegal, harmful, offensive, or violates others&apos; rights</li>
               <li>Use the Service to create content that infringes intellectual property rights</li>
               <li>Reverse engineer, decompile, or disassemble any part of the Service</li>
               <li>Use automated systems to access the Service without permission</li>
@@ -103,8 +103,8 @@ export default function TermsOfService() {
             <ul className="list-disc list-inside mb-4 space-y-2">
               <li>You own the rights to UI designs generated for you</li>
               <li>Our AI models are trained on publicly available data</li>
-              <li>No warranty that generated content won't infringe third-party rights</li>
-              <li>You are responsible for verifying content doesn't infringe rights</li>
+              <li>No warranty that generated content won&apos;t infringe third-party rights</li>
+              <li>You are responsible for verifying content doesn&apos;t infringe rights</li>
             </ul>
 
             <h3 className="text-xl font-semibold mb-3">6.3 Service Ownership</h3>
@@ -127,7 +127,7 @@ export default function TermsOfService() {
           <section className="mb-12">
             <h2 className="text-2xl font-semibold mb-4">8. Disclaimer of Warranties</h2>
             <p className="mb-4">
-              THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS 
+              THE SERVICE IS PROVIDED &ldquo;AS IS&ldquo; AND &ldquo;AS AVAILABLE&ldquo; WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS 
               OR IMPLIED. TO THE FULLEST EXTENT PERMISSIBLE BY LAW, WE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, 
               INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, 
               AND NON-INFRINGEMENT.

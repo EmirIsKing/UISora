@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { cn } from '@repo/shadcn-ui/lib/utils';
@@ -325,8 +326,10 @@ const components: Options['components'] = {
     if (
       isValidElement(children) &&
       children.props &&
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       typeof (children.props as any).children === 'string'
     ) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       code = (children.props as any).children;
     } else if (typeof children === 'string') {
       code = children;

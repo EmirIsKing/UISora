@@ -9,7 +9,7 @@ interface FirebaseProviderProps {
 }
 
 export default function FirebaseProvider({ children }: FirebaseProviderProps) {
-  const [user, loading, error] = useAuthState(auth);
+  const [loading, error] = useAuthState(auth);
 
   // Show loading state while auth is initializing
   if (loading) {

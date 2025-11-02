@@ -19,7 +19,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
     const [projectDetails, setProjectDetails] = useState<ProjectSettingsWithId | null>(null)
     const [projectName, setProjectName] = useState<string>('Loading...');
     const [credits, setCredits] = useState<number | null>(0);
-    const user = auth.currentUser;
+    //const user = auth.currentUser;
 
     const toggleExportModal = () => {
         useExportModal.getState().setExportModal(!useExportModal.getState().exportModal);

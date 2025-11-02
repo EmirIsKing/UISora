@@ -69,6 +69,7 @@ export default function CreditEstimation({
 
       onEstimateComplete?.(data.hasEnough, data.shortfall);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
       onEstimateComplete?.(false);

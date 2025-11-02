@@ -1,10 +1,10 @@
 'use client'
 import React, {useState, useRef, useEffect} from 'react'
-import {Rnd} from "react-rnd";
-import {CSSProperties} from "react";
-import {usePanning, useSelectElement} from "@/store/store";
+//import {Rnd} from "react-rnd";
+//import {CSSProperties} from "react";
+import { useSelectElement} from "@/store/store";
 import {RDEmetadata} from "@/types/types";
-import DOMPurify from 'dompurify';
+//import DOMPurify from 'dompurify';
 
 
 
@@ -12,22 +12,22 @@ import DOMPurify from 'dompurify';
 const RDE = ({metadata}: {metadata: RDEmetadata}) => {
 
     const [editable, setEditable] = useState(false);
-    const {panning, setPanning} = usePanning();
+    //const {panning, setPanning} = usePanning();
     const {selected, setSelected} = useSelectElement();
     const [content, setContent] = useState(metadata.content);
     const contentRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [inputValue, setInputValue] = useState("");
 
-    const [meta, setMeta] = useState({width: metadata.width, height: metadata.height, x: metadata.x , y: metadata.y, id: metadata.id})
+    //const [meta, setMeta] = useState({width: metadata.width, height: metadata.height, x: metadata.x , y: metadata.y, id: metadata.id})
 
-    const setPosition = (e: any, direction: any) => {
-        setMeta(prevMeta => ({
-            ...prevMeta,
-            x: direction.x,
-            y: direction.y,
-        }));
-    };
+    // const setPosition = (e: any, direction: any) => {
+    //     setMeta(prevMeta => ({
+    //         ...prevMeta,
+    //         x: direction.x,
+    //         y: direction.y,
+    //     }));
+    // };
 
 
     useEffect(() => {
@@ -45,7 +45,7 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
             inputRef.current.select(); // Select all text by default
         }
 
-    }, [content, editable, selected]);
+    }, [content, editable, metadata.id, selected]);
 
     const handleBlur = () => {
         if (contentRef.current) {
@@ -65,15 +65,16 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
         }
     };
 
-    const setSize = (e :any, direction :any, ref :any, delta :any, position :any) => {
-        setMeta(prevMeta => ({
-            ...prevMeta,
-            width: ref.offsetWidth,
-            height: ref.offsetHeight,
-        }));
-    };
+    // const setSize = (e :any, direction :any, ref :any, delta :any, position :any) => {
+    //     setMeta(prevMeta => ({
+    //         ...prevMeta,
+    //         width: ref.offsetWidth,
+    //         height: ref.offsetHeight,
+    //     }));
+    // };
+
     const clickHandler = () => {
-        setPanning(false);
+        //setPanning(false);
         setSelected(metadata.id);
     }
 
@@ -105,7 +106,7 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         onBlur={handleBlur}
-                        onDoubleClick={(e) => {
+                        onDoubleClick={() => {
                             if (selected === metadata.id){
                                 editHandler()
                             }
@@ -143,7 +144,7 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                         ref={contentRef}
                         contentEditable={editable}
                         suppressContentEditableWarning={true}
-                        onDoubleClick={(e) => {
+                        onDoubleClick={() => {
                             if (selected === metadata.id){
                                 editHandler()
                             }
@@ -205,7 +206,7 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                             ...metadata.style,
                             ...metadata.hoverStyle
                         }}
-                        onDoubleClick={(e) => {
+                        onDoubleClick={() => {
                             if (selected === metadata.id){
                                 editHandler()
                             }
@@ -220,7 +221,7 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                         ref={contentRef as unknown as React.RefObject<HTMLButtonElement>}
                         contentEditable={editable}
                         suppressContentEditableWarning={true}
-                        onDoubleClick={(e) => {
+                        onDoubleClick={() => {
                             if (selected === metadata.id){
                                 editHandler()
                             }
@@ -270,7 +271,7 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                         ref={contentRef}
                         contentEditable={editable}
                         suppressContentEditableWarning={true}
-                        onDoubleClick={(e) => {
+                        onDoubleClick={() => {
                             if (selected === metadata.id){
                                 editHandler()
                             }
@@ -349,7 +350,7 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                         ref={contentRef}
                         contentEditable={editable}
                         suppressContentEditableWarning={true}
-                        onDoubleClick={(e) => {
+                        onDoubleClick={() => {
                             if (selected === metadata.id){
                                 editHandler()
                             }

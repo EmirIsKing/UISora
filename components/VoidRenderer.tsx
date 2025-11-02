@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
-const VoidRenderer = ({index, processedAttributes, type,}:{index:number|undefined, processedAttributes:Record<string, any>, type:string}) => {
+const VoidRenderer = ({index, processedAttributes, type,}:{index:number|undefined, processedAttributes:Record<string, unknown>, type:string}) => {
 
     return (
         <div>

@@ -11,7 +11,7 @@ export default function PrivacyPolicy() {
           <section className="mb-12">
             <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
             <p className="mb-4">
-              Welcome to UISora (the "Service"). We respect your privacy and are committed to protecting 
+              Welcome to UISora (the &ldquo;Service&ldquo;). We respect your privacy and are committed to protecting 
               your personal data. This privacy policy explains how we collect, use, disclose, and safeguard your 
               information when you use our AI-powered UI generation platform.
             </p>
@@ -122,7 +122,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">8. Children's Privacy</h2>
+            <h2 className="text-2xl font-semibold mb-4">8. Children&apos;s Privacy</h2>
             <p className="mb-4">
               Our Service is not intended for users under the age of 13 (or the applicable age of consent 
               in your jurisdiction). We do not knowingly collect personal information from children. If you 
@@ -142,7 +142,7 @@ export default function PrivacyPolicy() {
             <h2 className="text-2xl font-semibold mb-4">10. Changes to This Policy</h2>
             <p className="mb-4">
               We may update this Privacy Policy from time to time. We will notify you of significant changes 
-              by posting the new policy on this page and updating the "Last updated" date. Your continued use 
+              by posting the new policy on this page and updating the &ldquo;Last updated&ldquo; date. Your continued use 
               of the Service after changes become effective constitutes acceptance of the updated policy.
             </p>
           </section>

@@ -118,7 +118,7 @@ export default function CookiePolicy() {
 
             <h3 className="text-xl font-semibold mb-3">5.3 Analytics Opt-Out</h3>
             <p className="mb-4">
-              You can opt out of Firebase Analytics by configuring your browser settings or using Google's 
+              You can opt out of Firebase Analytics by configuring your browser settings or using Google&apos;s 
               opt-out tool: <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Google Analytics Opt-out</a>
             </p>
           </section>
@@ -137,7 +137,7 @@ export default function CookiePolicy() {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-4">7. Cookies We Don't Use</h2>
+            <h2 className="text-2xl font-semibold mb-4">7. Cookies We Don&apos;t Use</h2>
             <p className="mb-4">
               We do not currently use:
             </p>
@@ -153,7 +153,7 @@ export default function CookiePolicy() {
             <p className="mb-4">
               We may update this Cookie Policy from time to time to reflect changes in our practices or for 
               operational, legal, or regulatory reasons. We will post the updated policy on this page and 
-              update the "Last updated" date.
+              update the &ldquo;Last updated&ldquo; date.
             </p>
           </section>
 

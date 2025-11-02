@@ -1,19 +1,19 @@
 "use client"
-import React,{useState} from 'react'
+import React from 'react'
 
 const Header = () => {
-    const [email, setEmail] = useState("")
+    // const [email, setEmail] = useState("")
 
-    const handleSubscribe = async () => {
-        await fetch("/api/newsletterSubscribe", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        });
-    }
+    // const handleSubscribe = async () => {
+    //     await fetch("/api/newsletterSubscribe", {
+    //       method: "POST",
+    //       headers: { "Content-Type": "application/json" },
+    //       body: JSON.stringify({ email }),
+    //     });
+    // }
 
     const handleEmail = (email) => {
-        setEmail(email);
+        //setEmail(email);
         console.log(email)
     }
 

@@ -3,7 +3,6 @@ import React, {useState} from 'react'
 import { Button } from '@heroui/button'
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-import Loader from './Loader';
 
 
 const AssetExport = ({assets}:{assets: string[]}) => {
@@ -15,7 +14,7 @@ const AssetExport = ({assets}:{assets: string[]}) => {
     setIsloading(true)
 
     const zip = new JSZip();
-    // @ts-ignore
+    // @ts-expect-error or undefined
     const urls : string[] = assets.map(str => (str.match(/https?:\/\/[^\s]+/g) || [])[0])
     console.log(urls)
 

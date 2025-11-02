@@ -53,7 +53,7 @@ const Examples = () => {
       <div className="container mx-auto max-w-5xl z-20 max-md:py-2 max-md:pb-8 items-center gap-10 px-6 py-6">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-            See What's Possible
+            See What&apos;s Possible
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             From simple ideas to stunning interfaces across all app categories

@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     return NextResponse.json(
-      { message: "There was a problem, please try again" },
+      { message: "There was a problem, please try again: "+error },
       { status: 500 }
     );
   }

@@ -76,7 +76,7 @@ export default function SignUpForm() {
       } else {
         throw new Error(response.message || 'Failed to create user account');
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Sign up error:', error);
       // Error is handled by the auth context
     } finally {

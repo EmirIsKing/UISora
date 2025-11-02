@@ -6,7 +6,7 @@ import { adminDb } from '@/utils/firebaseAdmin';
 
 type FeedbackType = 'feedback' | 'bug' | 'suggestion';
 
-function inferTypeFromBody(body: Record<string, any>): FeedbackType {
+function inferTypeFromBody(body: Record<string, unknown>): FeedbackType {
 	if (body?.type === 'bug' || body?.bugTitle || body?.bugDetails) {
 		return 'bug';
 	}
@@ -16,7 +16,7 @@ function inferTypeFromBody(body: Record<string, any>): FeedbackType {
 	return 'feedback';
 }
 
-function extractMessage(type: FeedbackType, body: Record<string, any>): string {
+function extractMessage(type: FeedbackType, body: Record<string, unknown>): string {
 	if (type === 'bug') {
 		const title = (body?.bugTitle ?? '').toString().trim();
 		const details = (body?.bugDetails ?? '').toString().trim();
@@ -28,7 +28,7 @@ function extractMessage(type: FeedbackType, body: Record<string, any>): string {
 	return (body?.feedback ?? '').toString().trim();
 }
 
-async function parseBody(request: Request): Promise<Record<string, any>> {
+async function parseBody(request: Request): Promise<Record<string, unknown>> {
 	const contentType = request.headers.get('content-type') || '';
 	try {
 		if (contentType.includes('application/json')) {

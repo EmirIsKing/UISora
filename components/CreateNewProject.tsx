@@ -2,7 +2,7 @@
 import React,{useState} from 'react'
 import {Plus} from 'lucide-react'
 import {Button} from "@heroui/button";
-import { v4 as uuidv4 } from 'uuid';
+//import { v4 as uuidv4 } from 'uuid';
 import {useRouter} from "next/navigation";
 import {createNewProject} from '@/actions/createNewProject'
 import Loader from './Loader'
@@ -11,7 +11,7 @@ import { useAuth } from '@/contexts/AuthContext'
 const CreateNewProject = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const { user, loading: authLoading } = useAuth();
+    const { user } = useAuth();
 
 
 

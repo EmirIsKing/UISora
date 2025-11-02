@@ -11,12 +11,12 @@ export async function POST(req: Request) {
         const openDesignJSON = htmlToFigma(html);
 
         return NextResponse.json({ success: true, openDesignJSON });
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message || "Failed to process request" }, { status: 500 });
+    } catch (error: unknown) {
+        return NextResponse.json({ error: error || "Failed to process request" }, { status: 500 });
     }
 }
 
-// Helper function to generate a UUID (if needed)
-function generateUuid() {
-    return crypto.randomUUID();
-}
+// // Helper function to generate a UUID (if needed)
+// function generateUuid() {
+//     return crypto.randomUUID();
+// }

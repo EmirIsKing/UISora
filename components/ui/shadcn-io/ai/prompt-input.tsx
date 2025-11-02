@@ -40,8 +40,8 @@ export const PromptInputTextarea = ({
   onChange,
   className,
   placeholder = 'What would you like to know?',
-  minHeight = 48,
-  maxHeight = 164,
+  //minHeight = 48,
+  //maxHeight = 164,
   ...props
 }: PromptInputTextareaProps) => {
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
@@ -69,7 +69,7 @@ export const PromptInputTextarea = ({
         className
       )}
       name="message"
-      onChange={(e) => {
+      onChange={(e: unknown) => {
         onChange?.(e);
       }}
       onKeyDown={handleKeyDown}

@@ -48,6 +48,6 @@ export async function POST(req: Request) {
 
     return Response.json({checkoutUrl}, { status: 200 });
   } catch (error) {
-    return new Response("Error submitting to LemonSqueezy", { status: 500 });
+    return new Response("Error submitting to LemonSqueezy: " + error, { status: 500 });
   }
 }

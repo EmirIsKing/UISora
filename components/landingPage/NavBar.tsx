@@ -1,6 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
-import SignUp from './SignUp'
 import { Navbar03 } from '../ui/shadcn-io/navbar-03'
 import Logo from '../Logo'
 

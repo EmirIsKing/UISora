@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import CreateNewProject from '@/components/CreateNewProject';
 import ProjectItem from '@/components/ProjectItem';
 import { useAuth } from '@/contexts/AuthContext';
-import { JsonToHtmlRendererProps } from '@/types/types';
 import {getUserProjectSettings} from "@/actions/getUserProjectSettings";
 import {ProjectSettings} from "@/types/types";
 import { AnimatePresence } from 'framer-motion';

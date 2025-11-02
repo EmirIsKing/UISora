@@ -1,7 +1,6 @@
 "use client"
 import React, { useRef, useEffect, useState } from 'react';
-import {Rnd} from "react-rnd";
-import DeviceMockup from "@/components/DeviceMockup";
+//import {Rnd} from "react-rnd";
 
 const Screen = ({ children, screen }:{children:React.ReactNode; screen: { name:string; width: number; height: number; }}) => {
     const screenRef = useRef<HTMLDivElement>(null);
@@ -12,7 +11,7 @@ const Screen = ({ children, screen }:{children:React.ReactNode; screen: { name:s
 
     useEffect(() => {
         if (screenRef.current) {
-            const children = screenRef.current.children;
+            //const children = screenRef.current.children;
 
             // Apply minimum dimensions
             setDimensions({
@@ -20,7 +19,7 @@ const Screen = ({ children, screen }:{children:React.ReactNode; screen: { name:s
                 height: screen.height
             });
         }
-    }, [children]);
+    }, [children, screen.height, screen.width]);
 
     return (
 

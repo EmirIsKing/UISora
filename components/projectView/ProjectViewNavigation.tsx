@@ -89,7 +89,7 @@ const ProjectViewNavigation = ({
         };
 
         if (projectId) fetchProject();
-    }, [projectId]);
+    }, [projectId, router]);
 
     const handleGotoDashboard = () => {
         router.push(`/dashboard/projects`);

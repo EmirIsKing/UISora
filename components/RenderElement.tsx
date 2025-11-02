@@ -13,19 +13,19 @@ const VOID_ELEMENTS = new Set([
     'source', 'track', 'wbr'
 ]);
 
-const handleSave = (data: any) => {
+// const handleSave = (data: any) => {
 
-}
+// }
 
 export const renderElement = (element: string | HtmlElement, index?: number): React.ReactNode => {
     if (typeof element === 'string') {
-        return (<EditableText key={index} text={element} onSave={handleSave}/>)
+        return (<EditableText key={index} text={element}/>)
     }
 
     const { type, attributes = {}, content = [] } = element;
 
     // Filter out event handlers and convert HTML attributes to React format
-    const processedAttributes: Record<string, any> = {};
+    const processedAttributes: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(attributes)) {
         // Skip event handlers (onclick, onClick, onchange, etc.)
         if (key.toLowerCase().startsWith('on')) {

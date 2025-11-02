@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import DashboardTabs from "@/components/DashboardTabs";
+//import DashboardTabs from "@/components/DashboardTabs";
 import UserProfile from "@/components/auth/UserProfile";
 import FeedbackButton from './FeedbackButton';
 import { SimpleThemeToggle } from '@/components/ThemeToggle';

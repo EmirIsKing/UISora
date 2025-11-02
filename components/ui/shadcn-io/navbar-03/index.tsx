@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import * as React from 'react';
@@ -18,7 +19,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import type { ComponentProps } from 'react';
+//import type { ComponentProps } from 'react';
 
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {
@@ -133,6 +134,7 @@ export const Navbar03 = React.forwardRef<HTMLElement, Navbar03Props>(
       const offset = -80; // Adjust for fixed navbar
     
       // Use Lenis if available
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const lenis = (window as any)?.lenis;
       if (lenis) {
         lenis.scrollTo(target, { offset, duration: 1.2 });

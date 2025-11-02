@@ -63,22 +63,23 @@ export async function POST(request: Request) {
         });
 
         // Step 1 & 2: Prompt Fattening and Image Generation (with chain prompting shortcut)
-        let images: string[] = imageHolder ?? [];
+        const images: string[] = imageHolder ?? [];
         let fattenedPrompt: string = prompt + previousUI;
         let fattenedTokens: number = 0;
 
         if (!(previousUI && images.length > 0)) {
             // Normal flow: fatten prompt and generate images if needed
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const fattenedRes:any = await PromptFattening(prompt);
             const fattenedJson = await fattenedRes.json();
             fattenedTokens = fattenedRes.usage?.total_tokens || 0;
 
             if (images.length === 0) {
-                //@ts-ignore
+                //@ts-expect-error return format may vary
                 const splashJson = await (await ImageGeneration(fattenedJson.ui[0].splashImagePrompt, 1)).json();
                 images.push(`${splashJson.images[0].url} - Image of ${splashJson.prompt}`);
 
-                //@ts-ignore
+                //@ts-expect-error return format may vary
                 const otherJson = await (await ImageGeneration(fattenedJson.ui[0].otherImagesPrompt, 4)).json();
                 for (let i = 0; i < 4; i++) {
                     images.push(`${otherJson.images[i].url} - Image of ${otherJson.prompt}`);
@@ -130,6 +131,7 @@ export async function POST(request: Request) {
         const projectData = projectSnap.data();
         const blobUrl = projectData?.uiBlobUrl;
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let history: any[] = [];
 
         if (blobUrl) {

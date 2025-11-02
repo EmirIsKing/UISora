@@ -5,16 +5,12 @@ import { MdFeedback } from "react-icons/md";
 import { Button as Feedbackbutton }  from '@heroui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Tabs, TabsList, TabsContent, TabsTrigger } from './ui/tabs';
 import { Textarea } from './ui/textarea';
 import { useAuth } from "@/hooks/useAuth";
@@ -33,7 +29,7 @@ const FeedbackButton = () => {
 
       try {
         const formData = new FormData(e.currentTarget)
-        const raw = Object.fromEntries(formData.entries()) as Record<string, any>
+        const raw = Object.fromEntries(formData.entries()) as Record<string, unknown>
 
         const payload = {
           ...raw,

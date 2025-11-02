@@ -66,8 +66,8 @@ export async function POST(req: NextRequest) {
             url: blob.url,
             message: "File uploaded, old one deleted, and Firestore updated.",
         });
-    } catch (err: any) {
+    } catch (err: unknown) {
         console.error("Upload error:", err);
-        return NextResponse.json({ error: err.message }, { status: 500 });
+        return NextResponse.json({ error: err }, { status: 500 });
     }
 }

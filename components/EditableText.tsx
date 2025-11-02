@@ -1,7 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react';
 
-const EditableText = ({ text, onSave }: {text:string; onSave:(value: string)=>void}) => {
+const EditableText = ({ text, onSave }: {text:string; onSave?:(value: string)=>void}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [value, setValue] = useState(text);
     const inputRef = useRef(null);
@@ -23,7 +23,7 @@ const EditableText = ({ text, onSave }: {text:string; onSave:(value: string)=>vo
         }
     };
 
-    const handleKeyDown = (e: any) => {
+    const handleKeyDown = (e: { key: string; }) => {
         if (e.key === 'Enter') {
             handleBlur();
         } else if (e.key === 'Escape') {

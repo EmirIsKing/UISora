@@ -21,7 +21,7 @@ export default function SignInForm() {
   const [viewPassword, setViewPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { signIn, error, clearError } = useAuth();
+  const { signIn, clearError } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

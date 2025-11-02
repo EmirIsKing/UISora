@@ -39,7 +39,7 @@ export function Renderer({ node }: RendererProps) {
     const style = parseStyleString(attributes.style);
 
     // Copy attributes, rename 'class' to 'className', skip event handlers
-    const reactAttrs: { [key: string]: any } = {};
+    const reactAttrs: { [key: string]: unknown } = {};
     for (const key in attributes) {
         if (key === "class") {
             reactAttrs["className"] = attributes[key];

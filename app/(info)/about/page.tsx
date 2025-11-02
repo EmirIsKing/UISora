@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Sparkles, Wand2, Zap, Code, Layers, Shield, Users, Target } from 'lucide-react'
+import { Wand2, Zap, Code, Layers, Shield, Users, Target } from 'lucide-react'
 import Logo from '@/components/Logo'
 
 export default function About() {
@@ -26,12 +26,12 @@ export default function About() {
               Our Mission
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed mb-4">
-              At UISora, we believe that great design should be accessible to everyone. We're on a mission to 
+              At UISora, we believe that great design should be accessible to everyone. We&apos;re on a mission to 
               democratize mobile UI/UX design by harnessing the power of artificial intelligence to transform 
               ideas into beautiful, production-ready interfaces in seconds.
             </p>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Whether you're a startup founder, a designer, a developer, or someone with a creative vision, 
+              Whether you&apos;re a startup founder, a designer, a developer, or someone with a creative vision, 
               UISora empowers you to bring your app ideas to life without the traditional barriers of time, 
               cost, or design expertise.
             </p>
@@ -97,7 +97,7 @@ export default function About() {
               <Zap className="text-primary mb-4 mx-auto" size={32} />
               <h3 className="text-xl font-semibold mb-3">Innovation</h3>
               <p className="text-muted-foreground">
-                We continuously push the boundaries of what's possible with AI and design, staying at the 
+                We continuously push the boundaries of what&apos;s possible with AI and design, staying at the 
                 forefront of technology.
               </p>
             </div>
@@ -208,7 +208,7 @@ export default function About() {
         <section className="text-center">
           <h2 className="text-3xl font-semibold mb-4">Get in Touch</h2>
           <p className="text-muted-foreground mb-6">
-            Have questions, feedback, or want to learn more? We'd love to hear from you.
+            Have questions, feedback, or want to learn more? We&apos;d love to hear from you.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
             <a 

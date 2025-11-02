@@ -31,7 +31,7 @@ export default function ProtectedRoute({
       router.push("/verify");
     }
     
-  }, [user, router])
+  }, [user, router, pathname])
   
 
   // Show loading while checking authentication

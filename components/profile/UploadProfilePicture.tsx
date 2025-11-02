@@ -4,14 +4,12 @@ import { getAuth } from "firebase/auth";
 import { Dropzone, DropzoneContent, DropzoneEmptyState } from "@/components/ui/shadcn-io/dropzone";
 
 export default function UploadProfilePicture({ setUrl }: { setUrl: (url: string) => void }) {
-    const [file, setFile] = useState<File[] | undefined>();
     const [uploading, setUploading] = useState(false);
 
     const handleDrop = async (acceptedFiles: File[]) => {
         if (!acceptedFiles || acceptedFiles.length === 0) return;
 
         const file = acceptedFiles[0];
-        setFile(acceptedFiles);
 
         const user = getAuth().currentUser;
         if (!user) return alert("You must be logged in");

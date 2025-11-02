@@ -4,10 +4,10 @@ import {
   WandSparkles,
   Coins,
   Download,
-  Lightbulb,
+  //Lightbulb,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+//import { Button } from "@/components/ui/button";
 
 interface Feature {
   heading: string;
@@ -62,8 +62,8 @@ const Feature43 = ({
       icon: <WandSparkles className="size-6 text-[#8b5cf6]" />,
     }
   ],
-  buttonText = "More Features",
-  buttonUrl = "https://shadcnblocks.com",
+  //buttonText = "More Features",
+  //buttonUrl = "https://shadcnblocks.com",
 }: Feature43Props) => {
   return (
     <section className="py-14 max-md:py-12">

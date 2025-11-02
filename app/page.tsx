@@ -2,9 +2,7 @@
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
-import Link from 'next/link'
 import NavBar from '@/components/landingPage/NavBar'
-import Hero from '@/components/landingPage/Hero'
 import {HeroShowcase} from '@/components/landingPage/NewHero'
 import ProblemSolution from '@/components/landingPage/ProblemSolution'
 import Features from '@/components/landingPage/Features'
@@ -31,8 +29,10 @@ const Page = () => {
       const lenis = new Lenis();
       
       // Expose Lenis instance globally for navbar access
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).lenis = lenis;
       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       function raf(time: any) {
         lenis.raf(time);
         requestAnimationFrame(raf)
@@ -41,6 +41,7 @@ const Page = () => {
       
       // Cleanup
       return () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         delete (window as any).lenis;
         lenis.destroy();
       }

@@ -1,16 +1,13 @@
 "use client"
 
 import Image from "next/image"
-import { ArrowDownRight, Star } from "lucide-react"
+import { Star } from "lucide-react"
 import { motion } from "motion/react"
 import SignUp from "./SignUp"
 import WatchDemo from "./WatchDemo"
-import { Button } from "../ui/button"
 import { AnimatedGroup } from "./animated-group"
 import { AnimatedText } from "./animated-text"
-import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import Marquee from "./Marquee"
-import HeroExampleCards from "./HeroExampleCards"
 
 
 interface HeroShowcaseProps {

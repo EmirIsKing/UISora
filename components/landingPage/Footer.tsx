@@ -1,4 +1,3 @@
-import { Sparkles } from "lucide-react";
 import Logo from "../Logo";
 import Link from "next/link";
 
@@ -31,8 +30,8 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="/about" className="hover:text-primary transition-colors">About</a></li>
-              <li><a href="/blog" className="hover:text-primary transition-colors">Blog</a></li>
+              <li><Link href="/about" className="hover:text-primary transition-colors">About</Link></li>
+              <li><Link href="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
             </ul>
           </div>
 

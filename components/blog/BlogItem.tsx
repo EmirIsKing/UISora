@@ -1,6 +1,5 @@
 import React from 'react'
 import Image from 'next/image'
-import { blogData } from '@/app/blog/page'
 import { MoveRight } from 'lucide-react'
 import Link from 'next/link';
 

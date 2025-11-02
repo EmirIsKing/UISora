@@ -21,7 +21,7 @@ const DashboardTabs = () => {
             setActive(2);
         }
 
-    }, []);
+    }, [pathname]);
 
 
     return (

@@ -26,7 +26,7 @@ const ResetPassword = ({hideSignIn}:{hideSignIn:boolean}) => {
       setLoading(false)
       setMessage("✅ Password reset email sent! Check your inbox.")
       setEmail("")
-    } catch (err: any) {
+    } catch (err) {
       setLoading(false)
       setError(err.message)
     }

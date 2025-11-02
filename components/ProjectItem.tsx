@@ -13,8 +13,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import BasicToast from './smoothui/ui/BasicToast'
-import { AnimatePresence } from 'framer-motion'
+//import BasicToast from './smoothui/ui/BasicToast'
+//import { AnimatePresence } from 'framer-motion'
 
 const ProjectItem = ({
   project,
@@ -23,7 +23,9 @@ const ProjectItem = ({
   handleShowToast,
 }: {
   project: { id: string; createdAt: {seconds: number; nanoseconds: number}; settings: ProjectSettings }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   allProjects: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setProjects: any;
   handleShowToast: (type:string,message:string)=>void
 }) => {
@@ -42,10 +44,12 @@ const ProjectItem = ({
     try {
       setLoading(true)
       await deleteProject(user.uid, projectId)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const updatedProjects = allProjects.filter((p: any) => p.id !== projectId)
       setProjects(updatedProjects)
       handleShowToast("success", "Project deleted!")
-    } catch (err: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
       handleShowToast("warning", "Failed to delete project!")
     } finally {
       setLoading(false)

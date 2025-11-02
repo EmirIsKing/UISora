@@ -3,7 +3,7 @@
 import React, { useState, RefObject } from "react";
 import { Button } from "@heroui/button";
 // If you created a declaration file, import normally. Otherwise use @ts-ignore
-// @ts-ignore
+// @ts-expect-error no type
 import domtoimage from "dom-to-image-more";
 
 type UiExportProps = {
@@ -44,7 +44,7 @@ const UiExport: React.FC<UiExportProps> = ({ screenRef }) => {
       cloneEl.style.outline = "none";
       cloneEl.style.boxShadow = "none";
       cloneEl.style.userSelect = "none";
-      // @ts-ignore - webkit style
+      // @ts-expect-error - webkit style
       cloneEl.style.webkitTapHighlightColor = "transparent";
     });
   };
@@ -74,7 +74,9 @@ const UiExport: React.FC<UiExportProps> = ({ screenRef }) => {
       await sleep(80); // give browser a moment to clear focus/active styling
 
       // 2) Make sure fonts are loaded (avoids fallback font layout)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (document.fonts && (document.fonts as any).ready) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (document.fonts as any).ready;
       }
 

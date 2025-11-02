@@ -69,7 +69,7 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data, setHTMLDa
     const { type, attributes = {}, content = [] } = element;
     if (!type || type === "#comment") return null;
 
-    const processedAttributes: Record<string, any> = {};
+    const processedAttributes: Record<string, unknown> = {};
 
     for (const [key, value] of Object.entries(attributes)) {
       if (key.toLowerCase().startsWith('on')) continue; // remove event handlers

@@ -1,6 +1,6 @@
 import React from 'react'
-import { blogData } from '@/app/blog/page'
 import BlogItem from './BlogItem'
+import { blogData } from '@/lib/blogData'
 
 const BlogList = () => {
   return (

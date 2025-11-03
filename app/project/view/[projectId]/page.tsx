@@ -6,7 +6,7 @@ import AiChatItem from "@/components/AiChatItem";
 //import ProjectPageNavigation from "@/components/ProjectPageNavigation";
 //import {useExportData} from "@/store/store";
 import {useExportModal} from "@/store/store";
-import {usePanning, useSelectElement} from "@/store/store";
+import {useSelectElement} from "@/store/store";
 // Removed react-zoom-pan-pinch in favor of a custom mobile-friendly canvas
 import ZoomPanCanvas, { ZoomPanCanvasHandle } from "@/components/ZoomPanCanvas";
 import {HtmlElement} from "@/types/types";
@@ -52,7 +52,7 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
     // const [panningOn, setPanningOn] = useState()
     // const [startPan, setStartPan] = useState({ x: 0, y: 0 });
     // const containerRef = useRef(null);
-    const {setSelected, selection} = useSelectElement()
+    const {setSelected} = useSelectElement()
     const { user } = useAuth();
     const screenshotRef = useRef<HTMLDivElement>(null)
     const canvasRef = useRef<ZoomPanCanvasHandle | null>(null);

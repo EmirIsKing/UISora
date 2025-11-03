@@ -6,11 +6,10 @@ import AiChatItem from "@/components/AiChatItem";
 import ProjectPageNavigation from "@/components/ProjectPageNavigation";
 //import {useExportData} from "@/store/store";
 import {useExportModal} from "@/store/store";
-import {usePanning, useSelectElement} from "@/store/store";
+//import {usePanning, useSelectElement} from "@/store/store";
 // Removed react-zoom-pan-pinch in favor of a custom mobile-friendly canvas
 import ZoomPanCanvas, { ZoomPanCanvasHandle } from "@/components/ZoomPanCanvas";
 import {HtmlElement} from "@/types/types";
-import {Hand, SquareMousePointer} from "lucide-react";
 import {jsondata} from "@/utils/newtestjson";
 import JsonToHtmlRenderer from "@/components/JsonToHtmlRenderer";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";

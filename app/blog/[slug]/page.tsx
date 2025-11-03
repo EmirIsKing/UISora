@@ -9,7 +9,7 @@ const Page = () => {
   const {slug} = useParams()
   
   
-  const [data, setData] = useState()
+  const [data, setData] = useState<string>("")
 
 
   const fetchBlogData = () => {

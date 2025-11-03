@@ -1,4 +1,16 @@
 import React from 'react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Terms of Service – UISora',
+  description: 'The terms governing your use of the UISora platform.',
+  alternates: { canonical: '/terms-of-service' },
+  openGraph: {
+    title: 'Terms of Service – UISora',
+    description: 'The terms governing your use of the UISora platform.',
+    images: [{ url: '/uisora-gradient.png', width: 1200, height: 630 }],
+  },
+}
 
 export default function TermsOfService() {
   return (

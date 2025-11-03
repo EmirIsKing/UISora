@@ -10,12 +10,14 @@ export async function POST(req: Request) {
         return Response.json({message:"Product Id and user Id are required"}, { status: 500 });
     }
 
+    const baseUrl = process.env.BASE_URL ?? "http://localhost:3000";
+
     const response = await LemonSqueezyApiInstance.post('/checkouts', {
         data: {
             type: "checkouts",
             attributes: {
               product_options: {
-                    redirect_url: "http://localhost:3000/profile"
+                    redirect_url: `${baseUrl}/profile`
                 },
               checkout_data: {
                 email: data.email,

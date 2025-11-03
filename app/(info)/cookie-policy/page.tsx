@@ -1,4 +1,16 @@
 import React from 'react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Cookie Policy – UISora',
+  description: 'Learn what cookies UISora uses and how to control them.',
+  alternates: { canonical: '/cookie-policy' },
+  openGraph: {
+    title: 'Cookie Policy – UISora',
+    description: 'Learn what cookies UISora uses and how to control them.',
+    images: [{ url: '/uisora-gradient.png', width: 1200, height: 630 }],
+  },
+}
 
 export default function CookiePolicy() {
   return (

@@ -1,7 +1,19 @@
 import React from 'react'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Wand2, Zap, Code, Layers, Shield, Users, Target } from 'lucide-react'
 import Logo from '@/components/Logo'
+
+export const metadata: Metadata = {
+  title: 'About – UISora',
+  description: 'Learn about UISora’s mission to make mobile UI design accessible with AI.',
+  alternates: { canonical: '/about' },
+  openGraph: {
+    title: 'About – UISora',
+    description: 'Learn about UISora’s mission to make mobile UI design accessible with AI.',
+    images: [{ url: '/uisora-gradient.png', width: 1200, height: 630 }],
+  },
+}
 
 export default function About() {
   return (

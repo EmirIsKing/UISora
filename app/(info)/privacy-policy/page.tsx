@@ -1,4 +1,16 @@
 import React from 'react'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy – UISora',
+  description: 'How UISora collects, uses, and protects your data.',
+  alternates: { canonical: '/privacy-policy' },
+  openGraph: {
+    title: 'Privacy Policy – UISora',
+    description: 'How UISora collects, uses, and protects your data.',
+    images: [{ url: '/uisora-gradient.png', width: 1200, height: 630 }],
+  },
+}
 
 export default function PrivacyPolicy() {
   return (

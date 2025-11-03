@@ -1,4 +1,5 @@
 import React from 'react'
+import type { Metadata } from 'next'
 import Footer from '@/components/landingPage/Footer'
 import Logo from '@/components/Logo'
 import { SimpleThemeToggle } from '@/components/ThemeToggle'
@@ -7,6 +8,19 @@ import { Outfit } from 'next/font/google'
 import Link from 'next/link'
 
 const outfit = Outfit({subsets: ['latin'], weight:['400','500','600','700']})
+
+export const metadata: Metadata = {
+  title: "Blog – Tips on AI UI design and product",
+  description:
+    "Learn about AI-assisted UI design, mobile UX patterns, and building products faster.",
+  alternates: { canonical: "/blog" },
+  openGraph: {
+    title: "Blog – Tips on AI UI design and product",
+    description:
+      "Learn about AI-assisted UI design, mobile UX patterns, and building products faster.",
+    images: [{ url: "/uisora-gradient.png", width: 1200, height: 630 }],
+  },
+}
 
 export default function BlogLayout({
   children,

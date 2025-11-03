@@ -7,7 +7,8 @@ import AiChatItem from "@/components/AiChatItem";
 //import {useExportData} from "@/store/store";
 import {useExportModal} from "@/store/store";
 import {usePanning, useSelectElement} from "@/store/store";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+// Removed react-zoom-pan-pinch in favor of a custom mobile-friendly canvas
+import ZoomPanCanvas, { ZoomPanCanvasHandle } from "@/components/ZoomPanCanvas";
 import {HtmlElement} from "@/types/types";
 import {Hand, SquareMousePointer} from "lucide-react";
 import {jsondata} from "@/utils/newtestjson";
@@ -56,7 +57,12 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
     const {setSelected, selection} = useSelectElement()
     const { user } = useAuth();
     const screenshotRef = useRef<HTMLDivElement>(null)
+    const canvasRef = useRef<ZoomPanCanvasHandle | null>(null)
 
+    useEffect(() => {
+      setPanning(true);
+    }, [])
+    
 
     // interface ScreenConfig {
     //     screen: {
@@ -204,125 +210,49 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
 
                 {/* Main Content */}
                 <div className="flex flex-1 relative overflow-hidden">
-                <TransformWrapper
-                    minScale={0.1}
-                    maxScale={6}
-                    initialScale={0.3}
-                    wheel={{ smoothStep: 0.0001, step: 0.02 }}
-                    panning={{disabled: panning}}
-                    doubleClick={{ disabled: true }}
-                    zoomAnimation={{
-                        animationType: 'easeOut',
-                        animationTime: 400,
-                    }}
-                    centerOnInit={true}
-                    limitToBounds={false}
-                >
-                    {({ zoomIn, zoomOut, centerView }) =>
-                        (
-                            <div className={'relative w-full h-full'}>
-                                <div className="absolute top-4 left-4 z-50 flex gap-2">
-                                    <button onClick={() => zoomIn()} className="px-2 py-1 bg-white shadow rounded font-semibold">+</button>
-                                    <button onClick={() => zoomOut()} className="px-2 py-1 bg-white shadow rounded font-semibold">-</button>
-                                    <button onClick={() => centerView()} className="px-2 py-1 bg-white shadow rounded font-semibold">Reset</button>
-                                    <button onClick={()=> togglePanning()} className={`px-2 py-1 shadow rounded ${panning ? "bg-white" : "bg-gray-600/30"}`}><Hand/></button>
-                                    <button onClick={()=>setPanning(false)} className={`px-2 py-1 shadow rounded ${selection ? "bg-gray-600/30" : "bg-white"}`}><SquareMousePointer/></button>
+                  <div className={'relative w-full h-full'}>
+                    <div className="absolute top-4 left-4 z-50 flex gap-2">
+                      <button onClick={() => canvasRef.current?.zoomIn()} className="px-2 py-1 bg-white shadow rounded font-semibold">+</button>
+                      <button onClick={() => canvasRef.current?.zoomOut()} className="px-2 py-1 bg-white shadow rounded font-semibold">-</button>
+                      <button onClick={() => canvasRef.current?.reset()} className="px-2 py-1 bg-white shadow rounded font-semibold">Reset</button>
+                      </div>
 
+                    <ZoomPanCanvas ref={canvasRef} panningEnabled={true} initialScale={0.3} minScale={0.05} maxScale={10}>
+                      <div
+                        onClick={()=> {
+                          setPanning(true)
+                          setSelected("none");
+                        }}
+                      >
+                        <div ref={screenshotRef} className='no-highlight'>
+                          <div className="flex flex-nowrap items-start gap-x-[100px] p-4">
+                            {generatedUI.ui.map((item , index: number) => {
+                              const screenWidth = item.screen.width || 280;
+                              const screenHeight = item.screen.height || 540;
 
-                                </div>
-
-                                <TransformComponent
-                                    wrapperStyle={{ width: '100%', height: '100%' }}
-                                    contentClass={'grid-background active:cursor-grabbing'}
+                              return (
+                                <div
+                                  key={index}
+                                  style={{
+                                    width: `${screenWidth}px`,
+                                    minHeight: `${screenHeight}px`,
+                                    flexShrink: 0,
+                                    position: 'relative'
+                                  }}
+                                  onClick={(e)=>{ e.stopPropagation(); }}
+                                  onDoubleClick={(e)=>{ e.stopPropagation(); }}
                                 >
-                                    <div
-                                        className="relative bg-[#1e1e1e]"
-                                        style={{ width: '1000000px', height: '1000000px' }}
-                                        onClick={()=> {
-                                            setPanning(true)
-                                            setSelected("none");
-                                        }}
-                                        
-                                    >
-                                        <div
-                                            
-                                            className="absolute"
-                                            style={{
-                                                top: '50%',
-                                                left: '50%',
-                                                transform: 'translate(-50%, -50%)',
-                                            }}
-                                        >
-
-                                                {/*{generatedUI.map((item, i) => (*/}
-                                                {/*    <Screen screen={item.screen} key={i} component={item.component} />*/}
-                                                {/*))}*/}
-
-                                            {/*<div className="flex flex-wrap items-start gap-x-[50px] p-4">*/}
-                                            {/*    {testData.ui.map((item, index) => {*/}
-                                            {/*        const screenWidth = item.screen.width || 280;*/}
-                                            {/*        const screenHeight = item.screen.height || 540;*/}
-
-                                            {/*        return (*/}
-                                            {/*            <div*/}
-                                            {/*                key={index}*/}
-                                            {/*                style={{*/}
-                                            {/*                    width: `${screenWidth}px`,*/}
-                                            {/*                    minHeight: `${screenHeight}px`,*/}
-                                            {/*                    flexShrink: 0*/}
-                                            {/*                }}*/}
-                                            {/*            >*/}
-                                            {/*                <Screen screen={item.screen.name}>*/}
-                                            {/*                    {item.component.map((element) => (*/}
-                                            {/*                        <RDE key={element.id} metadata={element} />*/}
-                                            {/*                    ))}*/}
-                                            {/*                </Screen>*/}
-                                            {/*            </div>*/}
-                                            {/*        );*/}
-                                            {/*    })}*/}
-                                            {/*</div>*/}
-                                            {/*prev use*/}
-                                            <div  ref={screenshotRef} className='no-highlight'>
-                                            <div  className="flex flex-wrap items-start gap-x-[100px] p-4">
-                                                {generatedUI.ui.map((item , index: number) => {
-                                                    const screenWidth = item.screen.width || 280;
-                                                    const screenHeight = item.screen.height || 540;
-
-                                                    return (
-                                                        <div
-                                                            key={index}
-                                                            style={{
-                                                                width: `${screenWidth}px`,
-                                                                minHeight: `${screenHeight}px`,
-                                                                flexShrink: 0,
-                                                                position: 'relative' // Important for absolute positioning of children
-                                                            }}
-                                                            onClick={(e)=>{
-                                                                e.stopPropagation();
-                                                            }}
-                                                            onDoubleClick={(e)=>{
-                                                                e.stopPropagation();
-                                                            }}
-                                                        >
-                                                            <Screen screen={item.screen}>
-                                                                    <JsonToHtmlRenderer data={item.component} />
-                                                            </Screen>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                            </div>
-
-                                            {/*{uiElements.map((item, i) => (*/}
-                                            {/*    <RDE key={i} metadata={item}/>*/}
-                                            {/*))}*/}
-                                        </div>
-                                    </div>
-                                </TransformComponent>
-                            </div>
-                        )
-                    }
-                </TransformWrapper>
+                                  <Screen screen={item.screen}>
+                                    <JsonToHtmlRenderer data={item.component} />
+                                  </Screen>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </ZoomPanCanvas>
+                  </div>
                 </div>
 
 

@@ -4,6 +4,8 @@ import "./globals.css";
 import React from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({
   variable: "--font-inter",
@@ -32,6 +34,8 @@ export default function RootLayout({
       <body
         className={`${inter.variable} antialiased h-screen`}
       >
+        <Analytics/>
+        <SpeedInsights/>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

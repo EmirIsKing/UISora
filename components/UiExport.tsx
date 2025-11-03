@@ -136,7 +136,7 @@ const UiExport: React.FC<UiExportProps> = ({ screenRef }) => {
       // download
       const a = document.createElement("a");
       a.href = dataUrl;
-      a.download = "screenshot.png";
+      a.download = "UIExport.png";
       a.click();
 
       // cleanup

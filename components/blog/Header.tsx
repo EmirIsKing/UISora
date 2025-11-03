@@ -12,7 +12,7 @@ const Header = () => {
     //     });
     // }
 
-    const handleEmail = (email) => {
+    const handleEmail = (email:string) => {
         //setEmail(email);
         console.log(email)
     }

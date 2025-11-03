@@ -22,8 +22,8 @@ const GenerateLoader = () => {
     return () => clearTimeout(t1);
   }, []);
 
-  const isActive = (name) => stage === name;
-  const isDone = (name) =>
+  const isActive = (name: string) => stage === name;
+  const isDone = (name: string) =>
     (name === "thinking" && stage !== "thinking") ||
     (name === "generatingImages" && stage === "generatingUI");
 

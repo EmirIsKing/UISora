@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import { cn } from '@repo/shadcn-ui/lib/utils';
+import { cn } from '@/lib/utils';
 import type { ComponentProps, HTMLAttributes } from 'react';
 import { isValidElement, memo } from 'react';
 import ReactMarkdown, { type Options } from 'react-markdown';

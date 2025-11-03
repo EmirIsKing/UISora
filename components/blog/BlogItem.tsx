@@ -10,12 +10,12 @@ interface props {
     description: string;
     alt: string;
     slug: string;
-    id: string;
+    id?: string;
 }
 
-const BlogItem = ({title, category, image, description, alt, slug}: props) => {
+const BlogItem = ({title, category, image, description, alt, slug, id}: props) => {
   return (
-    <Link href={`/blog/${slug}`} className='max-w-[330px] sm:max-w-[300px] bg-white border dark:bg-background hover:shadow-[-7px_7px_0px_#000] dark:hover:shadow-[-7px_7px_0px_#fff]'>
+    <Link href={`/blog/${slug}`} id={id} className='max-w-[330px] sm:max-w-[300px] bg-white border dark:bg-background hover:shadow-[-7px_7px_0px_#000] dark:hover:shadow-[-7px_7px_0px_#fff]'>
       <Image src={image} alt={alt} className='border-b' width={400} height={400}/>
       <p className='ml-5 mt-5 px-1 inline-block bg-black text-white text-sm dark:bg-white dark:text-black'>{category}</p>
       <div className="py-2 px-5 pt-1">

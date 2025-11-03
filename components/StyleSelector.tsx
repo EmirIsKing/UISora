@@ -25,7 +25,7 @@ export default function StyleSelector({ selectedStyle, setSelectedStyle }: propt
     <div className="flex flex-col gap-2 my-2">
       <ToggleGroup
         type="single"
-        value={selectedStyle}
+        value={selectedStyle ?? undefined}
         onValueChange={(val) => setSelectedStyle(val)}
         className="flex flex-wrap gap-1"
       >

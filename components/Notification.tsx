@@ -7,12 +7,19 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Spinner } from './ui/spinner';
 import { Bell } from 'lucide-react';
 import { getUser } from '@/actions/getUser';
+import type { DocumentData } from 'firebase/firestore';
+
+interface notification {
+  id:string;
+  message:string;
+  date: {seconds:number;nanoseconds:number}
+}
 
 const Notification = () => {
   const [isScrollAreaOpen, setScrollAreaOpen] = useState(false);
-  const [notification, setNotification] = useState(null);
+  const [notification, setNotification] = useState<notification[]>([]);
   const { user, loading: userLoading } = useAuth()
-  const [details, setDetails] = useState(null)
+  const [details, setDetails] = useState<DocumentData | null>(null)
   
 
   useEffect(() => {

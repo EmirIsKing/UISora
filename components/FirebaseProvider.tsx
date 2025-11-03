@@ -28,7 +28,7 @@ export default function FirebaseProvider({ children }: FirebaseProviderProps) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600">Authentication error: {error.message}</p>
+          <p className="text-red-600">Authentication error: {error}</p>
         </div>
       </div>
     );

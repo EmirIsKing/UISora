@@ -30,22 +30,44 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
     // };
 
 
+    function renderHelper(
+        content: string | { title?: string; subtitle?: string } | null | undefined
+        ) {
+        if (typeof content === "string") {
+            return <>{content}</>;
+        }
+
+        if (content && (content.title || content.subtitle)) {
+            return (
+            <>
+                {content.title && <h1>{content.title}</h1>}
+                {content.subtitle && <h2>{content.subtitle}</h2>}
+            </>
+            );
+        }
+
+        return null;
+    }
+
+
     useEffect(() => {
-        if (contentRef.current && !editable) {
-            if (content != null) {
-                contentRef.current.innerText = content;
-            } else {
-                contentRef.current.innerText = "";
-            }
-        }
+  if (contentRef.current && !editable) {
+    const text =
+      typeof content === "string"
+        ? content
+        : content?.title ?? content?.subtitle ?? "";
 
-        if (selected !== metadata.id) handleBlur()
-        if (editable && inputRef.current) {
-            inputRef.current.focus();
-            inputRef.current.select(); // Select all text by default
-        }
+    contentRef.current.innerText = text || "";
+  }
 
-    }, [content, editable, metadata.id, selected]);
+  if (selected !== metadata.id) handleBlur();
+
+  if (editable && inputRef.current) {
+    inputRef.current.focus();
+    inputRef.current.select();
+  }
+}, [content, editable, metadata.id, selected]);
+
 
     const handleBlur = () => {
         if (contentRef.current) {
@@ -179,8 +201,25 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                             editHandler()
                         }}
                     >
-                        <span>{metadata.content?.title}</span>
-                        <span>{metadata.content?.subtitle}</span>
+                        {typeof metadata.content === "object" && metadata.content !== null ? (
+                            <span>{metadata.content.title}</span>
+                            ) : (
+                            <span>{metadata.content}</span>
+                            )}
+
+                        {typeof metadata.content === "object" && metadata.content !== null ? (
+  <>
+                            {metadata.content.title && (
+                            <span>{metadata.content.title}</span>
+                            )}
+                            {metadata.content.subtitle && (
+                            <span>{metadata.content.subtitle}</span>
+                            )}
+                        </>
+                        ) : (
+                        <span>{metadata.content}</span>
+)}
+
                         {metadata.children?.map((child) => {
                             return <RDE key={child.id} metadata={child} />;
                         })}
@@ -260,7 +299,19 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                             }
                         }}
                     >
-                        {metadata.content}
+                        {typeof metadata.content === "string" ? (
+                            metadata.content
+                            ) : metadata.content ? (
+                            <>
+                                {metadata.content.title && (
+                                <span>{metadata.content.title}</span>
+                                )}
+                                {metadata.content.subtitle && (
+                                <span>{metadata.content.subtitle}</span>
+                                )}
+                            </>
+                            ) : null}
+
                     </button>
                 );
 
@@ -298,8 +349,7 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                             ...metadata.hoverStyle
                         }}
                     >
-                        <h1>{metadata.content?.title}</h1>
-                        <h2>{metadata.content?.subtitle}</h2>
+                        {renderHelper(metadata.content)}
                         {metadata.children?.map((child) => {
                             return <RDE key={child.id} metadata={child} />;
                         })}
@@ -337,7 +387,7 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                                     ...(editable ? metadata.hoverStyle : {})
                                 }}
                             >
-                                {metadata.content}
+                               {renderHelper(metadata.content)}
                             </div>
                         )}
                     </div>
@@ -377,8 +427,7 @@ const RDE = ({metadata}: {metadata: RDEmetadata}) => {
                             ...metadata.hoverStyle
                         }}
                     >
-                        <h1>{metadata.content?.title}</h1>
-                        <h2>{metadata.content?.subtitle}</h2>
+                        {renderHelper(metadata.content)}
                         {metadata.children?.map((child) => {
                             return <RDE key={child.id} metadata={child} />;
                         })}

@@ -8,11 +8,12 @@ import { sendEmailVerification, onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
+import type { User } from "firebase/auth";
 
 const Verify = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   // ✅ Proper Firebase Auth Listener (Fix for refresh)

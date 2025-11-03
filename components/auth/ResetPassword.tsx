@@ -26,7 +26,8 @@ const ResetPassword = ({hideSignIn}:{hideSignIn:boolean}) => {
       setLoading(false)
       setMessage("✅ Password reset email sent! Check your inbox.")
       setEmail("")
-    } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err:any) {
       setLoading(false)
       setError(err.message)
     }

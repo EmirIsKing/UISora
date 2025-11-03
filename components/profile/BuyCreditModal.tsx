@@ -12,29 +12,30 @@ import {
 import BasicToast from '../smoothui/ui/BasicToast'
 import { AnimatePresence } from 'framer-motion'
 import { Spinner } from '../ui/spinner'
+import { ToastType } from '../smoothui/ui/BasicToast'
 
 
-const BuyCreditModal = ({userId, email}) => {
+const BuyCreditModal = ({userId, email}:{userId:string; email:string;}) => {
     const [isOpen, setIsOpen] = useState(false)
     const [value, setValue] = useState<number>(5)
     const [credit, setCredit] = useState<number>(value * 3000)
     const [showToast, setShowToast] = useState(false)
-    const [toastType, setToastType] = useState("success")
+    const [toastType, setToastType] = useState<ToastType>("success")
     const [loading, setLoading] = useState(false)
     
 
-    const handleShowToast = (type) => {
+    const handleShowToast = (type:ToastType) => {
         setToastType(type)
         setShowToast(true)
     }
     
-      const handleCreditChange = (e) => {
+      const handleCreditChange = (e: { target: { value: string } }) => {
         const newCredit = parseFloat(e.target.value) || 0
         setCredit(newCredit)
         setValue(newCredit / 3000)
       }
     
-      const handleValueInputChange = (e) => {
+      const handleValueInputChange = (e: { target: { value: string } }) => {
         const newValue = parseFloat(e.target.value) || 0
         setValue(newValue)
         setCredit(newValue * 3000)

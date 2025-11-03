@@ -4,6 +4,10 @@ import { ProjectSettings } from '@/types/types';
 
 interface ProjectSettingsWithId {
     id: string;
+    createdAt: {
+        seconds: number;
+        nanoseconds: number;
+    };
     settings: ProjectSettings;
 }
 

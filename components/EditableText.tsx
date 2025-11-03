@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 const EditableText = ({ text, onSave }: {text:string; onSave?:(value: string)=>void}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [value, setValue] = useState(text);
-    const inputRef = useRef(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (isEditing && inputRef.current) {
@@ -19,7 +19,7 @@ const EditableText = ({ text, onSave }: {text:string; onSave?:(value: string)=>v
     const handleBlur = () => {
         setIsEditing(false);
         if (value !== text) {
-            onSave(value);
+            onSave?.(value);
         }
     };
 

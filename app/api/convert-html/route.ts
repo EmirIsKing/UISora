@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import {htmlToFigma} from "@/utils/newConvert";
+//import {htmlToFigma} from "@/utils/newConvert";
 export async function POST(req: Request) {
     try {
         const { html } = await req.json();
@@ -8,7 +8,8 @@ export async function POST(req: Request) {
         }
 
         // Convert HTML to OpenDesign JSON
-        const openDesignJSON = htmlToFigma(html);
+        //const openDesignJSON = htmlToFigma(html);
+        const openDesignJSON = "here";
 
         return NextResponse.json({ success: true, openDesignJSON });
     } catch (error: unknown) {

@@ -22,7 +22,8 @@ const voidTags = new Set([
 
 function parseStyleString(styleString?: string): React.CSSProperties {
     if (!styleString) return {};
-    const parsed = styleString.split(";").reduce((acc, stylePair) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const parsed = styleString.split(";").reduce((acc:Record<string, any>, stylePair) => {
         const [key, value] = stylePair.split(":").map(s => s.trim());
         if (key && value) {
             const camelKey = key.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
@@ -55,6 +56,9 @@ export function Renderer({ node }: RendererProps) {
     const width = style.width ? parseInt(style.width.toString()) : 200;
     const height = style.height ? parseInt(style.height.toString()) : 100;
 
+    const top = parseInt(style.top?.toString() || "0");
+    const left = parseInt(style.left?.toString() || "0");
+
     // For void tags, no children allowed in React.createElement
     const isVoid = voidTags.has(type.toLowerCase());
 
@@ -84,8 +88,7 @@ export function Renderer({ node }: RendererProps) {
             typeof child === "string" ? child : <Renderer key={index} node={child} />
         );
 
-    const top = parseInt(style.top?.toString() || "0");
-    const left = parseInt(style.left?.toString() || "0");
+
 
 
     return (

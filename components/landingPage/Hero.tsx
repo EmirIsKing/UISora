@@ -1,7 +1,6 @@
 import React from 'react'
 import SignUp from './SignUp'
 import WatchDemo from './WatchDemo'
-import HeroExampleCards from './HeroExampleCards'
 
 const Hero = () => {
   return (
@@ -23,9 +22,6 @@ const Hero = () => {
                 <WatchDemo/>
             </div>
             <div className='flex justify-center items-center gap-5'>
-                <HeroExampleCards/>
-                <HeroExampleCards/>
-                <HeroExampleCards/>
             </div>
         </div>
         

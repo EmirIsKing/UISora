@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/tooltip"
 //import BasicToast from './smoothui/ui/BasicToast'
 //import { AnimatePresence } from 'framer-motion'
+import { ToastType } from './smoothui/ui/BasicToast'
 
 const ProjectItem = ({
   project,
@@ -27,7 +28,7 @@ const ProjectItem = ({
   allProjects: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setProjects: any;
-  handleShowToast: (type:string,message:string)=>void
+  handleShowToast: (type:ToastType,message:string)=>void
 }) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)

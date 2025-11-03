@@ -154,7 +154,7 @@ Ensure:
         const content = response.choices[0].message.content;
         //console.log(content);
         const creditUsed = response?.usage?.total_tokens ?? 0;
-        const generatedUI: UIReturn = JSON.parse(content);
+        const generatedUI: UIReturn = JSON.parse(content as string);
 
         // Validate the UI components structure
         if (!generatedUI.ui || !Array.isArray(generatedUI.ui)) {
@@ -179,6 +179,7 @@ Ensure:
             creditUsed,
         });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         console.error(error);
         return NextResponse.json(

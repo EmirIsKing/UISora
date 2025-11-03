@@ -97,7 +97,7 @@ export async function POST(request: Request) {
         const convertedUI = await Promise.all(
             uiData.map(async item => ({
                 screen: item.screen,
-                component: JSON.parse(await HtmlToJson(item.component))
+                component: JSON.parse(await HtmlToJson(item.component) as string)
             }))
         );
 

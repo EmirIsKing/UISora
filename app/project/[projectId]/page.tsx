@@ -50,17 +50,15 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const { exportModal, setExportModal } = useExportModal();
     // const [zoom, setZoom] = useState(1);
     // const [offset, setOffset] = useState({ x: 0, y: 0 });
-    const {panning, togglePanning, setPanning} = usePanning();
     // const [panningOn, setPanningOn] = useState()
     // const [startPan, setStartPan] = useState({ x: 0, y: 0 });
     // const containerRef = useRef(null);
-    const {setSelected, selection} = useSelectElement()
+    //const {setSelected, selection} = useSelectElement()
     const { user } = useAuth();
     const screenshotRef = useRef<HTMLDivElement>(null)
     const canvasRef = useRef<ZoomPanCanvasHandle | null>(null)
     const [selectedStyle, setSelectedStyle] = useState<string | null>("");
     const [HTMLData, setHTMLData] = useState<string[]>([])
-    useEffect(() => { setPanning(true); }, [])
 
 
     // interface ScreenConfig {
@@ -290,7 +288,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
                     <ZoomPanCanvas ref={canvasRef} panningEnabled={true} initialScale={0.3} minScale={0.05} maxScale={10}>
                       <div
-                        onClick={()=> { setSelected("none"); }}
+                        //onClick={()=> { setSelected("none"); }}
                       >
                         <div ref={screenshotRef} className='no-highlight'>
                           <div className="flex flex-nowrap items-start gap-x-[100px] p-4">

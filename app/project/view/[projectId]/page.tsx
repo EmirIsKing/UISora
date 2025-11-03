@@ -10,7 +10,6 @@ import {usePanning, useSelectElement} from "@/store/store";
 // Removed react-zoom-pan-pinch in favor of a custom mobile-friendly canvas
 import ZoomPanCanvas, { ZoomPanCanvasHandle } from "@/components/ZoomPanCanvas";
 import {HtmlElement} from "@/types/types";
-import {Hand, SquareMousePointer} from "lucide-react";
 import {jsondata} from "@/utils/newtestjson";
 import JsonToHtmlRenderer from "@/components/JsonToHtmlRenderer";
 //import ProtectedRoute from "@/components/auth/ProtectedRoute";
@@ -50,18 +49,13 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
     const { exportModal, setExportModal } = useExportModal();
     // const [zoom, setZoom] = useState(1);
     // const [offset, setOffset] = useState({ x: 0, y: 0 });
-    const {panning, togglePanning, setPanning} = usePanning();
     // const [panningOn, setPanningOn] = useState()
     // const [startPan, setStartPan] = useState({ x: 0, y: 0 });
     // const containerRef = useRef(null);
     const {setSelected, selection} = useSelectElement()
     const { user } = useAuth();
     const screenshotRef = useRef<HTMLDivElement>(null)
-    const canvasRef = useRef<ZoomPanCanvasHandle | null>(null)
-
-    useEffect(() => {
-      setPanning(true);
-    }, [])
+    const canvasRef = useRef<ZoomPanCanvasHandle | null>(null);
     
 
     // interface ScreenConfig {
@@ -220,7 +214,6 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                     <ZoomPanCanvas ref={canvasRef} panningEnabled={true} initialScale={0.3} minScale={0.05} maxScale={10}>
                       <div
                         onClick={()=> {
-                          setPanning(true)
                           setSelected("none");
                         }}
                       >

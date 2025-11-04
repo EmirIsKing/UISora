@@ -138,6 +138,6 @@ export async function POST(request: Request) {
 
   } catch (error) {
     console.error('[ERROR]', error);
-    return NextResponse.json({ message: String(error?.message ?? 'Error generating UI') }, { status: 500 });
+    return NextResponse.json({ message: String(error ?? 'Error generating UI') }, { status: 500 });
   }
 }

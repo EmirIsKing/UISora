@@ -57,6 +57,7 @@
     "dom-to-image-more": "^3.7.1",
     "dompurify": "^3.2.6",
     "dotenv": "^16.4.7",
+    "encoding": "^0.1.13",
     "file-saver": "^2.0.5",
     "firebase": "^11.9.1",
     "firebase-admin": "^13.4.0",

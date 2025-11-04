@@ -20,13 +20,18 @@ if (getApps().length === 0) {
 const auth = getAuth();
 const db = getFirestore();
 
-export async function createUser(email: string, password: string, name?: string) {
+export async function createUser(email: string, password?: string, name?: string) {
     try {
-        const userRecord = await auth.createUser({
+        let userRecord;
+        if (password) {
+            userRecord = await auth.createUser({
             email,
             password,
             displayName: name || '',
-        });
+            });
+        } else {
+            userRecord = await auth.getUserByEmail(email)
+        }
 
         // ✅ Using admin SDK syntax to set user document
         await db.collection('users').doc(userRecord.uid).set({

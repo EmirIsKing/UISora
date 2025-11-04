@@ -21,7 +21,7 @@ export default function SignInForm() {
   const [viewPassword, setViewPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { signIn, clearError } = useAuth();
+  const { signIn, clearError, googleSignIn } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +43,16 @@ export default function SignInForm() {
       setIsLoading(false);
     }
   };
+
+  const handleGoogleSignIn = async () => {
+      try {
+        await googleSignIn();  
+        router.push('/dashboard/projects');
+  
+      } catch (error) {
+        console.error('Sign in error:', error);
+      }
+    }
 
   return (
     <div className="min-h-screen max-md:h-screen flex pl-16 bg-gradient-to-b text-white from-[#0D0D12] to-[#1A1A1A] sm:pl-6 lg:pl-8 max-md:flex-col max-md:px-0 max-md:pt-10 max-md:pb-0">
@@ -135,7 +145,7 @@ export default function SignInForm() {
             </Link>
           </div>
           <Separator className='bg-gradient-to-r from-black via-white to-black'/>
-          <Button className='border'>Sign In with Google</Button>
+          <Button type='button' onClick={handleGoogleSignIn} className='border cursor-pointer hover:scale-[0.98] active:scale-[0.99]'>Sign In with Google</Button>
           <div className='flex justify-center items-center'>
             <Link href="/sign-up" className="font-medium text-blue-600 hover:text-blue-500 underline">
               Don’t have an account? Sign up →

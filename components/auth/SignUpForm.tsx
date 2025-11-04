@@ -25,7 +25,7 @@ export default function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const router = useRouter();
-  const { signUp, error, clearError } = useAuth();
+  const { signUp, error, clearError, googleSignIn } = useAuth();
   const [viewPassword, setViewPassword] = useState(false)
 
   const validateForm = () => {
@@ -43,6 +43,33 @@ export default function SignUpForm() {
     }
     return null;
   };
+
+  const handleGoogleSignUp = async () => {
+    try {
+      const result = await googleSignIn();
+
+      if (result.user.email) {
+        const response = await createUser(result.user.email);
+
+        if (response.success) {
+          setSuccessMessage('Account created successfully! Please check your email for verification.');
+          await fetch("/api/newsletterSubscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+          setTimeout(() => {
+            router.push('/dashboard/projects');
+          }, 2000);
+        } else {
+          throw new Error(response.message || 'Failed to create user account');
+        }
+      }
+
+    } catch (error) {
+      console.error('Sign up error:', error);
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -235,7 +262,7 @@ export default function SignUpForm() {
             </button>
           </div>
           <Separator className='bg-gradient-to-r from-black via-white to-black'/>
-          <Button className='border w-full'>Sign Up with Google</Button>
+          <Button type='button' onClick={handleGoogleSignUp} className='border w-full cursor-pointer hover:scale-[0.98] active:scale-[0.99]'>Sign Up with Google</Button>
           <div className='flex justify-center items-center'>
             <Link href="/sign-in" className="font-medium text-blue-600 hover:text-blue-500 underline">
             Already have an account? Sign in →

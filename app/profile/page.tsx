@@ -80,8 +80,8 @@ const Page = () => {
     setDepartment(details.department || "")
     setUserId(details.uid)
     setPhotoUrl(details.photoURL || "")
-    setCustomerId(details.subscription.customerId || "")
-    setSubStatus(details.subscription.status || "")
+    setCustomerId(details.subscription?.customerId ?? "")
+    setSubStatus(details.subscription?.status ?? "")
     setLoading(false)
 
   }, [details])

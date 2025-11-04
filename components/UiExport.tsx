@@ -152,7 +152,7 @@ const UiExport: React.FC<UiExportProps> = ({ screenRef }) => {
   return (
     <Button
       onPress={handleExport}
-      className="flex flex-col !py-9 !px-4 items-center justify-center border border-black rounded-md p-2
+      className="flex flex-col !py-9 !px-4 text-black items-center justify-center border border-black rounded-md p-2
         cursor-pointer active:opacity-70 hover:shadow-md transition-all duration-300"
     >
       <span className={`text-sm font-bold text-nowrap ${isLoading ? "hidden" : ""}`}>

@@ -9,6 +9,19 @@ import {ProjectSettings} from "@/types/types";
 import { AnimatePresence } from 'framer-motion';
 import BasicToast from '@/components/smoothui/ui/BasicToast';
 import { ToastType } from '@/components/smoothui/ui/BasicToast';
+import { getSubscriptionStatus } from '@/actions/getSubscriptionStatus';
+import UpgradeModal from '@/components/UpgradeModal';
+
+export type SubscriptionStatus = {
+  authenticated: boolean;
+  subscribed: boolean;
+  subscription: {
+    status: string | null;
+    customerId: string | null;
+    planId: string | null;
+    renewsAt: number | null;
+  } | null;
+};
 
 
 const Page = () => {
@@ -17,8 +30,11 @@ const Page = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [showToast, setShowToast] = useState(false)
     const [toastType, setToastType] = useState<ToastType>("success")
-    const [message, setMessage] = useState("")
+    const [message, setMessage] = useState("");
+    const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null)
+    const [openModal, setOpenModal] = useState(false)
 
+    
 
     const handleShowToast = (type:ToastType, message:string) => {
         setMessage(message)
@@ -26,8 +42,11 @@ const Page = () => {
         setShowToast(true)
     }
 
+
     useEffect(() => {
         if (userLoading) return;
+
+        
 
         const fetchProjects = async () => {
             setLoading(true);
@@ -44,7 +63,19 @@ const Page = () => {
         };
 
         fetchProjects();
-    }, [user, userLoading]);
+    }, [ user, userLoading]);
+
+    useEffect(() => {
+      async function loadSub() {
+            const token = await user?.getIdToken();
+            const result = await getSubscriptionStatus(token);
+            setSubscription(result)
+        }
+
+      loadSub()
+
+    }, [projects, user])
+    
 
     useEffect(() => {
       console.log(projects)
@@ -61,8 +92,12 @@ const Page = () => {
             <h1 className="font-semibold text-2xl">Projects</h1>
 
             <div className="flex">
-                <CreateNewProject />
+            {(!subscription?.subscribed && projects.length >= 1)
+                ? <CreateNewProject openModal={setOpenModal} />
+                : <CreateNewProject />
+            }
             </div>
+
 
             <div
                 className="w-full h-[1px] bg-gradient-to-r
@@ -103,6 +138,7 @@ const Page = () => {
                 />
                 )}
             </AnimatePresence>
+            <UpgradeModal addon='You can only create <strong>1 Project</strong>.' isOpen={openModal} setIsOpen={setOpenModal}/>
 
         </div>
     );

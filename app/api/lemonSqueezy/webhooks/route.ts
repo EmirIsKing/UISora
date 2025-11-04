@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
   const status = attributes.status_formatted;
   const plan = attributes.product_name;
   const customerId = attributes.customer_id;
-  const renewsAt = attributes.renews_at;
+  const renewsAt = attributes.renews_at ?? null;
   
   console.log("Event:", eventName, "| Type:", type);
 

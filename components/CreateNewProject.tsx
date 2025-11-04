@@ -8,7 +8,7 @@ import {createNewProject} from '@/actions/createNewProject'
 import Loader from './Loader'
 import { useAuth } from '@/contexts/AuthContext'
 
-const CreateNewProject = () => {
+const CreateNewProject = ({openModal}:{openModal?: (boolean:boolean)=>void}) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const { user } = useAuth();
@@ -19,6 +19,11 @@ const CreateNewProject = () => {
         if (!user) {
             console.error('User not authenticated');
             return;
+        }
+
+        if (openModal) {
+            openModal(true);
+            return
         }
         
         setLoading(true);

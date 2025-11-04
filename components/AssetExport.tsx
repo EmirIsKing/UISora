@@ -34,7 +34,7 @@ const AssetExport = ({assets}:{assets: string[]}) => {
 
 
   return (
-    <Button onPress={handleExport} className='flex flex-col !px-4 !py-9 items-center justify-center border border-black rounded-md
+    <Button onPress={handleExport} className='flex text-black flex-col !px-4 !py-9 items-center justify-center border border-black rounded-md
       cursor-pointer active:opacity-70 hover:shadow-md transition-all duration-300'>
       <span className={`text-sm font-bold text-nowrap ${isloading? "hidden":""}`}>Export Assets</span>
       <span className={`text-sm text-gray-500 ${isloading? "hidden":""}`}>type: Zip</span>

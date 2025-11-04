@@ -197,7 +197,7 @@ export function PricingCreative({userId, email}:{userId?:string; email?:string})
                       type="button"
                       className="bg-black text-white dark:bg-white dark:text-black hover:bg-black/90 hover:dark:bg-white/90 focus-visible:ring-ring mb-6 inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
                       onClick={checkout}
-                      disabled={loading}
+                      disabled={true}
                     >
                       {loading ? <Spinner/> : "Get Started"}
                     </button>

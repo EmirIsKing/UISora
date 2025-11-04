@@ -12,6 +12,19 @@ import { Button } from '@heroui/button';
 import { useExportModal } from '@/store/store';
 import { useRouter } from 'next/navigation';
 import { getProjectViewDetails } from '@/components/projectView/actions/getProjectViewDetails';
+import { useAuth } from '@/contexts/AuthContext';
+import { getSubscriptionStatus } from '@/actions/getSubscriptionStatus';
+
+ type SubscriptionStatus = {
+  authenticated: boolean;
+  subscribed: boolean;
+  subscription: {
+    status: string | null;
+    customerId: string | null;
+    planId: string | null;
+    renewsAt: number | null;
+  } | null;
+};
 
 interface ProjectSettingsMod {
     id: string;
@@ -31,9 +44,12 @@ const ProjectViewNavigation = ({
                                    projectId,
                                }: ProjectViewNavigationProps) => {
     const router = useRouter();
+    const { user } = useAuth();
     const [projectDetails, setProjectDetails] = useState<ProjectSettingsMod | { error: string }>();
     const [projectName, setProjectName] = useState<string>('Loading...');
     const [error, setError] = useState<string | null>(null);
+    const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null)
+    
 
     const toggleExportModal = () => {
         const current = useExportModal.getState().exportModal;
@@ -49,6 +65,17 @@ const ProjectViewNavigation = ({
             setProjectName(projectDetails.settings.projectName);
         }
     }, [projectDetails]);
+
+    useEffect(() => {
+          async function loadSub() {
+                const token = await user?.getIdToken();
+                const result = await getSubscriptionStatus(token);
+                setSubscription(result)
+            }
+    
+          loadSub()
+    
+        }, [projectDetails, user])
 
 
     // Fetch project details
@@ -125,14 +152,27 @@ const ProjectViewNavigation = ({
                 </button>
             </div>
 
-            <div className="flex justify-end flex-1 items-end">
-                <Button
-                    onPress={toggleExportModal}
-                    className="border border-white text-white rounded-full px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300"
-                    isDisabled={!!error}
-                >
-                    Export
-                </Button>
+            <div className="flex justify-end flex-1 items-end">                
+                {!subscription?.authenticated ? (
+                    <Button
+                        onPress={() => {
+                        window.location.href = "/";
+                        }}
+                        className="border border-white text-white rounded-full px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300"
+                        isDisabled={!!error}
+                    >
+                        Sign In to export
+                    </Button>
+                    ) : (
+                    <Button
+                        onPress={toggleExportModal}
+                        className="border border-white text-white rounded-full px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300"
+                        isDisabled={!!error}
+                    >
+                        Export
+                    </Button>
+                    )}
+
             </div>
         </div>
     );

@@ -107,6 +107,6 @@ export function calculateActualCredits(
     imageGeneration,
     uiGeneration: Math.ceil(uiGeneration),
     htmlToJson,
-    total: Math.ceil(promptFattening + imageGeneration + uiGeneration + htmlToJson)
+    total: Math.ceil(promptFattening + imageGeneration + uiGeneration + htmlToJson)/10
   };
 } 

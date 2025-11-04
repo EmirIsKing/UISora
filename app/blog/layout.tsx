@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/blog" },
   openGraph: {
     title: "Blog – Tips on AI UI design and product",
+    siteName: "UISora",
     description:
       "Learn about AI-assisted UI design, mobile UX patterns, and building products faster.",
     images: [{ url: "/uisora-og.png", width: 1200, height: 630 }],

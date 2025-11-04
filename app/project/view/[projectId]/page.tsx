@@ -5,7 +5,6 @@ import UserChatItem from "@/components/UserChatItem";
 import AiChatItem from "@/components/AiChatItem";
 //import ProjectPageNavigation from "@/components/ProjectPageNavigation";
 //import {useExportData} from "@/store/store";
-import {useExportModal} from "@/store/store";
 import {useSelectElement} from "@/store/store";
 // Removed react-zoom-pan-pinch in favor of a custom mobile-friendly canvas
 import ZoomPanCanvas, { ZoomPanCanvasHandle } from "@/components/ZoomPanCanvas";
@@ -15,11 +14,15 @@ import JsonToHtmlRenderer from "@/components/JsonToHtmlRenderer";
 //import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
 //import { getProjectDetails } from '@/actions/getProjectDetails';
-import AssetExport from '@/components/AssetExport';
-import UiExport from '@/components/UiExport';
 //import { Send } from 'lucide-react';
 import ProjectViewNavigation from "@/components/projectView/ProjectViewNavigation";
 import {getProjectViewDetails} from "@/components/projectView/actions/getProjectViewDetails";
+import {useExportModal} from "@/store/store";
+import AssetExport from '@/components/AssetExport';
+import UiExport from '@/components/UiExport';
+import { SubscriptionStatus } from '@/app/dashboard/projects/page';
+import { getSubscriptionStatus } from '@/actions/getSubscriptionStatus';
+import UpgradeModal from '@/components/UpgradeModal';
 
 
 interface JsonToHtmlRendererProps {
@@ -43,10 +46,8 @@ type ChatItemType = {
 export default function ProjectView({ params }: { params: Promise<{ projectId: string }> }) {
     const [generatedUI, setGeneratedUI] = useState<JsonToHtmlRendererProps>(jsondata);
     const [chat, setChat] = useState<ChatItemType[]>([]);
-    const [imageHolder, setImageHolder] = useState([]);
     const [sidebarToggle, setSidebarToggle] = useState<boolean>(true);
     const { projectId } = use(params);
-    const { exportModal, setExportModal } = useExportModal();
     // const [zoom, setZoom] = useState(1);
     // const [offset, setOffset] = useState({ x: 0, y: 0 });
     // const [panningOn, setPanningOn] = useState()
@@ -56,6 +57,9 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
     const { user } = useAuth();
     const screenshotRef = useRef<HTMLDivElement>(null)
     const canvasRef = useRef<ZoomPanCanvasHandle | null>(null);
+    const { exportModal, setExportModal } = useExportModal();
+    const [imageHolder, setImageHolder] = useState([]);
+    const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null)
     
 
     // interface ScreenConfig {
@@ -122,11 +126,11 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                             }
                             setChat(chatHistory);
 
-                            // Set image holder from latest entry if exists
-                            const latestEntry = blobData[blobData.length - 1];
-                            if (latestEntry.imageHolder) {
-                                setImageHolder(latestEntry.imageHolder);
+                            if (blobData[blobData.length - 1].imageHolder) {
+                                setImageHolder(blobData[blobData.length - 1].imageHolder);
                             }
+                           
+                           
                         }
 
                         console.log("Loaded blob data:", blobData);
@@ -146,6 +150,17 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
 
         if (projectId) fetchProjectDetails();
     }, [projectId]);
+
+    useEffect(() => {
+              async function loadSub() {
+                    const token = await user?.getIdToken();
+                    const result = await getSubscriptionStatus(token);
+                    setSubscription(result)
+                }
+        
+              loadSub()
+        
+            }, [generatedUI, user])
 
 
 
@@ -251,16 +266,18 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
 
             </div>
             {
-                exportModal && (
+                exportModal && subscription?.subscription?.status === "Active"? (
                     <div
                         onClick={()=>setExportModal(false)}
                         className={'fixed inset-0 flex w-full h-full justify-center items-center backdrop-blur-xs z-[9999]'}>
-                        <div className="bg-white rounded-xl shadow-md w-80 flex items-center justify-center gap-4 p-12">
+                        <div className="bg-white text-black rounded-xl shadow-md w-80 flex items-center justify-center gap-4 p-12">
                             <AssetExport assets={imageHolder}/>
                             <UiExport screenRef={screenshotRef}/>
                         </div>
 
                     </div>
+                ) : (
+                    <UpgradeModal isOpen={exportModal} setIsOpen={setExportModal}/>
                 )
             }
         </section>

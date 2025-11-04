@@ -27,6 +27,7 @@ import Image from "next/image"
 import ProtectedRoute from "@/components/auth/ProtectedRoute"
 import { Spinner } from "@/components/ui/spinner"
 import BuyCreditModal from "@/components/profile/BuyCreditModal"
+import Link from "next/link"
 
 const Page = () => {
   const router = useRouter()
@@ -175,12 +176,14 @@ const Page = () => {
                   </Button>
                   ):
                   (
-                    <Button
+                    <Link href="/pricing">
+                      <Button
                       variant="outline"
                       className="mt-3 border-blue-400 text-blue-400 hover:bg-blue-400/10 cursor-pointer hover:scale-[0.98] active:scale-[0.97]"
-                    >
-                     Choose Plan
-                    </Button>
+                      >
+                      Choose Plan
+                      </Button>
+                    </Link>
                   )
 
                 }

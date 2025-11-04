@@ -22,7 +22,8 @@ type UIReturn = {
 export default async function UiGeneration(
     fattenedPrompt: string,
     imageHolder: string[],
-    previousUI: string
+    previousUI: string,
+    subHelper:string
 ): Promise<NextResponse<UISuccessResponse>> {
     const prompt = fattenedPrompt;
     try {
@@ -47,9 +48,10 @@ export default async function UiGeneration(
         const systemMessage: string = `
 You are an expert UI/UX designer.
 Generate a mobile app UI/UX based on the user's prompt,
+${subHelper},
 ensuring that it includes the necessary backgrounds, colors, layouts, fonts,
 paddings, and other elements to create a visually appealing design.
-The default mobile screen size is 270 width and minimum height 500px.
+The default mobile screen size is 375 width and minimum height 500px.
 Use inline styles to make the screens look beautiful.
 You can add as much content as needed to each screen, ensuring the interface is intuitive and user-friendly.
 Always style text appropriately and elegantly.

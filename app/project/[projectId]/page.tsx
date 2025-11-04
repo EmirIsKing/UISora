@@ -19,6 +19,10 @@ import AssetExport from '@/components/AssetExport';
 import UiExport from '@/components/UiExport';
 import { Send } from 'lucide-react';
 import StyleSelector from '@/components/StyleSelector';
+import UpgradeModal from '@/components/UpgradeModal';
+import { SubscriptionStatus } from '@/app/dashboard/projects/page';
+import { getSubscriptionStatus } from '@/actions/getSubscriptionStatus';
+import { getUserCredits } from '@/actions/getUserCredit';
 
 interface JsonToHtmlRendererProps {
 
@@ -58,6 +62,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const canvasRef = useRef<ZoomPanCanvasHandle | null>(null)
     const [selectedStyle, setSelectedStyle] = useState<string | null>("");
     const [HTMLData, setHTMLData] = useState<string[]>([])
+    const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null)
 
 
     // interface ScreenConfig {
@@ -148,6 +153,17 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
       console.log(generatedUI)
       console.log(HTMLData)
     }, [generatedUI, HTMLData])
+
+    useEffect(() => {
+        async function loadSub() {
+            const token = await user?.getIdToken();
+            const result = await getSubscriptionStatus(token);
+            setSubscription(result)
+        }
+            
+        loadSub()
+            
+    }, [generatedUI, user])
     
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -162,14 +178,25 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
            // Add user input to chat with a temporary AI response
            setChat((prevChat) => [...prevChat, { userPrompt: currentPrompt, AiResponse: "Generating..." }]);
+            
+           const creditCheck = await getUserCredits();
+            if (creditCheck == null || creditCheck < 100) {
+                return;
+            }
            
            // Send request to AI API with the current prompt (not chained)
 
-           const ui = (HTMLData ? "Here is the previous ui in string[] form "+HTMLData : "")
+           const ui = HTMLData && HTMLData.length > 0 
+            ? `Here is the previous ui in string[] form ${HTMLData}` 
+            : "";
+           const token = await user?.getIdToken()
+           console.log("ui: ",ui)
 
            const response = await fetch('/api/generate-ui', {
                method: 'POST',
-               headers: { 'Content-Type': 'application/json' },
+               headers: { 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+                },
                body: JSON.stringify({ prompt: currentPrompt, previousUI: ui, imageHolder, projectId, uid: user?.uid }),
            });
 
@@ -323,16 +350,18 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
             </div>
             {
-                exportModal && (
+                exportModal && subscription?.subscription?.status === "Active"? (
                     <div
                         onClick={()=>setExportModal(false)}
                         className={'fixed inset-0 flex w-full h-full justify-center items-center backdrop-blur-xs z-[9999]'}>
-                        <div className="bg-white rounded-xl shadow-md w-80 flex items-center justify-center gap-4 p-12">
+                        <div className="bg-white text-black rounded-xl shadow-md w-80 flex items-center justify-center gap-4 p-12">
                             <AssetExport assets={imageHolder}/>
                             <UiExport screenRef={screenshotRef}/>
                         </div>
 
                     </div>
+                ) : (
+                    <UpgradeModal addon="You <strong>can't Export</strong> in free plan." isOpen={exportModal} setIsOpen={setExportModal}/>
                 )
             }
         </section>

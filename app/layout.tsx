@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     url: "/",
     title: "UISora – AI Mobile UI Generator",
     description:
-      "Generate beautiful mobile app UIs from plain English. Create flows, export code and assets, and iterate fast with AI.",
+      "Generate beautiful mobile app UIs from plain text. Create flows, export code and assets, and iterate fast with AI.",
     siteName: "UISora",
     images: [
       { url: "/uisora-og.png", width: 1200, height: 630, alt: "UISora" },

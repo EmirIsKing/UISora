@@ -192,14 +192,14 @@ export const Navbar03 = React.forwardRef<HTMLElement, Navbar03Props>(
               <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  className="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
+                  className="group h-9 w-9 hover:opacity-85"
                   variant="ghost"
                   size="icon"
                 >
                   <HamburgerIcon />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent align="start" className="w-64 p-1">
+              <PopoverContent align="start" className="w-64 p-1 dark:bg-black dark:text-white bg-white text-black">
                 <NavigationMenu className="max-w-none">
                   <NavigationMenuList className="flex-col items-start gap-0">
                     {navigationLinks.map((link, index) => (

@@ -73,7 +73,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
             <div className={'flex'}>
                     <DropdownMenu >
                         <DropdownMenuTrigger asChild>
-                            <button className="px-4 flex py-2 rounded-md outline-0 hover:opacity-75 transition-all cursor-pointer">
+                            <button className="px-4 flex border hover:scale-[0.98] active:scale-[0.99] py-1 rounded-md outline-0 hover:opacity-75 transition-all cursor-pointer">
                                 {projectName ? <span className='truncate w-40 max-md:w-20 overflow-hidden whitespace-nowrap block'>{projectName}</span> :'Loading...'} ∨
                             </button>
                         </DropdownMenuTrigger>
@@ -97,7 +97,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
                 </button>
             </div>
             <div className={'flex justify-end flex-1 items-end'}>
-                    <Button onPress={()=>toggleExportModal()} className={'border border-white text-white rounded-full px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300'}>
+                    <Button onPress={()=>toggleExportModal()} className={'border border-white text-white rounded-full max-md:rounded-md px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300 max-md:text-sm !max-md:py-1'}>
                         Export
                     </Button>
             </div>

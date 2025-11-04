@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: 'Pricing – Fair, transparent credits',
     description:
       'Only pay for what you use. Clear credits for UI generation, images, and exports.',
-    images: [{ url: '/uisora-gradient.png', width: 1200, height: 630 }],
+    images: [{ url: '/uisora-og.png', width: 1200, height: 630 }],
   },
 }
 

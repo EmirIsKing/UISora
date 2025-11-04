@@ -16,7 +16,7 @@ export async function generateMetadata(
     openGraph: {
       title: formattedTitle,
       description: 'Insights on AI-assisted UI design, mobile UX, and product building.',
-      images: [{ url: '/uisora-gradient.png', width: 1200, height: 630 }],
+      images: [{ url: '/uisora-og.png', width: 1200, height: 630 }],
       type: 'article',
     },
   }

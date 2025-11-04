@@ -10,6 +10,7 @@ import {getProjectDetails, ProjectSettingsWithId} from "@/actions/getProjectDeta
 import { auth } from '@/utils/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { getUserCredits } from '@/actions/getUserCredit';
+import { ChevronDown } from 'lucide-react';
 
 
 const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sidebarToggle: boolean; setSidebarToggle: (open: boolean) => void; projectId: string;}) => {
@@ -74,7 +75,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
                     <DropdownMenu >
                         <DropdownMenuTrigger asChild>
                             <button className="px-4 flex border hover:scale-[0.98] active:scale-[0.99] py-1 rounded-md outline-0 hover:opacity-75 transition-all cursor-pointer">
-                                {projectName ? <span className='truncate w-40 max-md:w-20 overflow-hidden whitespace-nowrap block'>{projectName}</span> :'Loading...'} ∨
+                                {projectName ? <span className='truncate w-40 max-md:w-20 overflow-hidden whitespace-nowrap block'>{projectName}</span> :'Loading...'} <ChevronDown/>
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent  className="w-56 bg-slate-900 border opacity-100 z-[4000] border-slate-100/90 text-slate-100/90">

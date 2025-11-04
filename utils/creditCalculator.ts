@@ -1,27 +1,26 @@
-import { encoding_for_model } from '@dqbd/tiktoken';
+// ✅ REMOVED: import { encoding_for_model } from '@dqbd/tiktoken';
 
 // Credit pricing constants
 export const CREDIT_PRICING = {
-  // Per-image generation cost
   IMAGE_GENERATION: 100,
-  
-  // Per HTML-to-JSON conversion cost
   HTML_TO_JSON: 25,
-  
-  // Per token cost for different models
-  GPT4_PER_TOKEN: 1.5,    // GPT-4 is more expensive
-  O3_MINI_PER_TOKEN: 1,   // O3-mini is cheaper
-  
-  // Fixed costs for different operations
+  GPT4_PER_TOKEN: 1.5,
+  O3_MINI_PER_TOKEN: 1,
   PROMPT_FATTENING_BASE: 50,
   UI_GENERATION_BASE: 100,
 } as const;
 
+// ✅ New token estimator — no WASM, no imports, no runtime failures
+function estimateTokens(text: string): number {
+  if (!text) return 0;
+  return Math.ceil(text.length / 4); // Approx: 4 characters ≈ 1 token
+}
+
 // Token estimation for different models
 export const TOKEN_ESTIMATORS = {
-  'gpt-4': (text: string) => encoding_for_model('gpt-4').encode(text).length,
-  'o3-mini': (text: string) => encoding_for_model('gpt-4').encode(text).length,
-  'gpt-4o-latest': (text: string) => encoding_for_model('gpt-4').encode(text).length,
+  'gpt-4': (text: string) => estimateTokens(text),
+  'o3-mini': (text: string) => estimateTokens(text),
+  'gpt-4o-latest': (text: string) => estimateTokens(text),
 } as const;
 
 export interface CreditEstimate {
@@ -46,30 +45,26 @@ export function estimateCredits(
   prompt: string,
   imageHolder: string[] = [],
   previousUI: string = '',
-  estimatedScreens: number = 6 // Default: splash + onboarding + 4 other screens
+  estimatedScreens: number = 6
 ): CreditEstimate {
-  // Prompt fattening estimation
   const promptTokens = TOKEN_ESTIMATORS['gpt-4o-latest'](prompt);
   const promptFattening = CREDIT_PRICING.PROMPT_FATTENING_BASE + (promptTokens * CREDIT_PRICING.GPT4_PER_TOKEN);
-  
-  // Image generation estimation
-  const imagesToGenerate = imageHolder.length === 0 ? 5 : 0; // 1 splash + 4 other images
+
+  const imagesToGenerate = imageHolder.length === 0 ? 5 : 0;
   const imageGeneration = imagesToGenerate * CREDIT_PRICING.IMAGE_GENERATION;
-  
-  // UI generation estimation
-  const estimatedFattenedPrompt = prompt.length * 3; // Rough estimate of fattened prompt
+
+  const estimatedFattenedPrompt = prompt.length * 3;
   const uiTokens = TOKEN_ESTIMATORS['o3-mini'](estimatedFattenedPrompt + previousUI);
   const uiGeneration = CREDIT_PRICING.UI_GENERATION_BASE + (uiTokens * CREDIT_PRICING.O3_MINI_PER_TOKEN);
-  
-  // HTML-to-JSON conversion estimation
+
   const htmlToJson = estimatedScreens * CREDIT_PRICING.HTML_TO_JSON;
-  
+
   return {
     promptFattening: Math.ceil(promptFattening),
     imageGeneration,
     uiGeneration: Math.ceil(uiGeneration),
     htmlToJson,
-    total: Math.ceil(promptFattening + imageGeneration + uiGeneration + htmlToJson)
+    total: Math.ceil(promptFattening + imageGeneration + uiGeneration + htmlToJson),
   };
 }
 
@@ -79,13 +74,8 @@ export function estimateCredits(
 export function checkCredits(estimated: CreditEstimate, balance: number): CreditCheck {
   const hasEnough = balance >= estimated.total;
   const shortfall = hasEnough ? 0 : estimated.total - balance;
-  
-  return {
-    estimated,
-    balance,
-    hasEnough,
-    shortfall
-  };
+
+  return { estimated, balance, hasEnough, shortfall };
 }
 
 /**
@@ -101,12 +91,12 @@ export function calculateActualCredits(
   const imageGeneration = imageGenerationCount * CREDIT_PRICING.IMAGE_GENERATION;
   const uiGeneration = CREDIT_PRICING.UI_GENERATION_BASE + (uiGenerationTokens * CREDIT_PRICING.O3_MINI_PER_TOKEN);
   const htmlToJson = htmlToJsonCount * CREDIT_PRICING.HTML_TO_JSON;
-  
+
   return {
     promptFattening: Math.ceil(promptFattening),
     imageGeneration,
     uiGeneration: Math.ceil(uiGeneration),
     htmlToJson,
-    total: Math.ceil(promptFattening + imageGeneration + uiGeneration + htmlToJson)/10
+    total: Math.ceil(promptFattening + imageGeneration + uiGeneration + htmlToJson) / 10,
   };
-} 
+}

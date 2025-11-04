@@ -52,6 +52,7 @@ export async function POST(request: Request) {
     const isChainMode = Boolean(previousUI && (imageHolder?.length ?? 0) > 0);
 
     if (!isChainMode) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const fattenedResult = await PromptFattening(prompt, subHelper).then(async (res: any) => {
         const json = await res.json();
         const tokens = res?.usage?.total_tokens || 0;
@@ -67,6 +68,7 @@ export async function POST(request: Request) {
         const other = await ImageGeneration(fattenedPrompt + ' supporting images', 4).then(r => r.json());
 
         if (splash?.images?.[0]) images.push(`${splash.images[0].url} - Splash`);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (other?.images) other.images.forEach((img: any) => images.push(`${img.url} - Supporting image`));
       }
     }
@@ -117,6 +119,7 @@ export async function POST(request: Request) {
       allowOverwrite: true
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const update: Record<string, any> = {
       updatedAt: new Date(),
       lastUsedPrompt: prompt

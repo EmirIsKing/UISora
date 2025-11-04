@@ -64,8 +64,8 @@ export async function POST(request: Request) {
       fattenedPrompt = fattenedJson?.ui?.[0]?.ui ?? fattenedPrompt;
 
       if (images.length === 0) {
-        const splash = await ImageGeneration(fattenedPrompt + ' splash', 1).then(r => r.json());
-        const other = await ImageGeneration(fattenedPrompt + ' supporting images', 4).then(r => r.json());
+        const splash = await ImageGeneration(fattenedPrompt + ' splash', 1).then(r => r?.json());
+        const other = await ImageGeneration(fattenedPrompt + ' supporting images', 4).then(r => r?.json());
 
         if (splash?.images?.[0]) images.push(`${splash.images[0].url} - Splash`);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

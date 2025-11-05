@@ -53,6 +53,7 @@ export async function POST(request: Request) {
 
     if (!isChainMode) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      console.log("Prompt Fattening");
       const fattenedResult = await PromptFattening(prompt, subHelper).then(async (res: any) => {
         const json = await res.json();
         const tokens = res?.usage?.total_tokens || 0;
@@ -62,7 +63,9 @@ export async function POST(request: Request) {
       fattenedTokens = fattenedResult.tokens || 0;
       const fattenedJson = fattenedResult.json;
       fattenedPrompt = fattenedJson?.ui?.[0]?.ui ?? fattenedPrompt;
+      console.log("Prompt Fattening done");
 
+      console.log("Image Generation");
       if (images.length === 0) {
         const splash = await ImageGeneration(fattenedPrompt + ' splash', 1).then(r => r?.json());
         const other = await ImageGeneration(fattenedPrompt + ' supporting images', 4).then(r => r?.json());
@@ -71,19 +74,26 @@ export async function POST(request: Request) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (other?.images) other.images.forEach((img: any) => images.push(`${img.url} - Supporting image`));
       }
-    }
+      console.log("Image Generation done");
 
+    }
+    console.log("Ui Generation");
     const uiResponse = await UiGeneration(fattenedPrompt, images, previousUI, subHelper);
+    console.log("Ui Generation done");
     const data = await uiResponse.json();
     const uiData: UIComponent[] = data.ui || [];
 
+    console.log("Converting UI");
     const convertedUI = await Promise.all(
       uiData.map(async (item) => ({
         screen: item.screen,
         component: JSON.parse(await HtmlToJson(item.component) as string)
       }))
     );
+    console.log("Converting UI Done");
 
+
+    console.log("Calculating Actual Credits");
     const actualCredits = calculateActualCredits(
       fattenedTokens,
       images.length - (imageHolder?.length || 0),
@@ -91,8 +101,13 @@ export async function POST(request: Request) {
       convertedUI.length
     );
 
+    console.log("Calculating Actual Credits Done");
+    console.log("Updating User Credits");
+
     // --- DIRECT CREDIT SUBTRACTION ---
     await userRef.update({ credits: adminIncrement(-actualCredits.total) });
+    console.log("Updating User Credits Done");
+
 
     const newEntry = {
       createdAt: new Date().toISOString(),
@@ -114,10 +129,13 @@ export async function POST(request: Request) {
       history.push(newEntry);
     }
 
+    console.log("retrieve project json");
+
     const blob = await put(`project-ui/${projectId}.json`, JSON.stringify(history), {
       access: 'public',
       allowOverwrite: true
     });
+    console.log("retrieve project json Done");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const update: Record<string, any> = {

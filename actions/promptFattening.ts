@@ -16,6 +16,7 @@ export default async function PromptFattening(prompt: string, subHelper: string)
             Respond only with a valid JSON object .
             ${subHelper}
             Make sure to always keep in mind the dimensions of the screen.
+            Always remember that beauty of the design is main objective.
             You elaborate more on the users prompt and fatten it, make sure all components are aligned well.
             You can create any number of screens, always add a splash and atleast one onboarding screen and 5 other screens
             

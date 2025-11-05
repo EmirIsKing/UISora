@@ -52,8 +52,8 @@ export async function POST(request: Request) {
     const isChainMode = Boolean(previousUI && (imageHolder?.length ?? 0) > 0);
 
     if (!isChainMode) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       console.log("Prompt Fattening");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const fattenedResult = await PromptFattening(prompt, subHelper).then(async (res: any) => {
         const json = await res.json();
         const tokens = res?.usage?.total_tokens || 0;

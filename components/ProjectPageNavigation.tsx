@@ -98,7 +98,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
                 </button>
             </div>
             <div className={'flex justify-end flex-1 items-end'}>
-                    <Button onPress={()=>toggleExportModal()} className={'border border-white text-whiterounded-md px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300 max-md:text-sm !max-md:py-1'}>
+                    <Button onPress={()=>toggleExportModal()} className={'border border-white text-white rounded-md px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300 max-md:text-sm !max-md:py-1'}>
                         Export
                     </Button>
             </div>

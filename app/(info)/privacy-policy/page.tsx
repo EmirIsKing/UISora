@@ -165,7 +165,7 @@ export default function PrivacyPolicy() {
               If you have questions about this Privacy Policy or our data practices, please contact us at:
             </p>
             <ul className="list-none space-y-2">
-              <li><strong>Email:</strong> privacy@uisora.ai</li>
+              <li><strong>Email:</strong> support@uisora.com</li>
               <li><strong>Website:</strong> https://uisora.ai</li>
             </ul>
           </section>

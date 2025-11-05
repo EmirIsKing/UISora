@@ -103,7 +103,7 @@ Ensure:
         messages.push({ role: 'user', content: prompt });
 
         const response = await openai.chat.completions.create({
-            model: 'gpt-5',
+            model: 'gpt-5-mini-2025-08-07',
             messages: [
                 {
                     role: "system",

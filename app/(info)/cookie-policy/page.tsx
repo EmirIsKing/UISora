@@ -175,7 +175,7 @@ export default function CookiePolicy() {
               If you have questions about our use of cookies, please contact us at:
             </p>
             <ul className="list-none space-y-2">
-              <li><strong>Email:</strong> privacy@uisora.ai</li>
+              <li><strong>Email:</strong> support@uisora.com</li>
               <li><strong>Website:</strong> https://uisora.ai</li>
             </ul>
           </section>

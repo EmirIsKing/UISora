@@ -224,10 +224,10 @@ export default function About() {
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
             <a 
-              href="mailto:support@uisora.ai" 
+              href="mailto:support@uisora.com" 
               className="text-primary hover:underline"
             >
-              support@uisora.ai
+              support@uisora.com
             </a>
             <span className="hidden md:inline text-muted-foreground">•</span>
             <Link 

@@ -166,7 +166,7 @@ export default function PrivacyPolicy() {
             </p>
             <ul className="list-none space-y-2">
               <li><strong>Email:</strong> support@uisora.com</li>
-              <li><strong>Website:</strong> https://uisora.ai</li>
+              <li><strong>Website:</strong> https://uisora.com</li>
             </ul>
           </section>
         </div>

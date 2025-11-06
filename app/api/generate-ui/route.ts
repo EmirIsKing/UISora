@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const { prompt, previousUI, imageHolder, uid, projectId } = await request.json();
     const idToken = request.headers.get('Authorization')?.replace('Bearer ', '') || undefined;
 
-    const projectStateRef = adminDb.doc(`projects/${uid}`);
+    const projectStateRef = adminDb.collection("projects").doc(uid);
     await projectStateRef.set(
       { state: "generating" },
       { merge: true }

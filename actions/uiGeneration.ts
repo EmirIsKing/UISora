@@ -1,6 +1,5 @@
 import OpenAI from "openai";
 import {NextResponse} from "next/server";
-import aiChatResponse from "./aiChatResponse";
 
 type UIComponent = {
     screen: string;
@@ -174,14 +173,10 @@ Ensure:
             } as UIComponent;
         });
 
-        const formatMessage = await aiChatResponse([
-                { role: "assistant", content: generatedUI.message }
-                ]);
-        const text = formatMessage.content;
 
         return NextResponse.json({
             ui: validatedUI,
-            message: text,
+            message: generatedUI.message,
             imageHolder,
             creditUsed,
         });

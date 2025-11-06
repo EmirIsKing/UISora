@@ -174,8 +174,10 @@ Ensure:
             } as UIComponent;
         });
 
-        const formatMessage = await aiChatResponse(generatedUI.message)
-        const text = await formatMessage.text();
+        const formatMessage = await aiChatResponse([
+                { role: "assistant", content: generatedUI.message }
+                ]);
+        const text = formatMessage.content;
 
         return NextResponse.json({
             ui: validatedUI,

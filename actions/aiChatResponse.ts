@@ -1,10 +1,13 @@
-import { streamText, convertToModelMessages } from "ai";
+import { generateText, type ModelMessage } from "ai";
 
-export default async function aiChatResponse(messages) {
-  const result = streamText({
+export default async function aiChatResponse(messages: ModelMessage[]) {
+  const result = await generateText({
     model: "openai/gpt-5-mini",
-    messages: convertToModelMessages(messages),
+    messages,
   });
 
-  return result.toUIMessageStreamResponse();
+  return {
+    role: "assistant",
+    content: result.text,
+  };
 }

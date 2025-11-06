@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 interface props {
     title:string;
-    category: [];
+    category: string[];
     image: string;
     description: string;
     alt: string;

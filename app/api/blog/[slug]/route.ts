@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 export async function GET(
-  _req: Request,
+  _req: NextRequest,
   { params }: { params: { slug: string } }
 ) {
   try {

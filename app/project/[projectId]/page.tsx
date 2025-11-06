@@ -66,6 +66,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null);
     const [locked, setLocked] = useState(true);
     const [generating, setGenerating] = useState(false);
+    const [title, setTitle] = useState("")
     
 
 
@@ -230,6 +231,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
            // Ensure data.ui is wrapped in the expected structure { ui: [...] }
            setGeneratedUI(data.ui ? { ui: data.ui } : jsondata);
            setImageHolder(data.imageHolder || []);
+           setTitle(data.projectName)
 
        } catch (error) {
            console.log(error);
@@ -256,7 +258,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     return (
         <ProtectedRoute redirectTo={`/project/view/${projectId}`}>
             <section className={'flex flex-col h-screen'}>
-                <ProjectPageNavigation projectId={projectId} sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
+                <ProjectPageNavigation title={title} projectId={projectId} sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
             <div className='max-md:hidden'>
                 <InputBox prompt={prompt} generating={generating} sidebartoggle={sidebarToggle} setSelectedStyle={setSelectedStyle} locked={locked} handleSubmit={handleSubmit} selectedStyle={selectedStyle} setPrompt={setPrompt}/>
             </div>

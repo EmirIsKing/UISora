@@ -24,6 +24,7 @@ export default async function PromptFattening(prompt: string, subHelper: string)
 {
   "ui": [
     {
+        title: "short title for ui",
         ui:" All UI Structure & Description goes here(ui is a string not an object)",
         splashImagePrompt: "An image of a coffee shop for a splash screen",
         otherImagesPrompt: "An image of coffee in a cup"

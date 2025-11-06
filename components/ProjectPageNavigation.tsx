@@ -13,7 +13,7 @@ import { getUserCredits } from '@/actions/getUserCredit';
 import { ChevronDown } from 'lucide-react';
 
 
-const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sidebarToggle: boolean; setSidebarToggle: (open: boolean) => void; projectId: string;}) => {
+const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId, title}:{sidebarToggle: boolean; setSidebarToggle: (open: boolean) => void; projectId: string; title:string;}) => {
 
     const router = useRouter();
     const [toggleProject, setToggleProject] = useState(false);
@@ -31,7 +31,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId}:{sid
         if (projectDetails?.settings.projectName) {
             setProjectName(projectDetails.settings.projectName);
         }
-    }, [projectDetails]);
+    }, [projectDetails, title]);
 
     useEffect(() => {
         getUserCredits().then((credits) => {

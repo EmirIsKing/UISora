@@ -56,6 +56,7 @@ export async function POST(request: Request) {
     const images: string[] = Array.isArray(imageHolder) ? [...imageHolder] : (imageHolder ? [imageHolder] : []);
     let fattenedPrompt = Array.isArray(prompt) ? prompt.join('\n') : prompt || '';
     let fattenedTokens = 0;
+    let title:string = "New Project Title";
 
     const isChainMode = Boolean(previousUI && (imageHolder?.length ?? 0) > 0);
 
@@ -72,6 +73,14 @@ export async function POST(request: Request) {
       const fattenedJson = fattenedResult.json;
       fattenedPrompt = fattenedJson?.ui?.[0]?.ui ?? fattenedPrompt;
       console.log("Prompt Fattening done");
+
+      console.log("setting project title")
+      title = fattenedJson?.ui?.[0]?.title ?? "New project Title"
+      await projectStateRef.set(
+            { settings: {projectName: title} },
+            { merge: true }
+          );
+      console.log("setting project title done")
 
       console.log("Image Generation");
       if (images.length === 0) {
@@ -159,7 +168,8 @@ export async function POST(request: Request) {
       imageHolder: images,
       ui: convertedUI,
       creditUsed: actualCredits.total,
-      creditBreakdown: actualCredits
+      creditBreakdown: actualCredits,
+      projectName: title,
     });
 
   } catch (error) {

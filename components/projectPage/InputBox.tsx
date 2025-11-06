@@ -7,7 +7,7 @@ interface Props {
   handleSubmit: (e: React.FormEvent<Element>) => void;
   setPrompt: (value: string) => void;
   selectedStyle: string | null;
-  setSelectedStyle: (value: string) => void;
+  setSelectedStyle: (value: string | null) => void;
   sidebartoggle: boolean;
   locked: boolean;
   generating: boolean;

@@ -14,6 +14,7 @@ import { EyeClosed, Eye } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Button } from '../ui/button';
 import { IoArrowBackSharp } from "react-icons/io5";
+import { FirebaseError } from 'firebase/app';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
@@ -22,13 +23,12 @@ export default function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { signIn, clearError, googleSignIn } = useAuth();
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!email || !password) {
-      return;
-    }
+
+    if (!email || !password) return;
 
     setIsLoading(true);
     clearError();
@@ -36,8 +36,13 @@ export default function SignInForm() {
     try {
       await signIn(email, password);
       router.push('/dashboard/projects');
-    } catch (error) {
-      // Error is handled by the auth context
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        const errorMessage = error.code.replace("auth/", "").replace(/-/g, " ");
+        setError(errorMessage);
+      } else {
+        setError("Something went wrong");
+      }
       console.error('Sign in error:', error);
     } finally {
       setIsLoading(false);
@@ -45,114 +50,130 @@ export default function SignInForm() {
   };
 
   const handleGoogleSignIn = async () => {
-      try {
-        await googleSignIn();  
-        router.push('/dashboard/projects');
-  
-      } catch (error) {
-        console.error('Sign in error:', error);
+    try {
+      await googleSignIn();
+      router.push('/dashboard/projects');
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        const errorMessage = error.code.replace("auth/", "").replace(/-/g, " ");
+        setError(errorMessage);
+      } else {
+        setError("Something went wrong");
       }
+      console.error('Sign in error:', error);
     }
+  };
 
   return (
-    <div className="min-h-screen max-md:h-screen flex pl-16 bg-gradient-to-b text-white from-[#0D0D12] to-[#1A1A1A] sm:pl-6 lg:pl-8 max-md:flex-col max-md:px-0 max-md:pt-10 max-md:pb-0">
-      <div className='px-4 justify-center flex flex-col gap-10 max-md:gap-5 text-left max-w-[400px] max-md:pb-6'>
-        <Link href={"/"} className='flex gap-2 ml-4 items-center'>
-        <IoArrowBackSharp/>
-        Home
+    <div className="
+      min-h-screen flex text-white bg-gradient-to-b from-[#0D0D12] to-[#1A1A1A]
+      p-16 gap-10
+      max-md:flex-col max-md:p-6 max-md:gap-8
+    ">
+
+      {/* LEFT SECTION */}
+      <div className="
+        flex flex-col justify-center gap-6 max-w-[420px]
+        max-md:max-w-full max-md:text-center max-md:items-center
+      ">
+        <Link href="/" className="flex gap-2 items-center max-md:mx-auto">
+          <IoArrowBackSharp /> Home
         </Link>
-        <span className='text-4xl font-semibold max-md:text-2xl max-md:text-center'>Welcome Back to  
-          <span 
-          className='bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent font-bold'> UISora
-          </span>
-           👋
-        </span>
-        <span className='text-[#6B7280] max-md:text-center'>
-          Sign in to continue generating and 
-          customizing your app UIs.
-        </span>
+
+        <h1 className="text-4xl font-semibold max-md:text-3xl">
+          Welcome Back to 
+          <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent font-bold"> UISora</span> 👋
+        </h1>
+
+        <p className="text-[#6B7280] max-md:max-w-[260px]">
+          Sign in to continue generating and customizing your app UIs.
+        </p>
       </div>
-      <div className='rounded-l-4xl max-md:h-[60vh] max-md:rounded-4xl h-screen max-md:py-5 w-full bg-white/6 text-white flex flex-col justify-center items-center border border-white/10'>
-        <span className='text-2xl mb-6 font-bold'>Sign In</span>
-        <form className='flex flex-col gap-5 max-md:w-full max-md:px-10' onSubmit={handleSubmit}>
-          <div className='flex flex-col'>
-            <div>
-                  <label htmlFor="email" className="block text-sm font-medium">
-                     Email
-                  </label>
-                  <InputGroup>
-                    <InputGroupInput 
-                      id="email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email"
-                    />                    
-                  </InputGroup>
-              </div>
-          </div>
+
+      {/* RIGHT SECTION (FORM CARD) */}
+      <div className="
+        flex flex-col justify-center items-center w-full
+        bg-white/5 border border-white/10 rounded-3xl py-10 px-6
+        max-md:rounded-2xl max-md:py-8
+      ">
+        <span className="text-2xl mb-6 font-bold">Sign In</span>
+
+        <form className="flex flex-col gap-5 w-full max-w-[380px]" onSubmit={handleSubmit}>
+
+          {/* Email Field */}
           <div>
-                <label htmlFor="password" className="block text-sm font-medium">
-                  Password
-                </label>
-                <InputGroup>
-                  <InputGroupInput
-                    id="password"
-                    name="password"
-                    autoComplete="current-password"
-                    required
-                    placeholder="Enter password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    type={viewPassword ? "": "password"} 
-                  />
-                  <InputGroupAddon align="inline-end">
-                    <InputGroupButton
-                      aria-label="view"
-                      title="password"
-                      size="icon-xs"
-                      onClick={() => {
-                        setViewPassword(!viewPassword)
-                      }}
-                    >
-                      {viewPassword ? <Eye /> : <EyeClosed />}
-                    </InputGroupButton>
-                  </InputGroupAddon>
-                </InputGroup>
+            <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
+            <InputGroup>
+              <InputGroupInput
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+              />
+            </InputGroup>
           </div>
-          <div className='flex justify-center items-center'>
-            <button
-              type="submit"
-              disabled={isLoading || !email || !password}
-              className="group bg-gradient-to-r from-[#635BFF] to-[#3B3799] rounded-full p-2 w-[150px] cursor-pointer active:opacity-70 hover:scale-[0.97] disabled:scale-[1.0] disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Signing in...
-                </div>
-              ) : (
-                'Sign in'
-              )}
-            </button>
+
+          {/* Password Field */}
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium mb-1">Password</label>
+            <InputGroup>
+              <InputGroupInput
+                id="password"
+                name="password"
+                autoComplete="current-password"
+                required
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type={viewPassword ? "text" : "password"}
+              />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton
+                  size="icon-xs"
+                  onClick={() => setViewPassword(!viewPassword)}
+                  type="button"
+                >
+                  {viewPassword ? <Eye /> : <EyeClosed />}
+                </InputGroupButton>
+              </InputGroupAddon>
+            </InputGroup>
           </div>
-          <div className='flex justify-center items-center'>
-            <Link href="/forgot-password" className="font-medium text-blue-600 hover:text-blue-500 underline">
-              Forgot Password?
-            </Link>
-          </div>
-          <Separator className='bg-gradient-to-r from-black via-white to-black'/>
-          <Button type='button' onClick={handleGoogleSignIn} className='border cursor-pointer hover:scale-[0.98] active:scale-[0.99]'>Sign In with Google</Button>
-          <div className='flex justify-center items-center'>
-            <Link href="/sign-up" className="font-medium text-blue-600 hover:text-blue-500 underline">
-              Don’t have an account? Sign up →
-            </Link>
-          </div>
+
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            disabled={isLoading || !email || !password}
+            className="bg-gradient-to-r from-[#635BFF] to-[#3B3799] rounded-full py-2 w-full font-semibold disabled:opacity-50"
+          >
+            {isLoading ? "Signing in..." : "Sign in"}
+          </Button>
+
+          {/* Error Message */}
+          {error && <p className="text-center text-red-500 text-sm">{error}</p>}
+
+          {/* Forgot Password */}
+          <Link href="/forgot-password" className="text-center text-blue-400 underline">
+            Forgot Password?
+          </Link>
+
+          <Separator className="my-2" />
+
+          {/* Google Button */}
+          <Button type="button" onClick={handleGoogleSignIn} className="bg-white text-black rounded-full py-2 w-full font-semibold">
+            Sign In with Google
+          </Button>
+
+          {/* Link to Create Account */}
+          <Link href="/sign-up" className="text-center text-blue-400 underline">
+            Don’t have an account? Sign up →
+          </Link>
+
         </form>
       </div>
     </div>
   );
-} 
+}

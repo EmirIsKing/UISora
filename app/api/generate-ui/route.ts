@@ -9,6 +9,7 @@ import HtmlToJson from '@/actions/HtmlToJson';
 import { put } from '@vercel/blob';
 import { calculateActualCredits } from '@/utils/creditCalculator';
 import { getSubscriptionStatus } from '@/actions/getSubscriptionStatus';
+import { setProjectSettings } from '@/actions/setProjectSettings';
 
 type UIComponent = {
   screen: { name: string; width: number; height: number };
@@ -21,11 +22,8 @@ export async function POST(request: Request) {
     const { prompt, previousUI, imageHolder, uid, projectId } = await request.json();
     const idToken = request.headers.get('Authorization')?.replace('Bearer ', '') || undefined;
 
-    const projectStateRef = adminDb.collection("projects").doc(uid);
-    await projectStateRef.set(
-      { state: "generating" },
-      { merge: true }
-    );
+    const projectStateRef = adminDb.doc(`projects/${projectId}`);
+    await projectStateRef.update({ state: "generating" });
     
 
     const subStatus = await getSubscriptionStatus(idToken);
@@ -76,10 +74,7 @@ export async function POST(request: Request) {
 
       console.log("setting project title")
       title = fattenedJson?.ui?.[0]?.title ?? "New project Title"
-      await projectStateRef.set(
-            { settings: {projectName: title} },
-            { merge: true }
-          );
+      await setProjectSettings(projectId, {projectName: title})
       console.log("setting project title done")
 
       console.log("Image Generation");
@@ -176,11 +171,8 @@ export async function POST(request: Request) {
     console.error('[ERROR]', error);
     return NextResponse.json({ message: String(error ?? 'Error generating UI') }, { status: 500 });
   } finally {
-    const { uid } = await request.json();
-    const projectStateRef = adminDb.doc(`projects/${uid}`);
-    await projectStateRef.set(
-      { state: "unlocked" },
-      { merge: true }
-    );
+    const { projectId } = await request.json();
+    const projectStateRef = adminDb.doc(`projects/${projectId}`);
+    await projectStateRef.update({ state: "unlocked" });
   }
 }

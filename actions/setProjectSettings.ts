@@ -8,8 +8,13 @@ export async function setProjectSettings(projectId: string, settings: ProjectSet
 
     const db = getFirestore();
     const projectRef = doc(db, 'users', user.uid, 'projects', projectId);
+    const globalProjectRef = doc(db, 'projects', projectId);
+
 
     await updateDoc(projectRef, {
+        settings
+    });
+    await updateDoc(globalProjectRef, {
         settings
     });
 }

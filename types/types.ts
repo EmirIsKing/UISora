@@ -109,7 +109,7 @@ export interface ProjectSettings {
     projectName: string;
     createdBy?: string; // UID or email
     uiBlobUrl?: string;
-    visibility: 'private' | 'public';
+    visibility?: 'private' | 'public';
     theme?: 'light' | 'dark';
     autosave?: boolean;
     lastOpened?: string; // ISO string or Date

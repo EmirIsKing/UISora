@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function GET(req: NextRequest, context: any) {
+  // Await params before using
+  const params = await context.params;
+  const slug = params.slug as string;
+
   try {
     const supabase = createClient(
       process.env.SUPABASE_URL!,
@@ -14,7 +15,7 @@ export async function GET(
     const { data, error } = await supabase
       .from("blog_posts")
       .select("*")
-      .eq("slug", params.slug)
+      .eq("slug", slug)
       .single();
 
     if (error) return NextResponse.json({ error }, { status: 404 });

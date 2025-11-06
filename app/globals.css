@@ -288,3 +288,168 @@
 @theme {
   --color-purple-blue: #543cf3;
 }
+
+
+/* Base prose styles */
+.prose {
+  color: #111827; /* Tailwind gray-900 for light mode */
+  line-height: 1.7;
+}
+
+/* Headings – distinctive styles */
+.prose h1 {
+  font-size: 2.25rem; /* large title */
+  font-weight: 800;
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+  border-bottom: 4px solid #3b82f6; /* blue accent */
+  padding-bottom: 0.25em;
+}
+
+.prose h2 {
+  font-size: 1.875rem; 
+  font-weight: 700;
+  margin-top: 1.4em;
+  margin-bottom: 0.6em;
+  border-bottom: 2px solid #3b82f6;
+  padding-bottom: 0.2em;
+}
+
+.prose h3 {
+  font-size: 1.5rem; 
+  font-weight: 600;
+  margin-top: 1.3em;
+  margin-bottom: 0.5em;
+}
+
+.prose h4 {
+  font-size: 1.25rem; 
+  font-weight: 600;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+}
+
+.prose h5 {
+  font-size: 1.125rem; 
+  font-weight: 500;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.prose h6 {
+  font-size: 1rem; 
+  font-weight: 500;
+  margin-top: 0.9em;
+  margin-bottom: 0.4em;
+}
+
+/* Paragraphs, lists, links, code, images, blockquotes, tables remain mostly same */
+.prose p {
+  margin-bottom: 1em;
+}
+
+.prose ul, .prose ol {
+  margin-left: 1.5em;
+  margin-bottom: 1em;
+}
+
+.prose a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.prose img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 1em 0;
+}
+
+.prose blockquote {
+  border-left: 4px solid #3b82f6;
+  padding-left: 1em;
+  color: #6b7280;
+  font-style: italic;
+  margin: 1em 0;
+}
+
+.prose pre {
+  background: #f3f4f6;
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.prose code {
+  font-family: monospace;
+  background: #e5e7eb;
+  padding: 2px 4px;
+  border-radius: 4px;
+  word-break: break-word;
+}
+
+/* Tables */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1em;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.prose th, .prose td {
+  border: 1px solid #d1d5db;
+  padding: 0.5em 0.75em;
+}
+
+.prose th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+.prose td {
+  background-color: #ffffff;
+}
+
+.prose tr:nth-child(even) td {
+  background-color: #f9fafb;
+}
+
+/* Nested lists */
+.prose ul ul,
+.prose ol ol {
+  margin-left: 1.25em;
+}
+
+/* Horizontal rules */
+.prose hr {
+  border: none;
+  border-top: 1px solid #d1d5db;
+  margin: 1.5em 0;
+}
+
+/* Link hover effects */
+.prose a:hover {
+  text-decoration: underline;
+  color: #2563eb;
+}
+
+/* Dark mode overrides */
+.dark .prose {
+  color: #f9fafb;
+}
+
+.dark .prose h1 { border-bottom-color: #60a5fa; }
+.dark .prose h2 { border-bottom-color: #60a5fa; }
+
+.dark .prose a { color: #60a5fa; }
+.dark .prose a:hover { color: #3b82f6; }
+
+.dark .prose pre { background: #1f2937; }
+.dark .prose code { background: #374151; }
+
+.dark .prose th, .dark .prose td { border-color: #4b5563; }
+.dark .prose th { background-color: #374151; }
+.dark .prose td { background-color: #1f2937; }
+.dark .prose blockquote { border-color: #60a5fa; color: #d1d5db; }
+.dark .prose tr:nth-child(even) td { background-color: #374151; }
+

@@ -27,7 +27,7 @@ const InputBox = ({
     <div
       className={`
         absolute left-[calc(50%+90px)] max-md:left-[calc(50%-0.5px)] -translate-x-1/2 bottom-5 max-md:bottom-0 max-md:shadow-none! w-full max-w-2xl px-4
-        max-md:px-0 z-9999
+        max-md:px-0 z-2200
         transition-all duration-300 ease-in-out
         ${sidebartoggle ? "max-md:opacity-100 max-md:translate-y-0" : "max-md:opacity-0 max-md:translate-y-4 max-md:pointer-events-none"}
       `}

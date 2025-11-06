@@ -49,7 +49,7 @@ const ProjectSettings = ({toggleSettings, projectDetails, setProjectNameOptimist
 
 
     return (
-        <div onClick={toggleSettings}  className={'absolute flex top-0 backdrop-blur-xs justify-center items-center h-screen w-full text-black'}>
+        <div onClick={toggleSettings}  className={'absolute z-10000 flex top-0 backdrop-blur-xs justify-center items-center h-screen w-full text-black'}>
             <div className="relative flex justify-center items-center w-full h-full">
                 <div onClick={(e) => e.stopPropagation()} className={'p-5 bg-white dark:bg-[#1E1E1E] dark:text-white rounded-xl shadow-md gap-5 border-black border w-1/4 max-md:w-[80%]'}>
                     <h2 className="text-xl text-center font-bold text-gray-800 dark:text-white">Project Settings</h2>

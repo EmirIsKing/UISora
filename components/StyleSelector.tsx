@@ -34,9 +34,9 @@ export default function StyleSelector({ selectedStyle, setSelectedStyle }: propt
             key={style}
             value={style}
             className="
-              inline-flex items-center justify-center rounded-full
+              inline-flex items-center justify-center rounded-md
               px-2 py-0 h-5 text-[10px] leading-none
-              border border-black
+              border border-white
               whitespace-nowrap
               transition
               data-[state=on]:bg-purple-blue

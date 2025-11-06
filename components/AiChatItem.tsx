@@ -1,6 +1,7 @@
 import React from 'react'
 import Logo from './Logo'
 import GenerateLoader from './GenerateLoader'
+import { Message,MessageContent } from './ui/shadcn-io/ai/message'
 
 const AiChatItem = ({message}: {message: string}) => {
     return (
@@ -13,7 +14,11 @@ const AiChatItem = ({message}: {message: string}) => {
 
                 {/* Chat Bubble */}
                 <div className="bg-white/2 rounded-md p-2 max-w-full break-words whitespace-pre-wrap text-white min-h-[50px] flex items-center justify-center">
-                    {message === "Generating..." ? (<GenerateLoader/>) : message}
+                    {message === "Generating..." ? (<GenerateLoader/>) : (
+                        <Message from='assistant'>
+                            <MessageContent>{message}</MessageContent>
+                        </Message>
+                    )}
                 </div>
             </div>
         </div>

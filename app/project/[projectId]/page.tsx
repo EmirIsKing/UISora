@@ -17,12 +17,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getProjectDetails } from '@/actions/getProjectDetails';
 import AssetExport from '@/components/AssetExport';
 import UiExport from '@/components/UiExport';
-import { Send } from 'lucide-react';
-import StyleSelector from '@/components/StyleSelector';
 import UpgradeModal from '@/components/UpgradeModal';
 import { SubscriptionStatus } from '@/app/dashboard/projects/page';
 import { getSubscriptionStatus } from '@/actions/getSubscriptionStatus';
 import { getUserCredits } from '@/actions/getUserCredit';
+import getProjectState from '@/actions/getProjectState';
+import InputBox from '@/components/projectPage/InputBox';
+import SegmentedButtons from '@/components/projectPage/SegmentedButtons';
 
 interface JsonToHtmlRendererProps {
 
@@ -62,7 +63,10 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const canvasRef = useRef<ZoomPanCanvasHandle | null>(null)
     const [selectedStyle, setSelectedStyle] = useState<string | null>("");
     const [HTMLData, setHTMLData] = useState<string[]>([])
-    const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null)
+    const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null);
+    const [locked, setLocked] = useState(true);
+    const [generating, setGenerating] = useState(false);
+    
 
 
     // interface ScreenConfig {
@@ -88,6 +92,14 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
         const fetchProjectDetails = async () => {
             if (user?.uid) {
                 const projectDetails = await getProjectDetails(user?.uid, projectId);
+                const { state } = await getProjectState(projectId);
+                if (state === "locked") {
+                    setLocked(true)
+                } else if (state === "generating") {
+                    setGenerating(true) 
+                } else {
+                    setLocked(false)
+                }
                 console.log(projectDetails);
                 if (projectDetails?.blobUrl) {
                     try {
@@ -168,6 +180,8 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLocked(true)
+        setGenerating(true)
 
        try {
            if (!prompt.trim()) return; // Prevent empty messages
@@ -224,6 +238,9 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                    index === prevChat.length - 1 ? { ...item, AiResponse: "Error: Unable to generate UI. Please try again later." } : item
                )
            );
+       } finally{
+        setLocked(false)
+        setGenerating(false)
        }
     };
 
@@ -239,7 +256,12 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     return (
         <ProtectedRoute redirectTo={`/project/view/${projectId}`}>
             <section className={'flex flex-col h-screen'}>
-            <ProjectPageNavigation projectId={projectId} sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
+                <ProjectPageNavigation projectId={projectId} sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
+            <div className='max-md:hidden'>
+                <InputBox prompt={prompt} generating={generating} sidebartoggle={sidebarToggle} setSelectedStyle={setSelectedStyle} locked={locked} handleSubmit={handleSubmit} selectedStyle={selectedStyle} setPrompt={setPrompt}/>
+            </div>
+                <SegmentedButtons setSidebarToggle={setSidebarToggle} sidebarToggle={sidebarToggle}/>
+            
             <div
                 className={`hidden transition-all duration-300 inset-0 z-[2000] bg-slate-900/20 backdrop-blur-sm
                     data-[state=open]:animate-in data-[state=closed]:animate-out
@@ -255,9 +277,9 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
               ${sidebarToggle ? "w-1/3 max-w-sm" : "w-0"} 
               bg-[#212121] border-w hite 
               relative flex flex-col shadow-lg shadow-r-white justify-between 
-              max-md:fixed max-md:bottom-0 max-md:h-full max-md:mt-12 
+              max-md:fixed max-md:bottom-0 h-[85%] rounded-br-lg max-md:h-full max-md:mt-12 
             z-[2001] 
-              ${sidebarToggle ? "max-md:w-[308px]" : "max-md:w-0"}`}
+              ${sidebarToggle ? "max-md:w-full" : "max-md:w-0"}`}
                     style={{
                         transitionProperty: "width, transform",
                         transform: sidebarToggle ? "translateX(0)" : "translateX(-100%)",
@@ -265,6 +287,8 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                     {/* Chat History */}
                     <div
                         className={`flex-1 flex-grow flex border flex-col w-full h-full
+                            rounded-br-lg
+                            max-md:mb-26
                             overflow-y-auto pt-3 px-3 pb-24 max-md:pt-12 scrollbar-transparent scroll-smooth overscroll-y-contain
                             ${sidebarToggle ? "" : "hidden"}
                             `}
@@ -279,7 +303,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                     </div>
 
                     {/* Fixed Input Box */}
-                    <div className={`w-full ${sidebarToggle ? "" : "hidden"} flex text-white`}>
+                    {/* <div className={`w-full ${sidebarToggle ? "" : "hidden"} flex text-white`}>
                         <StyleSelector selectedStyle={selectedStyle} setSelectedStyle={setSelectedStyle}/>
                     </div>
                     <div
@@ -300,6 +324,21 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                             </div>
                         </form>
                     </div>
+                    <PromptInput onSubmit={handleSubmit} className={`flex ${sidebarToggle ? "" : "hidden"} bg-[#303030]! text-white transition-all duration-300 justify-center item-center pb-5 scrollbar-transparent max-md:pt-3`}>
+                        <PromptInputTextarea
+                            value={prompt}
+                            onChange={(e) => setPrompt(e.target.value)}
+                            placeholder={!locked ? "Type your message..." : "Please wait"}
+                            className='text-white'
+                        />
+                        <PromptInputToolbar>
+                            <PromptInputSubmit disabled={!prompt.trim() || locked} className='bg-gradient-to-r cursor-pointer! from-blue-400 to-purple-600 hover:bg-slate-600'/>
+                        </PromptInputToolbar>
+                     */}
+                    <div className='hidden max-md:block'>
+                        <InputBox prompt={prompt} sidebartoggle={sidebarToggle} generating={generating} setSelectedStyle={setSelectedStyle} locked={locked} handleSubmit={handleSubmit} selectedStyle={selectedStyle} setPrompt={setPrompt}/>
+                    </div>
+                    
                 </div>
 
                 {/* Main Content */}

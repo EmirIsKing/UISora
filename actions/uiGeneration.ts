@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import {NextResponse} from "next/server";
-
+import aiChatResponse from "./aiChatResponse";
 
 type UIComponent = {
     screen: string;
@@ -68,7 +68,7 @@ Each element must have a unique id.
 Do not add comments.
 Each screen gets its own component object; do not combine screens into one overflow.
 Return an array of objects in JSON format with the following structure:
-{ "ui": [ { "screen": { "name": "Home", "width": 250, "height": 500 }, "component": "<>pure html and css code</>" } ], "message": "..." }
+{ "ui": [ { "screen": { "name": "Home", "width": 250, "height": 500 }, "component": "<>pure html and css code</>" } ], "message": "...in markdown format" }
 Make the screen long or wide enough to fit the content.
 Minimum height: 500px; minimum width: 270px.
 Do not use the <Image> tag. Instead, create a rectangle or shape and use CSS background.
@@ -76,7 +76,7 @@ Do not add line breaks inside tags—only break text between tags.
 For linear backgrounds in ReactFigma, use: backgroundColor: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)'
 The "component" field should be a valid HTML string.
 Example output:
-{ "ui": [ { "screen": { "name": "login", "width": 250, "height": 500 }, "component": "<div id='unique-id' class='container' style='font-weight:bold'><h2 id='unique-id'>Login</h2></div>" } ], "message": "..." }
+{ "ui": [ { "screen": { "name": "login", "width": 250, "height": 500 }, "component": "<div id='unique-id' class='container' style='font-weight:bold'><h2 id='unique-id'>Login</h2></div>" } ], "message": "... in markdown format" }
 Ensure:
 - The primary objective is a beautiful UI.
 - Each element has a unique id.
@@ -84,8 +84,8 @@ Ensure:
 - Response must be a valid JSON array.
 - "component" must be a string containing valid HTML.
 - Do not emit escape characters (like backslashes).
-- Return a "message" explaining design choices, colors, layouts, and UI elements (include emojis if desired).
-- Make sure Message is clear and readable to the reader(spacious and friendly).
+- Return a "message" explaining design choices, colors, layouts, and UI elements (include emojis if desired) in markdown format.
+- Make sure Message is clear and readable to the reader(spacious and friendly) in markdown format.
 - Write styles as strings, not JS objects.
 - Wrap each screen component in a single root <div>.
 `;
@@ -174,9 +174,12 @@ Ensure:
             } as UIComponent;
         });
 
+        const formatMessage = await aiChatResponse(generatedUI.message)
+        const text = await formatMessage.text();
+
         return NextResponse.json({
             ui: validatedUI,
-            message: generatedUI.message,
+            message: text,
             imageHolder,
             creditUsed,
         });

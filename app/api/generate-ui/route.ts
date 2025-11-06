@@ -21,6 +21,13 @@ export async function POST(request: Request) {
     const { prompt, previousUI, imageHolder, uid, projectId } = await request.json();
     const idToken = request.headers.get('Authorization')?.replace('Bearer ', '') || undefined;
 
+    const projectStateRef = adminDb.doc(`projects/${uid}`);
+    await projectStateRef.set(
+      { state: "generating" },
+      { merge: true }
+    );
+    
+
     const subStatus = await getSubscriptionStatus(idToken);
 
     if (!subStatus) {
@@ -37,6 +44,7 @@ export async function POST(request: Request) {
 
     const userRef = adminDb.doc(`users/${uid}`);
     const projectRef = adminDb.doc(`users/${uid}/projects/${projectId}`);
+    
 
     const projectSnap = await projectRef.get();
     const blobUrl = projectSnap.data()?.uiBlobUrl;
@@ -157,5 +165,12 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('[ERROR]', error);
     return NextResponse.json({ message: String(error ?? 'Error generating UI') }, { status: 500 });
+  } finally {
+    const { uid } = await request.json();
+    const projectStateRef = adminDb.doc(`projects/${uid}`);
+    await projectStateRef.set(
+      { state: "unlocked" },
+      { merge: true }
+    );
   }
 }

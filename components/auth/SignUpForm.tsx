@@ -75,7 +75,16 @@ export default function SignUpForm() {
 
   const handleGoogleSignUp = async () => {
     try {
-      await googleSignIn();
+      const result = await googleSignIn();
+      if (result) {
+        setSuccessMessage("Account created! Redirecting...");
+        await fetch("/api/newsletterSubscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: result.user.email }),
+        });
+        setTimeout(() => router.push("/dashboard/projects"), 1500);
+      }
       router.push('/dashboard/projects');
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {

@@ -61,7 +61,7 @@ const BuyCreditModal = ({userId, email}:{userId:string; email:string;}) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              productId: "1066544",
+              productId: process.env.BUY_CREDIT_ID,
               userId,
               email,
               amount: value,

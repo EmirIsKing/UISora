@@ -26,7 +26,7 @@ export function PricingCreative({userId, email}:{userId?:string; email?:string})
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productId: isAnnual ? "1065511" : "1065510",
+          productId: isAnnual ? process.env.PRO_ANNUALLY_ID : process.env.PRO_MONTHLY_ID,
           userId,
           email,
         }),
@@ -34,7 +34,7 @@ export function PricingCreative({userId, email}:{userId?:string; email?:string})
   
       const data = await response.json();
   
-      window.open(data.checkoutUrl, "_blank");
+      window.open(data.checkoutUrl);
     } catch (error) {
       console.error(error);
     } finally {
@@ -55,7 +55,7 @@ export function PricingCreative({userId, email}:{userId?:string; email?:string})
               Scale with advanced features and
               priority support
             </p>
-            <div className="my-12 hidden">
+            <div className="my-12">
               <div
                 data-period={isAnnual ? "annually" : "monthly"}
                 className="bg-white dark:bg-black relative mx-auto grid w-fit grid-cols-2 rounded-full border p-1 *:block *:h-8 *:w-24 *:rounded-full *:text-sm *:hover:opacity-75"
@@ -197,7 +197,6 @@ export function PricingCreative({userId, email}:{userId?:string; email?:string})
                       type="button"
                       className="bg-black text-white dark:bg-white dark:text-black hover:bg-black/90 hover:dark:bg-white/90 focus-visible:ring-ring mb-6 inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
                       onClick={checkout}
-                      disabled={true}
                     >
                       {loading ? <Spinner/> : "Get Started"}
                     </button>

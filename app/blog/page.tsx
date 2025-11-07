@@ -26,7 +26,7 @@ const Page = () => {
     
 
   return (
-    <section className='px-16 flex flex-col w-full gap-16'>
+    <section className='px-16 max-md:px-4 flex flex-col w-full gap-16'>
       <Header/>
       <BlogList blogData={blogs}/>
     </section>

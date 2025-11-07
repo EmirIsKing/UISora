@@ -26,7 +26,7 @@ export function PricingCreative({userId, email}:{userId?:string; email?:string})
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productId: isAnnual ? process.env.PRO_ANNUALLY_ID : process.env.PRO_MONTHLY_ID,
+          productId: isAnnual ? process.env.NEXT_PUBLIC_PRO_ANNUALLY_ID : process.env.NEXT_PUBLIC_PRO_MONTHLY_ID,
           userId,
           email,
         }),

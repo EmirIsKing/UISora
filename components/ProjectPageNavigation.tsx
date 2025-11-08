@@ -54,7 +54,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId, titl
         });
 
         return () => unsubscribe(); // cleanup on unmount
-    }, [projectId]);
+    }, [projectId, title]);
 
 
 

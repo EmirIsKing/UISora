@@ -37,7 +37,7 @@ const Page = () => {
   </p>;
 
   return (
-    <div className="max-w-full mx-[300px] max-md:mx-auto py-10 px-5">
+    <div className="max-w-full mx-[300px] max-md:mx-auto md:mx-auto lg:mx-[300px] py-10 px-5">
       {/* Back */}
       <div className="mb-10">
         <Link href="/blog" className="flex items-center gap-2 text-sm">

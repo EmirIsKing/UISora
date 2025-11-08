@@ -82,9 +82,11 @@ Ensure:
 - Maintain existing UI structure while applying modifications.
 - Response must be a valid JSON array.
 - "component" must be a string containing valid HTML.
+- Message will be shown to user so make it concise and readable.
+- Message is not a blog.
 - Do not emit escape characters (like backslashes).
 - Return a "message" explaining design choices, colors, layouts, and UI elements (include emojis if desired) in markdown format.
-- Make sure Message is clear and readable to the reader(spacious and friendly) in markdown format.
+- Make sure Message is clear and readable to the reader (in markdown format).
 - Write styles as strings, not JS objects.
 - Wrap each screen component in a single root <div>.
 `;
@@ -146,7 +148,8 @@ Ensure:
                         "additionalProperties": false
                     }
                 }
-            }
+            },
+            reasoning_effort: "low",
 
         });
 

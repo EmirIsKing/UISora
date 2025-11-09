@@ -1,6 +1,6 @@
 'use server';
 
-import { NextResponse } from 'next/server';
+//import { NextResponse } from 'next/server';
 import { adminDb, adminIncrement } from '@/utils/firebaseAdmin';
 import PromptFattening from '@/actions/promptFattening';
 import ImageGeneration from '@/actions/imageGen';
@@ -100,7 +100,7 @@ export async function POST(request: Request) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let fattenedJson: any = null;
         // Store empty screens to merge with generated ones - declare early so it can be used in prompt fattening
-        let emptyScreensMap: Map<string, { screen: { name: string; width: number; height: number }; component: unknown }> = new Map();
+        const emptyScreensMap: Map<string, { screen: { name: string; width: number; height: number }; component: unknown }> = new Map();
 
         const isChainMode = Boolean(previousUI && (imageHolder?.length ?? 0) > 0);
 
@@ -205,7 +205,7 @@ export async function POST(request: Request) {
 
         // Extract screen list from fattened prompt
         const screenList: string[] = [];
-        let screenPrompts: Record<string, string> = {};
+        const screenPrompts: Record<string, string> = {};
         
         if (!isChainMode && fattenedJson?.ui?.[0]?.ui) {
           // fattenedJson.ui[0].ui is an array like ["splash: description", "onboarding: description"]
@@ -253,7 +253,7 @@ export async function POST(request: Request) {
 
         // If we can't extract screens, use the original approach
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let allScreens: any[] = [];
+        const allScreens: any[] = [];
         let totalCreditUsed = 0;
         let totalScreenCreditsDeducted = 0; // Track total credits deducted for screens
         const convertedUI: Array<{ screen: { name: string; width: number; height: number }; component: unknown }> = [];

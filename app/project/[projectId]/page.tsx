@@ -48,7 +48,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [generatedUI, setGeneratedUI] = useState<JsonToHtmlRendererProps>(jsondata);
     const [chat, setChat] = useState<ChatItemType[]>([]);
     //const [chain, setChain] = useState('')
-    const [imageHolder, setImageHolder] = useState([]);
+    const [imageHolder, setImageHolder] = useState<string[]>([]);
     const [sidebarToggle, setSidebarToggle] = useState<boolean>(true);
     const { projectId } = use(params);
     const { exportModal, setExportModal } = useExportModal();

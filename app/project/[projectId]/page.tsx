@@ -272,13 +272,26 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                // New screen generated - update UI immediately
                                const screenData = data.screen;
                                
+                               // Helper function to check if a screen is a placeholder
+                               const isPlaceholder = (screen: { component?: { content?: Array<string | unknown> } }) => {
+                                   const content = screen.component?.content;
+                                   if (Array.isArray(content)) {
+                                       const textContent = content
+                                           .filter((item): item is string => typeof item === 'string')
+                                           .join(' ');
+                                       return textContent.includes('Generating...') || textContent.includes('Screen - Generating') || textContent.includes('Screen Is Generating');
+                                   }
+                                   return false;
+                               };
+                               
                                // Use allScreens if provided (includes empty placeholders for unrendered screens)
                                if (data.allScreens && Array.isArray(data.allScreens)) {
-                                   // Update with all screens (generated + empty placeholders)
-                                   setGeneratedUI({ ui: [...data.allScreens] });
+                                   // Filter out placeholder screens and update with generated screens only
+                                   const filteredScreens = data.allScreens.filter((screen: { component?: { content?: Array<string | unknown> } }) => !isPlaceholder(screen));
+                                   setGeneratedUI({ ui: filteredScreens });
                                    console.log(`Screen ${(data.index ?? 0) + 1}/${data.total ?? data.allScreens.length} generated: ${screenData.screen.name}`);
                                } else if (screenData) {
-                                   // Fallback: update incrementally while preserving empty placeholders
+                                   // Fallback: update incrementally, replacing placeholders
                                    setGeneratedUI((prevUI) => {
                                        const existingIndex = prevUI.ui.findIndex(
                                            s => s.screen.name.toLowerCase() === screenData.screen.name.toLowerCase()
@@ -292,7 +305,10 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                            // Add new screen (shouldn't happen if empty screens were sent first)
                                            newUI.push(screenData);
                                        }
-                                       return { ui: newUI };
+                                       
+                                       // Remove any remaining placeholder screens
+                                       const filtered = newUI.filter(screen => !isPlaceholder(screen));
+                                       return { ui: filtered };
                                    });
                                    console.log(`Screen generated: ${screenData.screen.name}`);
                                }
@@ -315,35 +331,26 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                });
                                
                                // Always replace UI with final generated screens (no placeholders)
+                               // Helper function to check if a screen is a placeholder
+                               const isPlaceholder = (screen: { component?: { content?: Array<string | unknown> } }) => {
+                                   const content = screen.component?.content;
+                                   if (Array.isArray(content)) {
+                                       const textContent = content
+                                           .filter((item): item is string => typeof item === 'string')
+                                           .join(' ');
+                                       return textContent.includes('Generating...') || textContent.includes('Screen - Generating') || textContent.includes('Screen Is Generating');
+                                   }
+                                   return false;
+                               };
+                               
                                if (data.ui && Array.isArray(data.ui)) {
                                    // Filter out any placeholder screens that might have "Generating..." text
-                                   const filteredUI = data.ui.filter((screen: { component?: { content?: Array<string | unknown> } }) => {
-                                       // Check if this is a placeholder screen
-                                       const content = screen.component?.content;
-                                       if (Array.isArray(content)) {
-                                           // Check all string items in content array
-                                           const textContent = content
-                                               .filter((item): item is string => typeof item === 'string')
-                                               .join(' ');
-                                           // Filter out screens with "Generating..." text
-                                           return !textContent.includes('Generating...') && !textContent.includes('Screen - Generating');
-                                       }
-                                       return true; // Keep screens without content array
-                                   });
+                                   const filteredUI = data.ui.filter((screen: { component?: { content?: Array<string | unknown> } }) => !isPlaceholder(screen));
                                    setGeneratedUI({ ui: filteredUI.length > 0 ? filteredUI : data.ui });
                                } else {
                                    // If no UI data, clear any existing placeholders
                                    setGeneratedUI((prevUI) => {
-                                       const filtered = prevUI.ui.filter((screen) => {
-                                           const content = screen.component?.content;
-                                           if (Array.isArray(content)) {
-                                               const textContent = content
-                                                   .filter((item): item is string => typeof item === 'string')
-                                                   .join(' ');
-                                               return !textContent.includes('Generating...') && !textContent.includes('Screen - Generating');
-                                           }
-                                           return true;
-                                       });
+                                       const filtered = prevUI.ui.filter((screen) => !isPlaceholder(screen));
                                        return { ui: filtered };
                                    });
                                }

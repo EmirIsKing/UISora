@@ -126,7 +126,7 @@ Do not return any explanation, description, or markdown — only the JSON.
                     }
                 }
             },
-            reasoning_effort: "low",
+            reasoning_effort: "minimal",
             
         });
 

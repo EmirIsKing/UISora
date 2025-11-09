@@ -10,7 +10,8 @@ export default async function PromptFattening(prompt: string, subHelper: string)
 
         const systemMessage: OpenAI.ChatCompletionMessageParam = {
             role: 'system',
-            content: `You are a ui/ux developer. You use modern techniques and design to design beautiful mobile ui/ux.
+            content: `You are an expert mobile app ui/ux developer. You use modern techniques and design to design beautiful mobile ui.
+            Always keep in mind the dimensions of content on the screen cause this is only for mobile phones.
             Ui structure and description should be in detail.
             Always use a design technique to make the ui/ux look beautiful especially for the background of the screens make them colourful and visually appealing.
             Respond only with a valid JSON object .
@@ -30,7 +31,7 @@ export default async function PromptFattening(prompt: string, subHelper: string)
                             "onboarding: how oonboarding should be",
                             etc
                         ],
-                        message: "describing the ui screen by screen in markdown format",
+                        message: "describing the ui screen by screen in markdown format no title and make spacing between screen mesage tight.",
                         splashImagePrompt: "An image of a coffee shop for a splash screen",
                         otherImagesPrompt: "An image of coffee in a cup"
                     }

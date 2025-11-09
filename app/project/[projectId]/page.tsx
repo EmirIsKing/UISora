@@ -196,11 +196,12 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
             
            const creditCheck = await getUserCredits();
             if (creditCheck == null || creditCheck < 100) {
+                setLocked(false)
+                setGenerating(false)
                 return;
             }
            
            // Send request to AI API with the current prompt (not chained)
-
            const ui = HTMLData && HTMLData.length > 0 
             ? `Here is the previous ui in string[] form ${HTMLData}` 
             : "";
@@ -215,29 +216,158 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                body: JSON.stringify({ prompt: currentPrompt, previousUI: ui, imageHolder, projectId, uid: user?.uid }),
            });
 
-           const data = await response.json();
+           if (!response.ok) {
+               throw new Error(`HTTP error! status: ${response.status}`);
+           }
 
-           // Update chat with actual AI response (normalize array or string)
-           const aiMessage = Array.isArray(data.message)
-               ? (data.message[data.message.length - 1] || "No response generated")
-               : (data.message || "No response generated");
-           setChat((prevChat) =>
-               prevChat.map((item, index) =>
-                   index === prevChat.length - 1 ? { ...item, AiResponse: aiMessage } : item
-               )
-           );
+           // Handle streaming response
+           const reader = response.body?.getReader();
+           const decoder = new TextDecoder();
+           
+           if (!reader) {
+               throw new Error('No response body');
+           }
 
-           // Update the UI with the new generated UI
-           // Ensure data.ui is wrapped in the expected structure { ui: [...] }
-           setGeneratedUI(data.ui ? { ui: data.ui } : jsondata);
-           setImageHolder(data.imageHolder || []);
-           setTitle(data.projectName)
+           let buffer = '';
+           let finalMessage = '';
+           let finalImageHolder: string[] = imageHolder;
+           let finalTitle = title;
+           let currentEventType = '';
+
+           while (true) {
+               const { done, value } = await reader.read();
+               
+               if (done) break;
+
+               buffer += decoder.decode(value, { stream: true });
+               const lines = buffer.split('\n');
+               buffer = lines.pop() || ''; // Keep incomplete line in buffer
+
+               for (let i = 0; i < lines.length; i++) {
+                   const line = lines[i];
+                   if (line.startsWith('event: ')) {
+                       currentEventType = line.substring(7).trim();
+                       continue;
+                   }
+                   
+                   if (line.startsWith('data: ')) {
+                       const dataStr = line.substring(6).trim();
+                       if (!dataStr) continue;
+                       
+                       try {
+                           const data = JSON.parse(dataStr);
+                           
+                           // Handle different event types based on currentEventType
+                           // Note: promptFattening events are no longer sent - message comes with complete event
+                           if (currentEventType === 'emptyScreens') {
+                               // Empty screens with titles - show immediately
+                               if (data.screens && Array.isArray(data.screens)) {
+                                   setGeneratedUI({ ui: [...data.screens] });
+                                   console.log(`Showing ${data.screens.length} empty screens with titles`);
+                               }
+                           } else if (currentEventType === 'status') {
+                               // Status update - could show in UI if needed
+                               console.log('Status:', data.message);
+                           } else if (currentEventType === 'screen' || data.screen) {
+                               // New screen generated - update UI immediately
+                               const screenData = data.screen;
+                               
+                               // Use allScreens if provided (includes empty placeholders for unrendered screens)
+                               if (data.allScreens && Array.isArray(data.allScreens)) {
+                                   // Update with all screens (generated + empty placeholders)
+                                   setGeneratedUI({ ui: [...data.allScreens] });
+                                   console.log(`Screen ${(data.index ?? 0) + 1}/${data.total ?? data.allScreens.length} generated: ${screenData.screen.name}`);
+                               } else if (screenData) {
+                                   // Fallback: update incrementally while preserving empty placeholders
+                                   setGeneratedUI((prevUI) => {
+                                       const existingIndex = prevUI.ui.findIndex(
+                                           s => s.screen.name.toLowerCase() === screenData.screen.name.toLowerCase()
+                                       );
+                                       
+                                       const newUI = [...prevUI.ui];
+                                       if (existingIndex >= 0) {
+                                           // Replace the empty placeholder or existing screen
+                                           newUI[existingIndex] = screenData;
+                                       } else {
+                                           // Add new screen (shouldn't happen if empty screens were sent first)
+                                           newUI.push(screenData);
+                                       }
+                                       return { ui: newUI };
+                                   });
+                                   console.log(`Screen generated: ${screenData.screen.name}`);
+                               }
+                           } else if (currentEventType === 'complete') {
+                               // Generation complete - always replace UI to remove any placeholders
+                               finalMessage = data.message || finalMessage;
+                               finalImageHolder = data.imageHolder || finalImageHolder;
+                               finalTitle = data.projectName || finalTitle;
+                               
+                               // Update chat with final message
+                               setChat((prevChat) => {
+                                   const newChat = [...prevChat];
+                                   if (newChat.length > 0) {
+                                       newChat[newChat.length - 1] = {
+                                           ...newChat[newChat.length - 1],
+                                           AiResponse: finalMessage || "UI generation complete"
+                                       };
+                                   }
+                                   return newChat;
+                               });
+                               
+                               // Always replace UI with final generated screens (no placeholders)
+                               if (data.ui && Array.isArray(data.ui)) {
+                                   // Filter out any placeholder screens that might have "Generating..." text
+                                   const filteredUI = data.ui.filter((screen: { component?: { content?: Array<string | unknown> } }) => {
+                                       // Check if this is a placeholder screen
+                                       const content = screen.component?.content;
+                                       if (Array.isArray(content)) {
+                                           // Check all string items in content array
+                                           const textContent = content
+                                               .filter((item): item is string => typeof item === 'string')
+                                               .join(' ');
+                                           // Filter out screens with "Generating..." text
+                                           return !textContent.includes('Generating...') && !textContent.includes('Screen - Generating');
+                                       }
+                                       return true; // Keep screens without content array
+                                   });
+                                   setGeneratedUI({ ui: filteredUI.length > 0 ? filteredUI : data.ui });
+                               } else {
+                                   // If no UI data, clear any existing placeholders
+                                   setGeneratedUI((prevUI) => {
+                                       const filtered = prevUI.ui.filter((screen) => {
+                                           const content = screen.component?.content;
+                                           if (Array.isArray(content)) {
+                                               const textContent = content
+                                                   .filter((item): item is string => typeof item === 'string')
+                                                   .join(' ');
+                                               return !textContent.includes('Generating...') && !textContent.includes('Screen - Generating');
+                                           }
+                                           return true;
+                                       });
+                                       return { ui: filtered };
+                                   });
+                               }
+                               setImageHolder(finalImageHolder);
+                               setTitle(finalTitle);
+                           } else if (currentEventType === 'error') {
+                               // Handle errors
+                               throw new Error(data.message || 'An error occurred during generation');
+                           }
+                       } catch (parseError) {
+                           console.error('Error parsing SSE data:', parseError, 'Data:', dataStr);
+                       }
+                   } else if (line === '') {
+                       // Empty line indicates end of event, reset event type
+                       currentEventType = '';
+                   }
+               }
+           }
 
        } catch (error) {
            console.log(error);
            setChat((prevChat) =>
                prevChat.map((item, index) =>
-                   index === prevChat.length - 1 ? { ...item, AiResponse: "Error: Unable to generate UI. Please try again later." } : item
+                   index === prevChat.length - 1 ? { ...item, AiResponse: `Error: ${error instanceof Error ? error.message : "Unable to generate UI. Please try again later."}` } : item
                )
            );
        } finally{

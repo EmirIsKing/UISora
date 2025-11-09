@@ -18,21 +18,26 @@ export default async function PromptFattening(prompt: string, subHelper: string)
             Make sure to always keep in mind the dimensions of the screen.
             Always remember that beauty of the design is main objective.
             You elaborate more on the users prompt and fatten it, make sure all components are aligned well.
-            You can create any number of screens, always add a splash and atleast one onboarding screen and 5 other screens
+            Always add a splash and atleast one onboarding screen.
             
             **Example output:**
-{
-  "ui": [
-    {
-        title: "short title for ui",
-        ui:" All UI Structure & Description goes here(ui is a string not an object)",
-        splashImagePrompt: "An image of a coffee shop for a splash screen",
-        otherImagesPrompt: "An image of coffee in a cup"
-    }
-  ],
-}
+            {
+                "ui": [
+                    {
+                        title: "short title for ui",
+                        ui:[
+                            "splash: how splash should be",
+                            "onboarding: how oonboarding should be",
+                            etc
+                        ],
+                        message: "describing the ui screen by screen in markdown format",
+                        splashImagePrompt: "An image of a coffee shop for a splash screen",
+                        otherImagesPrompt: "An image of coffee in a cup"
+                    }
+                ],
+            }
 
-just one ui object with all the ui structure and description.
+            just one ui object with all the ui structure and description.
             `}
 
 

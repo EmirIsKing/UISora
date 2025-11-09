@@ -6,6 +6,8 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import Script from "next/script";
+import AnalyticsProvider from "@/components/AnalyticsProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -77,6 +79,21 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
+          <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=G-8VN6NBHB2E`}
+          strategy="afterInteractive"
+        />
+        <Script id="ga-script" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-8VN6NBHB2E', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
+        <AnalyticsProvider/>
             {children}
           </AuthProvider>
         </ThemeProvider>

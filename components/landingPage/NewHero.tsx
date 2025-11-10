@@ -11,7 +11,7 @@ interface HeroShowcaseProps {
 
 export function HeroShowcase({
   heading = "Build beautiful Mobile UIs, effortlessly.",
-  description = "Describe your app vision, and watch our AI create stunning, mobile interfaces in seconds",
+  description = "Transform Text to UI with an Advanced AI Mobile UI Generator",
 }: HeroShowcaseProps) {
   return (
     <main className="relative max-md:pt-4 bg-gradient-to-b from-background to-background/50" id="Hero">

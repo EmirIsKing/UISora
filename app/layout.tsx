@@ -20,8 +20,18 @@ export const metadata: Metadata = {
     default: "UISora – AI Mobile UI Generator",
     template: "%s | UISora",
   },
+  keywords: [
+    "ai mobile ui generator",
+    "mobile app ui designer",
+    "ai-powered ui generator",
+    "ai", "generative ai",
+    "ui app generator",
+    "ui ai generator",
+    "ui ux generator ai",
+    "ui ux generator"
+    ],
   description:
-    "Generate beautiful mobile app UIs from plain English. Create flows, export code and assets, and iterate fast with AI.",
+    "Generate beautiful mobile app UIs from plain text. Create flows, export code and assets, and iterate fast with AI.",
   robots: {
     index: true,
     follow: true,

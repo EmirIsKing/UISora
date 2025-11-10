@@ -5,7 +5,7 @@ const steps = [
     icon: MessageSquare,
     number: "01",
     title: "Describe",
-    description: "Tell us about your app idea in plain English. Be as detailed or simple as you like.",
+    description: "Provide a description of your app concept using plain English. Whether simple or detailed, our app design generator is engineered to understand your input.",
   },
   {
     icon: Wand2,
@@ -35,7 +35,7 @@ const HowItWorks = () => {
           <p
             className="text-xl max-w-2xl mx-auto text-muted-foreground"
           >
-            From idea to production-ready UI in three simple steps
+            From a simple idea to a fully realized user interface, our platform simplifies the entire design journey. This intuitive process makes our ui/ux design generator an indispensable tool for efficient creation.
           </p>
         </div>
 

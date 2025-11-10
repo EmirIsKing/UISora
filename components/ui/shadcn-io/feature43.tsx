@@ -28,7 +28,7 @@ const Feature43 = ({
     {
       heading: "AI-Powered Generation",
       description:
-        "Transform natural language descriptions into beautiful, functional mobile UIs instantly.",
+        "Our core feature as a text to ui generator is transforming text into complete mobile UIs instantly.",
       icon: <WandSparkles className="size-6 text-[#8b5cf6]" />,
     },
     {
@@ -46,7 +46,7 @@ const Feature43 = ({
     {
       heading: "Multiple Screens",
       description:
-        "Generate complete app flows with multiple connected screens, not just single views.",
+        "Go beyond single views. Use our mobile interface builder to generate entire application flows with multiple, interconnected screens.",
       icon: <Layers className="size-6 text-[#8b5cf6]" />,
     },
     {

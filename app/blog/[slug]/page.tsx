@@ -1,32 +1,24 @@
-// app/blog/[slug]/page.tsx
 import React from "react";
 import Link from "next/link";
+import { MoveLeft } from "lucide-react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { MoveLeft } from "lucide-react";
 
-type BlogPost = {
-  title: string;
-  content: string;
-  excerpt?: string;
-  og_image?: string;
-};
-
-async function getBlogData(slug: string): Promise<BlogPost> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/blog/${slug}`, { cache: "no-store" });
+async function getBlogData(slug: string) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/blog/${slug}`, {
+    cache: "no-store",
+  });
   return res.json();
 }
 
-type PageProps = {
-  params: { slug: string }
-}
-
-export default async function Page({ params }: PageProps) {
-  const data = await getBlogData(params.slug);
+export default async function Page({ params }: {params: Promise<{ slug: string }>}) {
+  const {slug} = await params
+  const data = await getBlogData(slug);
 
   return (
     <div className="max-w-full mx-[300px] max-md:mx-auto md:mx-auto lg:mx-[300px] py-10 px-5">
+      
       <div className="mb-10">
         <Link href="/blog" className="flex items-center gap-2 text-sm">
           <MoveLeft size={18} />

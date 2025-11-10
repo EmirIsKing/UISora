@@ -1,27 +1,16 @@
-"use client"
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import Header from '@/components/blog/Header'
 import BlogList from '@/components/blog/BlogList'
 
 async function getBlogs() {
-  const res = await fetch(`/api/blog/all`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/blog/all`, {
     cache: "no-store", // ensure fresh content
   });
   return res.json();
 }
 
-const Page = () => {
-  const [blogs, setBlogs] = useState([])
-
-    useEffect(() => {
-      const fetchBlogs = async () => {
-        const blogs = await getBlogs();
-        setBlogs(blogs);
-        console.log(blogs)
-      };
-
-      fetchBlogs();
-    }, []);
+export default async function Page() {
+  const blogs = await getBlogs();
 
     
 
@@ -32,5 +21,3 @@ const Page = () => {
     </section>
   )
 }
-
-export default Page

@@ -98,6 +98,8 @@ export async function POST(request: Request) {
         let title: string = "New Project Title";
         let fattenedMessage: string = '';
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let styleGuide: any = undefined;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let fattenedJson: any = null;
         // Store empty screens to merge with generated ones - declare early so it can be used in prompt fattening
         const emptyScreensMap: Map<string, { screen: { name: string; width: number; height: number }; component: unknown }> = new Map();
@@ -120,6 +122,7 @@ export async function POST(request: Request) {
           fattenedPrompt = fattenedJson?.ui?.[0]?.ui ?? fattenedPrompt;
           fattenedMessage = fattenedJson?.ui?.[0]?.message ?? '';
           title = fattenedJson?.ui?.[0]?.title ?? "New project Title";
+          styleGuide = fattenedJson?.ui?.[0]?.style_guide ?? undefined;
           
           console.log("Prompt Fattening done");
           
@@ -256,7 +259,7 @@ export async function POST(request: Request) {
         const allScreens: any[] = [];
         let totalCreditUsed = 0;
         let totalScreenCreditsDeducted = 0; // Track total credits deducted for screens
-        const convertedUI: Array<{ screen: { name: string; width: number; height: number }; component: unknown }> = [];
+        const convertedUI: Array<{ screen: { name: string; width: number; height: number }; component: unknown; styleGuide?: unknown }> = [];
 
         if (screenList.length > 0) {
           await sendEvent('status', { message: `Generating ${screenList.length} screens in parallel...` });
@@ -264,7 +267,7 @@ export async function POST(request: Request) {
 
           // Generate screens in parallel batches for faster processing
           // Process 3 screens at a time to balance speed with API rate limits
-          const BATCH_SIZE = 5;
+          const BATCH_SIZE = 6;
 
           for (let batchStart = 0; batchStart < screenList.length; batchStart += BATCH_SIZE) {
             const batchEnd = Math.min(batchStart + BATCH_SIZE, screenList.length);
@@ -296,7 +299,8 @@ export async function POST(request: Request) {
                   images,
                   previousUI,
                   subHelper,
-                  allScreens
+                  allScreens,
+                  styleGuide
                 );
 
                 return {
@@ -341,7 +345,8 @@ export async function POST(request: Request) {
                 const convertedComponent = JSON.parse(await HtmlToJson(result.screen.component) as string);
                 const generatedScreen = {
                   screen: result.screen.screen,
-                  component: convertedComponent
+                  component: convertedComponent,
+                  styleGuide: result.screen.styleGuide
                 };
                 convertedUI.push(generatedScreen);
 
@@ -374,7 +379,8 @@ export async function POST(request: Request) {
                 await sendEvent('screen', {
                   screen: {
                     screen: result.screen.screen,
-                    component: convertedComponent
+                    component: convertedComponent,
+                    styleGuide: result.screen.styleGuide
                   },
                   index: result.index,
                   total: screenList.length,

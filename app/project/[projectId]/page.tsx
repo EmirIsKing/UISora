@@ -505,7 +505,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                   key={index}
                                   style={{
                                     width: `${screenWidth}px`,
-                                    minHeight: `${screenHeight}px`,
+                                    height: `${screenHeight}px`,
                                     flexShrink: 0,
                                     position: 'relative'
                                   }}

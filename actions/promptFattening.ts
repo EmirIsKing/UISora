@@ -16,7 +16,8 @@ export default async function PromptFattening(prompt: string, subHelper: string)
             Always use a design technique to make the ui/ux look beautiful especially for the background of the screens make them colourful and visually appealing.
             Respond only with a valid JSON object .
             ${subHelper}
-            Make sure to always keep in mind the dimensions of the screen.
+            Make sure to always keep in mind the dimensions of the screens, they are for mobile phones idealy 375 width and 700 height.
+            Add a message describing all screens in markdown format no title and make spacing between screen mesage tight. make it look just like how it looks on chatgpt response
             Always remember that beauty of the design is main objective.
             You elaborate more on the users prompt and fatten it, make sure all components are aligned well.
             Always add a splash and atleast one onboarding screen.
@@ -26,6 +27,30 @@ export default async function PromptFattening(prompt: string, subHelper: string)
                 "ui": [
                     {
                         title: "short title for ui",
+                        style_guide: {
+                            "theme": "Modern minimal finance dashboard",
+                            "colors": {
+                                "primary": "#4A8EFF",
+                                "accent": "#FFD66B",
+                                "background": "#FFFFFF",
+                                "text_primary": "#1C1C1C"
+                            },
+                            "typography": {
+                                "header": "Inter, SemiBold, 22px",
+                                "body": "Inter, Regular, 16px"
+                            },
+                            "layout_rules": [
+                                "Use spacing of 16px for padding",
+                                "Rounded corners = 12px",
+                                "Shadow soft",
+                                "Buttons full-width"
+                            ],
+                            "component_library": {
+                                "button": {},
+                                "navbar": {},
+                                "card": {}
+                            }
+                        },
                         ui:[
                             "splash: how splash should be",
                             "onboarding: how oonboarding should be",

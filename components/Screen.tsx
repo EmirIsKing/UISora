@@ -37,9 +37,11 @@ const Screen = ({ children, screen }:{children:React.ReactNode; screen: { name:s
             </div>
                 <div
                     ref={screenRef}
-                    className={`relative rounded-lg bg-[#252525] border border-black shadow-[5px_5px_0px_0px_rgba(255,255,255,0.5)] overflow-hidden transform-gpu h-auto min-h-[${dimensions.height}px]`}
+                    className={`relative rounded-lg bg-[#252525] border border-black shadow-[5px_5px_0px_0px_rgba(255,255,255,0.5)] overflow-hidden transform-gpu`}
                     style={{
                         width: `${dimensions.width}px`,
+                        height: `${dimensions.height}px`,
+                        minHeight: `${dimensions.height}px`,
                     }}
 
                     onClick={(e)=>{

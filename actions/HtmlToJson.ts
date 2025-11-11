@@ -1,15 +1,29 @@
-import {NextResponse} from "next/server";
-import {HTMLToJSON} from "html-to-json-parser";
+import { HTMLToJSON } from "html-to-json-parser";
 
+export default async function HtmlToJson(html: string) {
+  try {
+    // Merge duplicate style attributes
+    const sanitized = html.replace(/<([a-zA-Z][^\s/>]*)([^>]*)>/g, (full, tagName, attrChunk) => {
+      const styles: string[] = [];
+      let remaining = attrChunk;
 
-export default async function HtmlToJson(html:string) {
-    try {
+      remaining = remaining.replace(/\sstyle\s*=\s*"([^"]*)"/gi, (_m, s) => {
+        styles.push(s);
+        return "";
+      });
+      remaining = remaining.replace(/\sstyle\s*=\s*'([^']*)'/gi, (_m, s) => {
+        styles.push(s);
+        return "";
+      });
 
-        const result = await HTMLToJSON(html, true);
+      const mergedStyle = styles.length > 0 ? ` style="${styles.join(";")}"` : "";
+      return `<${tagName}${remaining}${mergedStyle}>`;
+    });
 
-        return result;
-    } catch (error){
-        console.error(error);
-        return NextResponse.json({ error: error || "Unknown error" }, { status: 500 });
-    }
+    const result = await HTMLToJSON(sanitized, true);
+    return result;
+  } catch (error) {
+    console.error("HtmlToJson parse error:", error);
+    throw error;
+  }
 }

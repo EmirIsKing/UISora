@@ -83,22 +83,26 @@ export async function POST(request: Request) {
         }
 
         const subHelper = subStatus.subscribed && subStatus.subscription?.status === 'Active'
-          ? 'User is subscribed, you can create more than 7 screens if needed but cap at 10 unless user asks for more than 10 screens.'
+          ? 'User is subscribed, you can create more than 7 screens if needed but cap at 10 or create any number of screens user asks for.'
           : 'User is not subscribed, so create only seven screens. Don not go over even if the user asks for more.';
 
         const blobUrl = projectSnap.data()?.uiBlobUrl;
-
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let styleGuide: any = undefined;
         const history = blobUrl
           ? await fetch(blobUrl).then(r => r.text()).then(t => JSON.parse(t)).catch(() => [])
           : [];
+
+        if (history) {
+          styleGuide = history.styleGuide
+        }
 
         const images: string[] = Array.isArray(imageHolder) ? [...imageHolder] : (imageHolder ? [imageHolder] : []);
         let fattenedPrompt = Array.isArray(prompt) ? prompt.join('\n') : prompt || '';
         let fattenedTokens = 0;
         let title: string = "New Project Title";
         let fattenedMessage: string = '';
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let styleGuide: any = undefined;
+        
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let fattenedJson: any = null;
         // Store empty screens to merge with generated ones - declare early so it can be used in prompt fattening
@@ -266,7 +270,7 @@ export async function POST(request: Request) {
           console.log("Ui Generation - Generating screens in parallel");
 
           // Generate screens in parallel batches for faster processing
-          // Process 3 screens at a time to balance speed with API rate limits
+          // Process 6 screens at a time to balance speed with API rate limits
           const BATCH_SIZE = 6;
 
           for (let batchStart = 0; batchStart < screenList.length; batchStart += BATCH_SIZE) {
@@ -346,7 +350,6 @@ export async function POST(request: Request) {
                 const generatedScreen = {
                   screen: result.screen.screen,
                   component: convertedComponent,
-                  styleGuide: result.screen.styleGuide
                 };
                 convertedUI.push(generatedScreen);
 
@@ -380,7 +383,6 @@ export async function POST(request: Request) {
                   screen: {
                     screen: result.screen.screen,
                     component: convertedComponent,
-                    styleGuide: result.screen.styleGuide
                   },
                   index: result.index,
                   total: screenList.length,
@@ -399,7 +401,8 @@ export async function POST(request: Request) {
               aiResponse: [fattenedMessage || ''],
               creditUsed: 0, // Will be calculated at the end
               ui: convertedUI,
-              imageHolder: images
+              imageHolder: images,
+              styleGuide: styleGuide,
             };
 
             if (isChainMode && tempHistory.length > 0) {
@@ -468,7 +471,8 @@ export async function POST(request: Request) {
               aiResponse: [fattenedMessage || ''],
               creditUsed: 0,
               ui: convertedUI,
-              imageHolder: images
+              imageHolder: images,
+              styleGuide: styleGuide,
             };
 
             if (isChainMode && tempHistory.length > 0) {
@@ -522,7 +526,8 @@ export async function POST(request: Request) {
           aiResponse: fattenedMessage ? [fattenedMessage] : (Array.isArray(prompt) ? prompt.map(() => '') : ['']),
           creditUsed: actualCredits.total,
           ui: convertedUI,
-          imageHolder: images
+          imageHolder: images,
+          styleGuide: styleGuide,
         };
 
         if (isChainMode && history.length > 0) {

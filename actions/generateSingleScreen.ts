@@ -69,12 +69,14 @@ ${subHelper}
 The UI must be visually appealing and well-structured. Use modern design styles, spacing, typography, color usage, and layout flow. The default mobile screen size is minimum width 375px and minimum height 500px.
 
 Rules:
+- Use camelCase on SVG attributes.
 - Use pure HTML with inline CSS styles.
 - Generate ONLY ONE screen.
 - Each element must have a unique id.
 - Wrap the screen in one root <div>.
 - Use camelCase for SVG attributes.
 - No comments.
+- No malformed HTML.(&lt; instead of <)
 - make the screen concise to reduce output tokens.
 - Do not over style the screen, keep it simple and minimalistic.
 - Do not over scope the design.
@@ -181,7 +183,6 @@ Do not return any explanation, description, or markdown — only the JSON.
         const screen: UIComponent = {
             screen: { name: parsedScreen.name || screenName, width: normalizedWidth, height: normalizedHeight },
             component: adjustedComponent,
-            styleGuide: styleGuide
         };
 
         return { screen, creditUsed };

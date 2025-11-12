@@ -28,7 +28,15 @@ export const metadata: Metadata = {
     "ui app generator",
     "ui ai generator",
     "ui ux generator ai",
-    "ui ux generator"
+    "ui ux generator",
+    "uidai",
+    "stitch",
+    "design",
+    "google sketchup",
+    "uizard",
+    "google stitch",
+    "galileo ai",
+    "ui ai"
     ],
   description:
     "Generate beautiful mobile app UIs from plain text. Create flows, export code and assets, and iterate fast with AI.",

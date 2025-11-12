@@ -7,11 +7,11 @@ export default async function HtmlToJson(html: string) {
       const styles: string[] = [];
       let remaining = attrChunk;
 
-      remaining = remaining.replace(/\sstyle\s*=\s*"([^"]*)"/gi, (_m, s) => {
+      remaining = remaining.replace(/\sstyle\s*=\s*"([^"]*)"/gi, (_m: unknown, s: string) => {
         styles.push(s);
         return "";
       });
-      remaining = remaining.replace(/\sstyle\s*=\s*'([^']*)'/gi, (_m, s) => {
+      remaining = remaining.replace(/\sstyle\s*=\s*'([^']*)'/gi, (_m: unknown, s: string) => {
         styles.push(s);
         return "";
       });

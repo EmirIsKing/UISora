@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
+
+async function notifyIndexNow(urls: string[]) {
+  await fetch('/api/indexnow', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ urls }),
+  });
+}
+
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -24,6 +34,9 @@ export async function POST(req: Request) {
       console.error("Supabase insert error:", error);
       return NextResponse.json({ error }, { status: 500 });
     }
+
+    await notifyIndexNow([`https://uisora.com/${body.slug}`]);
+
 
     return NextResponse.json({ success: true, data }, { status: 200 });
   } catch (err) {

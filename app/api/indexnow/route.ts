@@ -18,6 +18,7 @@ export async function POST(req: Request) {
         const payload = {
             host: process.env.NEXT_PUBLIC_SITE_DOMAIN,
             key: process.env.INDEXNOW_KEY,
+            keyLocation:"https://uisora.com/d0f92008e4f242838b87f2cf409862e1.txt",
             urlList: urls,
         };
 

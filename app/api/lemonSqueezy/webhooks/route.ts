@@ -55,11 +55,11 @@ export async function POST(request: NextRequest) {
       const creditsAdded = (attributes.total / 100) * 3000;
 
       const snap = await userRef.get();
-      const currentCredits = snap.exists ? snap.data()?.credits ?? 0 : 0;
+      const currentCredits = snap.exists ? snap.data()?.boughtCredits ?? 0 : 0;
 
       await userRef.update({
         customerId,
-        credits: currentCredits + creditsAdded,
+        boughtCredits: currentCredits + creditsAdded,
         lastOrderAt: new Date().toISOString(),
       });
 

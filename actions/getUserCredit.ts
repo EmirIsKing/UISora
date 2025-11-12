@@ -10,7 +10,9 @@ export async function getUserCredits(): Promise<number | null> {
     const snapshot = await getDoc(userDocRef);
 
     if (snapshot.exists()) {
-        const credit = snapshot.get('credits');
+        const subCredits = snapshot.get('credits');
+        const boughtCredits = snapshot.get('boughtCredits');
+        const credit = Number(subCredits) + Number(boughtCredits);
         return credit as number;
     } else {
         console.error("No document found!");

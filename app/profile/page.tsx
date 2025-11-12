@@ -77,7 +77,7 @@ const Page = () => {
     setPreferences({
       newsletter: details.preferences?.newsletter ?? true,
     })
-    setCredits(details.credits?.toString() || "0")
+    setCredits(((Number(details.credits) || 0) + (Number(details.boughtCredits) || 0)).toString());
     setDepartment(details.department || "")
     setUserId(details.uid)
     setPhotoUrl(details.photoURL || "")

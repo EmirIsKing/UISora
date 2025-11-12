@@ -25,7 +25,7 @@ export async function GET() {
 
     for (const doc of snapshot.docs) {
         const user = doc.data();
-        const { subscription, credits = 0 } = user;
+        const { subscription} = user;
 
         if (!subscription?.renewsAt || !subscription?.createdAt) continue;
 

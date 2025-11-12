@@ -1,0 +1,6 @@
+{
+  "crons": [{
+    "path": "/api/cron/topup-credits",
+    "schedule": "0 0 * * *"
+  }]
+}

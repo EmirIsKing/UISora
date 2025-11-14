@@ -24,6 +24,7 @@ import { getUserCredits } from '@/actions/getUserCredit';
 import getProjectState from '@/actions/getProjectState';
 import InputBox from '@/components/projectPage/InputBox';
 import SegmentedButtons from '@/components/projectPage/SegmentedButtons';
+import UIScreen from "@/components/projectPage/UIScreen";
 
 interface JsonToHtmlRendererProps {
 
@@ -67,6 +68,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [locked, setLocked] = useState(true);
     const [generating, setGenerating] = useState(false);
     const [title, setTitle] = useState("")
+    const [hideInput, setHideInput] = useState(false);
     
 
 
@@ -397,7 +399,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
             <section className={'flex flex-col h-screen'}>
                 <ProjectPageNavigation title={title} projectId={projectId} sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
             <div className='max-md:hidden'>
-                <InputBox prompt={prompt} generating={generating} sidebartoggle={sidebarToggle} setSelectedStyle={setSelectedStyle} locked={locked} handleSubmit={handleSubmit} selectedStyle={selectedStyle} setPrompt={setPrompt}/>
+                <InputBox hideInput={hideInput} prompt={prompt} generating={generating} sidebartoggle={sidebarToggle} setSelectedStyle={setSelectedStyle} locked={locked} handleSubmit={handleSubmit} selectedStyle={selectedStyle} setPrompt={setPrompt}/>
             </div>
                 <SegmentedButtons setSidebarToggle={setSidebarToggle} sidebarToggle={sidebarToggle}/>
             
@@ -475,7 +477,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                         </PromptInputToolbar>
                      */}
                     <div className='hidden max-md:block'>
-                        <InputBox prompt={prompt} sidebartoggle={sidebarToggle} generating={generating} setSelectedStyle={setSelectedStyle} locked={locked} handleSubmit={handleSubmit} selectedStyle={selectedStyle} setPrompt={setPrompt}/>
+                        <InputBox hideInput={hideInput} prompt={prompt} sidebartoggle={sidebarToggle} generating={generating} setSelectedStyle={setSelectedStyle} locked={locked} handleSubmit={handleSubmit} selectedStyle={selectedStyle} setPrompt={setPrompt}/>
                     </div>
                     
                 </div>
@@ -512,9 +514,10 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                   onClick={(e)=>{ e.stopPropagation(); }}
                                   onDoubleClick={(e)=>{ e.stopPropagation(); }}
                                 >
-                                  <Screen screen={item.screen}>
-                                    <JsonToHtmlRenderer data={item.component} setHTMLData={setHTMLData} screen={item.screen.name} HTMLData={HTMLData}/>
-                                  </Screen>
+                                  {/*<Screen screen={item.screen}>*/}
+                                  {/*  <JsonToHtmlRenderer data={item.component} setHTMLData={setHTMLData} screen={item.screen.name} HTMLData={HTMLData}/>*/}
+                                  {/*</Screen>*/}
+                                    <UIScreen hideMainInput={hideInput} setHideInput={setHideInput} setHTMLData={setHTMLData} item={item} HTMLData={HTMLData} />
                                 </div>
                               );
                             })}

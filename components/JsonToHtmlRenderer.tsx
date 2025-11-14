@@ -7,6 +7,7 @@ import EditableText from "@/components/EditableText";
 import camelcaseKeys from 'camelcase-keys';
 import VoidRenderer from "@/components/VoidRenderer";
 import { cleanStyleConflicts } from "@/utils/styleUtils";
+import {createPortal} from "react-dom";
 
 interface JsonToHtmlRendererProps {
   data: HtmlElement;
@@ -108,7 +109,9 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data, setHTMLDa
     );
   };
 
-  return <>{renderElement(data)}</>;
+  return <>
+    {renderElement(data)}
+  </>
 };
 
 export default JsonToHtmlRenderer;

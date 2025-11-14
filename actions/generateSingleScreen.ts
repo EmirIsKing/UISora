@@ -50,7 +50,7 @@ export default async function GenerateSingleScreen(
     screenName: string,
     imageHolder: string[],
     previousUI: string,
-    subHelper: string,
+    subHelper?: string,
     allScreens: UIComponent[] = [],
     styleGuide?: unknown
 ): Promise<{ screen: UIComponent; creditUsed: number }> {

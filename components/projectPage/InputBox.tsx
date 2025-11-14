@@ -6,11 +6,14 @@ interface Props {
   prompt: string;
   handleSubmit: (e: React.FormEvent<Element>) => void;
   setPrompt: (value: string) => void;
-  selectedStyle: string | null;
-  setSelectedStyle: (value: string | null) => void;
-  sidebartoggle: boolean;
+  selectedStyle?: string | null;
+  setSelectedStyle?: (value: string | null) => void;
+  sidebartoggle?: boolean;
   locked: boolean;
   generating: boolean;
+  styleSelectorHidden?: boolean;
+  classname?: string
+  hideInput?: boolean;
 }
 
 const InputBox = ({
@@ -21,24 +24,28 @@ const InputBox = ({
   setSelectedStyle,
   locked,
   sidebartoggle,
-  generating
+  generating,
+  styleSelectorHidden = false,
+  classname,
+ hideInput
 }: Props) => {
   return (
     <div
-      className={`
-        absolute left-[calc(50%+90px)] max-md:left-[calc(50%-0.5px)] -translate-x-1/2 bottom-5 max-md:bottom-0 max-md:shadow-none! w-full max-w-2xl px-4
-        max-md:px-0 z-2200
-        transition-all duration-300 ease-in-out
-        ${sidebartoggle ? "max-md:opacity-100 max-md:translate-y-0" : "max-md:opacity-0 max-md:translate-y-4 max-md:pointer-events-none"}
+        hidden={hideInput}
+      className={`${classname? classname : "left-[calc(50%+90px)] max-md:left-[calc(50%-0.5px)] -translate-x-1/2 bottom-5 max-md:bottom-0 max-md:shadow-none! max-w-2xl px-4" +
+          "   max-md:px-0 "}  z-2200
+        transition-all duration-300 ease-in-out absolute w-full
+        ${sidebartoggle ? "max-md:opacity-100 max-md:translate-y-0" : "max-md:opacity-100 max-md:translate-y-4 max-md:pointer-events-none"}
       `}
     >
       <div
+          hidden={styleSelectorHidden}
         className={`
           w-full flex text-white justify-center transition-all duration-300 ease-in-out max-md:backdrop-blur-md
           ${sidebartoggle ? "max-md:opacity-100 max-md:translate-y-0" : "max-md:opacity-0 max-md:-translate-y-2 max-md:pointer-events-none"}
         `}
       >
-        <StyleSelector selectedStyle={selectedStyle} setSelectedStyle={setSelectedStyle} />
+        <StyleSelector selectedStyle={selectedStyle|| ""} setSelectedStyle={setSelectedStyle || (() => {})} />
       </div>
 
       <PromptInput
@@ -56,7 +63,7 @@ const InputBox = ({
         <PromptInputTextarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder={!locked ? "Type your message..." : generating ? "Generating..." : "Please wait..."}
+          placeholder={!locked ? "Type your prompt..." : generating ? "Generating..." : "Please wait..."}
           disabled={locked}
           className="text-white"
         />

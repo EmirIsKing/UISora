@@ -1,13 +1,29 @@
 "use client"
 import React, { useRef, useEffect, useState } from 'react';
 //import {Rnd} from "react-rnd";
+import InputBox from "@/components/projectPage/InputBox";
+import {X} from 'lucide-react'
 
-const Screen = ({ children, screen }:{children:React.ReactNode; screen: { name:string; width: number; height: number; }}) => {
+type props = {
+    children:React.ReactNode;
+    screen: { name:string; width: number; height: number; };
+    prompt:string;
+    setPrompt:(e:string)=>void;
+    locked:boolean;
+    generating:boolean;
+    handleSubmit:(e: React.FormEvent<Element>) => void;
+    setHideMainInput?:(e:boolean) => void;
+    hideMainInput?:boolean;
+}
+
+const Screen =
+                ({ children, screen, prompt, setPrompt, locked, generating, handleSubmit,setHideMainInput,hideMainInput }:props) => {
     const screenRef = useRef<HTMLDivElement>(null);
     const [dimensions, setDimensions] = useState({
         width: 270,
         height: 500
     });
+    const [edit, setEdit] = useState(true);
 
     useEffect(() => {
         if (screenRef.current) {
@@ -31,8 +47,17 @@ const Screen = ({ children, screen }:{children:React.ReactNode; screen: { name:s
                  e.stopPropagation();
              }} >
             <div>
-                <span>
-                    <h4 className={'font-semibold text-white'}>{screen.name}</h4>
+                <span className={'flex justify-between text-white items-center'}>
+                    <h4 className={'font-semibold '}>{screen.name}</h4>
+                    <button onClick={()=> {
+                        setEdit(!edit);
+                        if (setHideMainInput) {
+                            setHideMainInput(edit)
+                        }
+                    }}
+                            className={`bg-black/80 hover:bg-black/30 active:scale-[0.98] cursor-pointer px-3 py-2 rounded-sm ${edit?"":"bg-red-800/80! hover:bg-red-800/50!"}`}>
+                        {edit?"Edit":<X/>}
+                    </button>
                 </span>
             </div>
                 <div
@@ -53,6 +78,11 @@ const Screen = ({ children, screen }:{children:React.ReactNode; screen: { name:s
                 >
                     {children}
                 </div>
+            <div hidden={edit}>
+                <InputBox
+                    classname={'p-0 max-md:block! '}
+                    styleSelectorHidden={true}  generating={generating} handleSubmit={handleSubmit} prompt={prompt} setPrompt={setPrompt} locked={locked}/>
+            </div>
         </div>
     );
 };

@@ -13,11 +13,10 @@ type props = {
     generating?:boolean;
     handleSubmit?:(e: React.FormEvent<Element>) => void;
     setHideMainInput?:(e:boolean) => void;
-    hideMainInput?:boolean;
 }
 
 const Screen =
-                ({ children, screen, prompt, setPrompt, locked, generating, handleSubmit,setHideMainInput,hideMainInput }:props) => {
+                ({ children, screen, prompt, setPrompt, locked, generating, handleSubmit,setHideMainInput }:props) => {
     const screenRef = useRef<HTMLDivElement>(null);
     const [dimensions, setDimensions] = useState({
         width: 270,
@@ -37,7 +36,6 @@ const Screen =
         }
     }, [children, screen.height, screen.width]);
 
-    // @ts-ignore
                     return (
 
         <div className={'flex flex-col gap-10'}
@@ -82,7 +80,7 @@ const Screen =
             <div hidden={edit}>
                 <InputBox
                     classname={'p-0 max-md:block! '}
-                    styleSelectorHidden={true}  generating={generating|| false} handleSubmit={handleSubmit || (() => {})} prompt={prompt || ""} setPrompt={setPrompt || ((e: string) => {})} locked={locked || false}/>
+                    styleSelectorHidden={true}  generating={generating|| false} handleSubmit={handleSubmit || (() => {})} prompt={prompt || ""} setPrompt={setPrompt || (() => {})} locked={locked || false}/>
             </div>
         </div>
     );

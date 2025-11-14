@@ -33,13 +33,14 @@ export async function POST(request: Request) {
         }
 
         // Load UI blob history
-        const blobURL = projectSnap.data()?.uiBlobUrl;
+        const blobURL:string = projectSnap.data()?.uiBlobUrl;
         let history: any = {};
 
         if (blobURL) {
             try {
                 history = await fetch(blobURL).then(r => r.text()).then(t => JSON.parse(t));
-            } catch (e) {
+            } catch (e:unknown) {
+                console.error(e);
                 history = {};
             }
         }
@@ -61,6 +62,7 @@ export async function POST(request: Request) {
         const convertedComponent = JSON.parse(await HtmlToJson(screen.component) as string);
 
         // 4. Replace UI inside history
+        // @ts-expect-error
         const updatedUI = prevUI.map((item: any) =>
             item.screen.name === title
                 ? { screen: screen.screen, component: convertedComponent }

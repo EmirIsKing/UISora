@@ -1,5 +1,5 @@
 "use client"
-import React, {Dispatch, SetStateAction, useState} from 'react'
+import React, { SetStateAction, useState} from 'react'
 import Screen from "@/components/Screen";
 import JsonToHtmlRenderer from "@/components/JsonToHtmlRenderer";
 import {HtmlElement} from "@/types/types";
@@ -30,12 +30,14 @@ const UiScreen = ({item,setHTMLData, HTMLData, setHideInput, hideMainInput}:prop
 
 
     const handleSubmit = (e: React.FormEvent<Element>) => {
+        setLocked(false)
+        setGenerating(false)
         e.preventDefault();
     }
 
 
     return (
-        <Screen hideMainInput={hideMainInput} setHideMainInput={setHideInput} screen={item.screen} prompt={prompt} setPrompt={setPrompt} locked={locked} generating={generating} handleSubmit={handleSubmit}>
+        <Screen setHideMainInput={setHideInput} screen={item.screen} prompt={prompt} setPrompt={setPrompt} locked={locked} generating={generating} handleSubmit={handleSubmit}>
             <JsonToHtmlRenderer data={item.component} setHTMLData={setHTMLData} screen={item.screen.name} HTMLData={HTMLData}/>
         </Screen>
     )

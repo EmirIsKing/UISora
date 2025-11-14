@@ -34,6 +34,7 @@ export async function POST(request: Request) {
 
         // Load UI blob history
         const blobURL:string = projectSnap.data()?.uiBlobUrl;
+    //@ts-expect-error format changes
         let history: any = {};
 
         if (blobURL) {
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
         const convertedComponent = JSON.parse(await HtmlToJson(screen.component) as string);
 
         // 4. Replace UI inside history
-        // @ts-expect-error
+        // @ts-expect-error item format too nested
         const updatedUI = prevUI.map((item: any) =>
             item.screen.name === title
                 ? { screen: screen.screen, component: convertedComponent }

@@ -21,7 +21,7 @@ type props = {
     HTMLData: string[];
 }
 
-const UiScreen = ({item,setHTMLData, HTMLData, setHideInput, hideMainInput}:props) => {
+const UiScreen = ({item,setHTMLData, HTMLData, setHideInput}:props) => {
 
 
     const [prompt, setPrompt] = useState("");

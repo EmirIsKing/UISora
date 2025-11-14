@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 
         // Load UI blob history
         const blobURL:string = projectSnap.data()?.uiBlobUrl;
-    //@ts-expect-error format changes
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let history: any = {};
 
         if (blobURL) {
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
         const convertedComponent = JSON.parse(await HtmlToJson(screen.component) as string);
 
         // 4. Replace UI inside history
-        // @ts-expect-error item format too nested
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const updatedUI = prevUI.map((item: any) =>
             item.screen.name === title
                 ? { screen: screen.screen, component: convertedComponent }

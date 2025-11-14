@@ -1,9 +1,27 @@
 "use client"
-import React,{useState} from 'react'
+import React, {Dispatch, SetStateAction, useState} from 'react'
 import Screen from "@/components/Screen";
 import JsonToHtmlRenderer from "@/components/JsonToHtmlRenderer";
+import {HtmlElement} from "@/types/types";
 
-const UiScreen = ({item,setHTMLData, HTMLData, setHideInput, hideMainInput}) => {
+type props = {
+    item:  {
+        screen: {
+            name: string
+            width: number
+            height: number
+        }
+        component: HtmlElement
+        styleGuide?: unknown
+    }
+
+    setHTMLData: (html: SetStateAction<string[]>) => void;
+    setHideInput: (show: boolean) => void;
+    hideMainInput: boolean;
+    HTMLData: string[];
+}
+
+const UiScreen = ({item,setHTMLData, HTMLData, setHideInput, hideMainInput}:props) => {
 
 
     const [prompt, setPrompt] = useState("");

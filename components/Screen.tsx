@@ -7,11 +7,11 @@ import {X} from 'lucide-react'
 type props = {
     children:React.ReactNode;
     screen: { name:string; width: number; height: number; };
-    prompt:string;
-    setPrompt:(e:string)=>void;
-    locked:boolean;
-    generating:boolean;
-    handleSubmit:(e: React.FormEvent<Element>) => void;
+    prompt?:string;
+    setPrompt?:(e:string)=>void;
+    locked?:boolean;
+    generating?:boolean;
+    handleSubmit?:(e: React.FormEvent<Element>) => void;
     setHideMainInput?:(e:boolean) => void;
     hideMainInput?:boolean;
 }
@@ -37,7 +37,8 @@ const Screen =
         }
     }, [children, screen.height, screen.width]);
 
-    return (
+    // @ts-ignore
+                    return (
 
         <div className={'flex flex-col gap-10'}
              onClick={(e)=>{
@@ -81,7 +82,7 @@ const Screen =
             <div hidden={edit}>
                 <InputBox
                     classname={'p-0 max-md:block! '}
-                    styleSelectorHidden={true}  generating={generating} handleSubmit={handleSubmit} prompt={prompt} setPrompt={setPrompt} locked={locked}/>
+                    styleSelectorHidden={true}  generating={generating|| false} handleSubmit={handleSubmit || (() => {})} prompt={prompt || ""} setPrompt={setPrompt || ((e: string) => {})} locked={locked || false}/>
             </div>
         </div>
     );

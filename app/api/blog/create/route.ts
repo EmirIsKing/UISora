@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 
 
 async function notifyIndexNow(urls: string[]) {
-  await fetch('/api/indexnow', {
+  await fetch('https://uisora.com/api/indexnow', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ urls }),

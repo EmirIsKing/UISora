@@ -50,7 +50,8 @@ export async function POST(request: Request) {
                 history = {};
             }
         }
-        const Screen = history[0].ui.find(item => item.screen.name === title);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const Screen = history[0].ui.find((item: { screen: { name: string; }; }) => item.screen.name === title);
 
         const prevUI =  previousUI || [];
         const styleGuide =  Screen.styleGuide || history[0].styleGuide;
@@ -89,7 +90,7 @@ export async function POST(request: Request) {
             Math.ceil(tokens / 10 + 50);
 
         const creditsDeducted = calculateCredits(creditUsed);
-        const newTotalCredits = Number(history.creditUsed || 0) + creditsDeducted;
+        const newTotalCredits = Number(history[0].creditUsed || 0) + creditsDeducted;
 
         // 6. Save updated history into blob storage
         const Entry = []
@@ -98,7 +99,7 @@ export async function POST(request: Request) {
             createdAt: new Date().toISOString(),
             prompt: history[0].prompt,
             aiResponse: history[0].aiResponse,
-            creditUsed: Number(history[0].creditUsed) + Number(newTotalCredits),
+            creditUsed: newTotalCredits,
             ui: updatedUI,
             imageHolder,
             styleGuide,

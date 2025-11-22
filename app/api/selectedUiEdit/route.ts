@@ -5,7 +5,6 @@ import GenerateSingleScreen from '@/actions/generateSingleScreen';
 import HtmlToJson from '@/actions/HtmlToJson';
 import { put } from '@vercel/blob';
 import { getSubscriptionStatus } from '@/actions/getSubscriptionStatus';
-import {stringify} from "node:querystring";
 
 export async function POST(request: Request) {
     try {
@@ -50,7 +49,6 @@ export async function POST(request: Request) {
                 history = {};
             }
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const Screen = history[0].ui.find((item: { screen: { name: string; }; }) => item.screen.name === title);
 
         const prevUI =  previousUI || [];

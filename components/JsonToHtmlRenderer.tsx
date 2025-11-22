@@ -62,7 +62,7 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data, setHTMLDa
       return [...prev, entry];
     });
 
-  }, [data, screen, setHTMLData]);
+  }, [data, screen, setHTMLData, setPrevUI]);
 
   // ✅ React Renderer (keeps editable content)
   const renderElement = (element: string | HtmlElement, index?: number): React.ReactNode => {

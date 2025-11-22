@@ -8,6 +8,7 @@ type UIComponent = {
     };
     component: string;
     styleGuide?: unknown;
+    message: string;
 };
 
 type MistralMessage = {
@@ -72,6 +73,7 @@ Rules:
 - Use camelCase on SVG attributes.
 - Use pure HTML with inline CSS styles.
 - Generate ONLY ONE screen.
+- Only change exactly what user asks for and nothing else.
 - Each element must have a unique id.
 - Wrap the screen in one root <div>.
 - Use camelCase for SVG attributes.
@@ -88,6 +90,8 @@ Rules:
 - Minimum width: 370px; minimum height: 700px.
 - Make the screen tall enough to contain content—avoid overflow when possible.
 
+${allScreens ? "These are already generated screens do not regenerate. " + allScreens : ""}
+
 Return the final result **only** as JSON in the following format:
 
 Example output:
@@ -96,6 +100,7 @@ Example output:
 		 { 
 			"screen": { "name": "${screenName}", "width": 375, "height": 700 }, 
 			"component": "<div id='unique-id' class='container' style='font-weight:bold'><h2 id='unique-id'>Screen Title</h2></div>" 
+			"message: "${screenName} - short detail about main changes made"
 		 } 
 	 ]
  }
@@ -114,7 +119,7 @@ Do not return any explanation, description, or markdown — only the JSON.
         if (previousUI && previousUI.length > 0) {
             messages.push({
                 role: "user",
-                content: `Here is the current UI state:\n${JSON.stringify(previousUI, null, 2)}`
+                content: `Only change exactly what i ask for and nothing else. Here is the current UI state: ${previousUI}`
             });
         }
 
@@ -128,7 +133,7 @@ Do not return any explanation, description, or markdown — only the JSON.
 
         messages.push({
             role: "user",
-            content: `Generate the "${screenName}" screen. ${screenPrompt} Do not use placeholder images; use the images below: ${imageHolder.join(', ')}`
+            content: `Generate the "${screenName}" screen. ${screenPrompt} Do not use placeholder images; use the images below only if need, its not necessary to use: ${imageHolder.join(', ')}`
         });
         if (styleGuide) {
             messages.push({
@@ -179,10 +184,12 @@ Do not return any explanation, description, or markdown — only the JSON.
         const normalizedWidth = Math.max(370, Number(parsedScreen.width) || 375);
         const normalizedHeight = Math.max(500, Number(parsedScreen.height) || 500);
         const adjustedComponent = enforceRootDivDimensions(parsed.ui[0].component, normalizedWidth, normalizedHeight);
+        const parsedMessage = parsed.ui[0].message;
 
         const screen: UIComponent = {
             screen: { name: parsedScreen.name || screenName, width: normalizedWidth, height: normalizedHeight },
             component: adjustedComponent,
+            message: parsedMessage,
         };
 
         return { screen, creditUsed };

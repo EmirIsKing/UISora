@@ -4,6 +4,12 @@ import Screen from "@/components/Screen";
 import JsonToHtmlRenderer from "@/components/JsonToHtmlRenderer";
 import {HtmlElement} from "@/types/types";
 
+interface HtmlEntry {
+    screenName: string;
+    component: string;
+}
+
+
 type props = {
     item:  {
         screen: {
@@ -15,10 +21,10 @@ type props = {
         styleGuide?: unknown
     }
 
-    setHTMLData: (html: SetStateAction<string[]>) => void;
+    setHTMLData: (html: SetStateAction<HtmlEntry[]>) => void;
     setHideInput: (show: boolean) => void;
     hideMainInput: boolean;
-    HTMLData: string[];
+    HTMLData: HtmlEntry[];
     uid:string;
     projectId:string;
 }

@@ -3,10 +3,7 @@ import React, { useState, useEffect, useRef, use } from 'react';
 import UserChatItem from "@/components/UserChatItem";
 import AiChatItem from "@/components/AiChatItem";
 import ProjectPageNavigation from "@/components/ProjectPageNavigation";
-//import {useExportData} from "@/store/store";
 import {useExportModal} from "@/store/store";
-//import {usePanning, useSelectElement} from "@/store/store";
-// Removed react-zoom-pan-pinch in favor of a custom mobile-friendly canvas
 import ZoomPanCanvas, { ZoomPanCanvasHandle } from "@/components/ZoomPanCanvas";
 import {HtmlElement} from "@/types/types";
 import {jsondata} from "@/utils/newtestjson";
@@ -23,6 +20,7 @@ import getProjectState from '@/actions/getProjectState';
 import InputBox from '@/components/projectPage/InputBox';
 import SegmentedButtons from '@/components/projectPage/SegmentedButtons';
 import UIScreen from "@/components/projectPage/UIScreen";
+import {fetchProjectBlobData} from "@/actions/blob";
 
 interface JsonToHtmlRendererProps {
 
@@ -41,53 +39,35 @@ type ChatItemType = {
     AiResponse: string;
 };
 
+interface HtmlEntry {
+    screenName: string;
+    component: string;
+}
+
+
 
 export default function Project({ params }: { params: Promise<{ projectId: string }> }) {
     const [prompt, setPrompt] = useState('');
     const [generatedUI, setGeneratedUI] = useState<JsonToHtmlRendererProps>(jsondata);
     const [chat, setChat] = useState<ChatItemType[]>([]);
-    //const [chain, setChain] = useState('')
+    //const [isChain, setIsChain] = useState(false)
     const [imageHolder, setImageHolder] = useState<string[]>([]);
     const [sidebarToggle, setSidebarToggle] = useState<boolean>(true);
     const { projectId } = use(params);
     const { exportModal, setExportModal } = useExportModal();
-    // const [zoom, setZoom] = useState(1);
-    // const [offset, setOffset] = useState({ x: 0, y: 0 });
-    // const [panningOn, setPanningOn] = useState()
-    // const [startPan, setStartPan] = useState({ x: 0, y: 0 });
-    // const containerRef = useRef(null);
-    //const {setSelected, selection} = useSelectElement()
     const { user } = useAuth();
     const screenshotRef = useRef<HTMLDivElement>(null)
     const canvasRef = useRef<ZoomPanCanvasHandle | null>(null)
     const [selectedStyle, setSelectedStyle] = useState<string | null>("");
-    const [HTMLData, setHTMLData] = useState<string[]>([])
+    const [HTMLData, setHTMLData] = useState<HtmlEntry[]>([])
     const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null);
     const [locked, setLocked] = useState(true);
     const [generating, setGenerating] = useState(false);
     const [title, setTitle] = useState("")
     const [hideInput, setHideInput] = useState(false);
+    const [prevUI, setPrevUI] = useState();
     
 
-
-    // interface ScreenConfig {
-    //     screen: {
-    //         name: string;
-    //         width: number;
-    //         height: number;
-    //     };
-    //     component: HtmlElement[]; // Can be either a component or array of elements
-    // }
-
-// Define interface for the entire test data
-    // interface TestData {
-    //     ui: ScreenConfig[];
-    //     message: string;
-    // }
-
-    // interface MetaData {
-    //     ui: ScreenConfig[];
-    // }
 
     useEffect(() => {
         const fetchProjectDetails = async () => {
@@ -104,12 +84,12 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 console.log(projectDetails);
                 if (projectDetails?.blobUrl) {
                     try {
-                        const blobRes = await fetch(projectDetails?.blobUrl, {cache: 'no-store'});
-                        if (!blobRes.ok) {
-                            console.error('Failed to fetch blob data:', blobRes.status, blobRes.statusText);
-                            return;
-                        }
-                        const blobData = await blobRes.json();
+                        const blobData = await fetchProjectBlobData(projectDetails?.blobUrl)
+                        // if (!blobRes.ok) {
+                        //     console.error('Failed to fetch blob data:', blobRes.status, blobRes.statusText);
+                        //     return;
+                        // }
+                        // const blobData = blobRes
                         // Load the full history
                         if (blobData) {
                             // Set the latest UI
@@ -150,7 +130,6 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                             }
                         }
                         
-                        console.log('Loaded blob data:', blobData);
                     } catch (error) {
                         console.error('Error loading project data:', error);
                     }
@@ -159,13 +138,9 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
             }
         };
         fetchProjectDetails();
-    }, [projectId, user?.uid, generatedUI]);
+    }, [projectId, user?.uid ]);
 
 
-    useEffect(() => {
-      console.log(generatedUI)
-      console.log(HTMLData)
-    }, [generatedUI, HTMLData])
 
     useEffect(() => {
         async function loadSub() {
@@ -176,7 +151,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
             
         loadSub()
             
-    }, [generatedUI, user])
+    }, [ user])
     
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -203,11 +178,15 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
            
            // Send request to AI API with the current prompt (not chained)
            const ui = HTMLData && HTMLData.length > 0 
-            ? `Here is the previous ui in string[] form ${HTMLData}` 
-            : "";
+            ? HTMLData
+            : [];
            const token = await user?.getIdToken()
            console.log("ui: ",ui)
-
+           console.log("HTMLData: ", HTMLData)
+           // setLocked(false)
+           // setGenerating(false)
+           //
+           // return;
            const response = await fetch('/api/generate-ui', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json',
@@ -441,39 +420,6 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                         ))}
                     </div>
 
-                    {/* Fixed Input Box */}
-                    {/* <div className={`w-full ${sidebarToggle ? "" : "hidden"} flex text-white`}>
-                        <StyleSelector selectedStyle={selectedStyle} setSelectedStyle={setSelectedStyle}/>
-                    </div>
-                    <div
-                        className={`flex w-full ${sidebarToggle ? "" : "hidden"} transition-all duration-300 justify-center item-center pb-5 scrollbar-transparent max-md:pt-3`}>
-                            
-                        <form onSubmit={handleSubmit} className="flex w-[75%] max-md:w-[83%]">
-                          <textarea
-                              onChange={(e) => setPrompt(e.target.value)}
-                              value={prompt}
-                              className="rounded-md w-full bg-[#303030] p-4 resize-none focus:outline-none scrollbar-transparent text-white"
-                              placeholder="Type your prompt here..."
-                          />
-                            <div className="flex flex-col justify-end ml-3">
-                                <button type="submit"
-                                        className="w-[36px] cursor-pointer h-[36px] rounded-full border flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-600 hover:bg-slate-600">
-                                    <Send className='text-white w-[20px]'/>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <PromptInput onSubmit={handleSubmit} className={`flex ${sidebarToggle ? "" : "hidden"} bg-[#303030]! text-white transition-all duration-300 justify-center item-center pb-5 scrollbar-transparent max-md:pt-3`}>
-                        <PromptInputTextarea
-                            value={prompt}
-                            onChange={(e) => setPrompt(e.target.value)}
-                            placeholder={!locked ? "Type your message..." : "Please wait"}
-                            className='text-white'
-                        />
-                        <PromptInputToolbar>
-                            <PromptInputSubmit disabled={!prompt.trim() || locked} className='bg-gradient-to-r cursor-pointer! from-blue-400 to-purple-600 hover:bg-slate-600'/>
-                        </PromptInputToolbar>
-                     */}
                     <div className='hidden max-md:block'>
                         <InputBox hideInput={hideInput} prompt={prompt} sidebartoggle={sidebarToggle} generating={generating} setSelectedStyle={setSelectedStyle} locked={locked} handleSubmit={handleSubmit} selectedStyle={selectedStyle} setPrompt={setPrompt}/>
                     </div>
@@ -512,9 +458,6 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                   onClick={(e)=>{ e.stopPropagation(); }}
                                   onDoubleClick={(e)=>{ e.stopPropagation(); }}
                                 >
-                                  {/*<Screen screen={item.screen}>*/}
-                                  {/*  <JsonToHtmlRenderer data={item.component} setHTMLData={setHTMLData} screen={item.screen.name} HTMLData={HTMLData}/>*/}
-                                  {/*</Screen>*/}
                                     <UIScreen projectId={projectId} uid={user?.uid || ""} hideMainInput={hideInput} setHideInput={setHideInput} setHTMLData={setHTMLData} item={item} HTMLData={HTMLData} />
                                 </div>
                               );

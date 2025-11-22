@@ -93,9 +93,14 @@ export async function POST(request: Request) {
           ? await fetch(blobUrl).then(r => r.text()).then(t => JSON.parse(t)).catch(() => [])
           : [];
 
-        if (history) {
-          styleGuide = history.styleGuide
+
+        console.log(history)
+        if (history.length > 0) {
+          styleGuide = history[0].styleGuide
+          console.log("styleguide: ",styleGuide);
         }
+
+
 
         const images: string[] = Array.isArray(imageHolder) ? [...imageHolder] : (imageHolder ? [imageHolder] : []);
         let fattenedPrompt = Array.isArray(prompt) ? prompt.join('\n') : prompt || '';
@@ -108,7 +113,7 @@ export async function POST(request: Request) {
         // Store empty screens to merge with generated ones - declare early so it can be used in prompt fattening
         const emptyScreensMap: Map<string, { screen: { name: string; width: number; height: number }; component: unknown }> = new Map();
 
-        const isChainMode = Boolean(previousUI && (imageHolder?.length ?? 0) > 0);
+        const isChainMode = Boolean(previousUI && previousUI.length > 0);
 
         if (!isChainMode) {
           await sendEvent('status', { message: 'Starting prompt fattening...' });
@@ -213,6 +218,12 @@ export async function POST(request: Request) {
         // Extract screen list from fattened prompt
         const screenList: string[] = [];
         const screenPrompts: Record<string, string> = {};
+        if (isChainMode){
+          console.log(previousUI)
+          const parsedPrevUi = previousUI.map((item: { screenName: any; component: any; }) => `${item.screenName} - ${item.component}`);
+          screenList.push(...parsedPrevUi)
+          console.log("screenList: ", screenList);
+        }
         
         if (!isChainMode && fattenedJson?.ui?.[0]?.ui) {
           // fattenedJson.ui[0].ui is an array like ["splash: description", "onboarding: description"]
@@ -258,9 +269,10 @@ export async function POST(request: Request) {
           });
         }
 
+        let chainMessage = ""
         // If we can't extract screens, use the original approach
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const allScreens: any[] = [];
+        const allScreens: any[] = previousUI.map((item: { screenName: any; component: any; }) => `${item.screenName} `);
         let totalCreditUsed = 0;
         let totalScreenCreditsDeducted = 0; // Track total credits deducted for screens
         const convertedUI: Array<{ screen: { name: string; width: number; height: number }; component: unknown; styleGuide?: unknown }> = [];
@@ -278,6 +290,7 @@ export async function POST(request: Request) {
             const batch = screenList.slice(batchStart, batchEnd);
             
             await sendEvent('status', { message: `Generating batch ${Math.floor(batchStart / BATCH_SIZE) + 1}: screens ${batchStart + 1}-${batchEnd}...` });
+
 
             // Generate all screens in this batch in parallel
             const batchPromises = batch.map(async (screenName, batchIndex) => {
@@ -297,15 +310,27 @@ export async function POST(request: Request) {
                   }
                 }
 
+                const firstBracketIndex = screenName.indexOf('<');
+
+
+                const cleanedPrevUi = screenName.substring(firstBracketIndex);
+
                 const { screen, creditUsed } = await GenerateSingleScreen(
                   screenPrompt as string,
-                  screenName,
+                    screenName.split('<')[0].replace(/-\s*$/, '').trim(),
                   images,
-                  previousUI,
+                    cleanedPrevUi,
                   subHelper,
                   allScreens,
                   styleGuide
                 );
+
+                chainMessage += `${screen.message}\n\n `
+
+                console.log("ScreenName: ", screenName.split('<')[0].replace(/-\s*$/, '').trim());
+                console.log("screenPrompt: ", screenPrompt);
+                console.log("images: ", images);
+                console.log("previousUI: ", cleanedPrevUi);
 
                 return {
                   screen,
@@ -398,7 +423,7 @@ export async function POST(request: Request) {
             const tempEntry = {
               createdAt: new Date().toISOString(),
               prompt: Array.isArray(prompt) ? prompt : [prompt],
-              aiResponse: [fattenedMessage || ''],
+              aiResponse: fattenedMessage ? [fattenedMessage] : [],
               creditUsed: 0, // Will be calculated at the end
               ui: convertedUI,
               imageHolder: images,
@@ -468,7 +493,7 @@ export async function POST(request: Request) {
             const tempEntry = {
               createdAt: new Date().toISOString(),
               prompt: Array.isArray(prompt) ? prompt : [prompt],
-              aiResponse: [fattenedMessage || ''],
+              aiResponse: fattenedMessage ? [fattenedMessage] : [],
               creditUsed: 0,
               ui: convertedUI,
               imageHolder: images,
@@ -523,7 +548,7 @@ export async function POST(request: Request) {
         const newEntry = {
           createdAt: new Date().toISOString(),
           prompt: Array.isArray(prompt) ? prompt : [prompt],
-          aiResponse: fattenedMessage ? [fattenedMessage] : (Array.isArray(prompt) ? prompt.map(() => '') : ['']),
+          aiResponse: fattenedMessage ? [fattenedMessage] : [],
           creditUsed: actualCredits.total,
           ui: convertedUI,
           imageHolder: images,
@@ -533,7 +558,7 @@ export async function POST(request: Request) {
         if (isChainMode && history.length > 0) {
           const last = history[history.length - 1];
           last.prompt.push(...newEntry.prompt);
-          last.aiResponse.push(...newEntry.aiResponse);
+          last.aiResponse.push(...newEntry.aiResponse, chainMessage);
           last.creditUsed += actualCredits.total;
           last.ui = convertedUI;
           last.imageHolder = images;
@@ -596,7 +621,7 @@ export async function POST(request: Request) {
 
         // Send final completion event with only generated screens (no placeholders)
         await sendEvent('complete', {
-          message: fattenedMessage || 'UI generation complete',
+          message: fattenedMessage || chainMessage,
           imageHolder: images,
           ui: finalUI, // Only generated screens, no placeholders
           creditUsed: actualCredits.total,

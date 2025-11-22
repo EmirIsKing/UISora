@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react';
+import React, {Dispatch, SetStateAction, useEffect} from 'react';
 import { HtmlElement } from "@/types/types";
 import parse from 'style-to-object';
 import EditableText from "@/components/EditableText";
@@ -8,10 +8,16 @@ import camelcaseKeys from 'camelcase-keys';
 import VoidRenderer from "@/components/VoidRenderer";
 import { cleanStyleConflicts } from "@/utils/styleUtils";
 
+interface HtmlEntry {
+  screenName: string;
+  component: string;
+}
+
+
 interface JsonToHtmlRendererProps {
   data: HtmlElement;
-  setHTMLData?: React.Dispatch<React.SetStateAction<string[]>>;
-  HTMLData?: string[];
+  setHTMLData?: Dispatch<SetStateAction<HtmlEntry[]>>;
+  HTMLData?: HtmlEntry[];
   screen?: string;
   setPrevUI?: (prevUI: string) => void;
 }
@@ -55,11 +61,20 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data, setHTMLDa
     if (setPrevUI) {
       setPrevUI(htmlString);
     }
-    const entry = `${screen} - ${htmlString}`;
+    const entry = { screenName: screen, component: htmlString };
 
     setHTMLData(prev => {
-      if (prev.includes(entry)) return prev; // avoid duplicates
-      return [...prev, entry];
+      const existingIndex = prev.findIndex(e => e.screenName === entry.screenName);
+
+      if (existingIndex !== -1) {
+        // FOUND: Replace the existing entry with the new one (UPDATE)
+        const newPrev = [...prev];
+        newPrev[existingIndex] = entry;
+        return newPrev;
+      } else {
+        // NOT FOUND: Add the new entry to the array (CREATE)
+        return [...prev, entry];
+      }
     });
 
   }, [data, screen, setHTMLData, setPrevUI]);

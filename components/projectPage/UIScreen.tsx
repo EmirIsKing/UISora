@@ -19,26 +19,59 @@ type props = {
     setHideInput: (show: boolean) => void;
     hideMainInput: boolean;
     HTMLData: string[];
+    uid:string;
+    projectId:string;
 }
 
-const UiScreen = ({item,setHTMLData, HTMLData, setHideInput}:props) => {
+const UiScreen = ({item,setHTMLData, HTMLData, setHideInput, uid, projectId}:props) => {
 
 
     const [prompt, setPrompt] = useState("");
     const [locked, setLocked] = useState(false)
     const [generating, setGenerating] = useState(false)
+    const [prevUI, setPrevUI] = useState<string>();
+    const [newUI, setNewUI] = useState();
+    const [screen, setScreen] = useState();
 
 
-    const handleSubmit = (e: React.FormEvent<Element>) => {
-        setLocked(false)
-        setGenerating(false)
+    const handleSubmit = async (e: React.FormEvent<Element>) => {
         e.preventDefault();
+        setLocked(true)
+        setGenerating(true)
+        try {
+
+            const payload = {
+               prompt,
+                previousUI: prevUI,
+                uid,
+                projectId,
+                title: item.screen.name
+            };
+
+            const res = await fetch('/api/selectedUiEdit', {
+                method: 'POST',
+                body: JSON.stringify(payload),
+            });
+
+            const data = await res.json();
+
+            setNewUI(data.component);
+            setScreen(data.screen);
+
+
+
+        }catch(error) {
+            console.error(error)
+        } finally {
+            setLocked(false)
+            setGenerating(false)
+        }
     }
 
 
     return (
-        <Screen setHideMainInput={setHideInput} screen={item.screen} prompt={prompt} setPrompt={setPrompt} locked={locked} generating={generating} handleSubmit={handleSubmit}>
-            <JsonToHtmlRenderer data={item.component} setHTMLData={setHTMLData} screen={item.screen.name} HTMLData={HTMLData}/>
+        <Screen setHideMainInput={setHideInput} screen={screen || item.screen} prompt={prompt} setPrompt={setPrompt} locked={locked} generating={generating} handleSubmit={handleSubmit}>
+            <JsonToHtmlRenderer  setPrevUI={setPrevUI} data={newUI || item.component} setHTMLData={setHTMLData} screen={item.screen.name} HTMLData={HTMLData}/>
         </Screen>
     )
 }

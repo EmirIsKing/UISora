@@ -13,6 +13,7 @@ interface JsonToHtmlRendererProps {
   setHTMLData?: React.Dispatch<React.SetStateAction<string[]>>;
   HTMLData?: string[];
   screen?: string;
+  setPrevUI?: (prevUI: string) => void;
 }
 
 // Void HTML elements (self-closing)
@@ -44,13 +45,16 @@ const elementToHTML = (element: string | HtmlElement): string => {
   return `${openTag}${content.map(elementToHTML).join("")}</${type}>`;
 };
 
-const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data, setHTMLData, screen = "" }) => {
+const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data, setHTMLData, screen = "" , setPrevUI}) => {
 
   // ✅ Save the HTML result ONCE per screen change
   useEffect(() => {
     if (!setHTMLData || !screen || !data) return;
 
     const htmlString = elementToHTML(data);
+    if (setPrevUI) {
+      setPrevUI(htmlString);
+    }
     const entry = `${screen} - ${htmlString}`;
 
     setHTMLData(prev => {
@@ -62,6 +66,8 @@ const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data, setHTMLDa
 
   // ✅ React Renderer (keeps editable content)
   const renderElement = (element: string | HtmlElement, index?: number): React.ReactNode => {
+
+
     if (typeof element === 'string') {
       return (<EditableText key={index} text={element}/>);
     }

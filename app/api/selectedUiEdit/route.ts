@@ -5,6 +5,7 @@ import GenerateSingleScreen from '@/actions/generateSingleScreen';
 import HtmlToJson from '@/actions/HtmlToJson';
 import { put } from '@vercel/blob';
 import { getSubscriptionStatus } from '@/actions/getSubscriptionStatus';
+import {stringify} from "node:querystring";
 
 export async function POST(request: Request) {
     try {
@@ -37,18 +38,31 @@ export async function POST(request: Request) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let history: any = {};
 
+        console.log(blobURL)
+
         if (blobURL) {
             try {
-                history = await fetch(blobURL).then(r => r.text()).then(t => JSON.parse(t));
+                const res = await fetch(blobURL, { cache: 'no-store' })
+                history = await res.json()
+                console.log(history)
             } catch (e:unknown) {
                 console.error(e);
                 history = {};
             }
         }
+        const Screen = history[0].ui.find(item => item.screen.name === title);
 
-        const prevUI = history.ui || previousUI || [];
-        const styleGuide = history.styleGuide;
-        const imageHolder = history.imageHolder;
+        const prevUI =  previousUI || [];
+        const styleGuide =  Screen.styleGuide || history[0].styleGuide;
+        const imageHolder = history[0].imageHolder;
+
+        console.log("prompt", prompt);
+        console.log("prevUI", prevUI);
+        console.log("styleGuide",  styleGuide);
+        console.log("imageHolder", imageHolder);
+        console.log("title", title);
+
+
 
         // 2. Generate the screen
         const { screen, creditUsed } = await GenerateSingleScreen(
@@ -64,7 +78,7 @@ export async function POST(request: Request) {
 
         // 4. Replace UI inside history
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const updatedUI = prevUI.map((item: any) =>
+        const updatedUI = history[0].ui.map((item: any) =>
             item.screen.name === title
                 ? { screen: screen.screen, component: convertedComponent }
                 : item
@@ -78,17 +92,21 @@ export async function POST(request: Request) {
         const newTotalCredits = Number(history.creditUsed || 0) + creditsDeducted;
 
         // 6. Save updated history into blob storage
+        const Entry = []
+
         const newEntry = {
             createdAt: new Date().toISOString(),
-            prompt: history.prompt,
-            aiResponse: history.aiResponse,
-            creditUsed: newTotalCredits,
+            prompt: history[0].prompt,
+            aiResponse: history[0].aiResponse,
+            creditUsed: Number(history[0].creditUsed) + Number(newTotalCredits),
             ui: updatedUI,
             imageHolder,
             styleGuide,
         };
 
-        await put(`project-ui/${projectId}.json`, JSON.stringify(newEntry), {
+        Entry.push(newEntry);
+
+        await put(`project-ui/${projectId}.json`, JSON.stringify(Entry), {
             access: 'public',
             allowOverwrite: true
         });
@@ -99,6 +117,7 @@ export async function POST(request: Request) {
         // Unlock the project
         await adminDb.doc(`projects/${projectId}`).update({ state: "unlocked" });
 
+        console.log(convertedComponent)
         // 8. Return the new screen
         return Response.json({
             success: true,

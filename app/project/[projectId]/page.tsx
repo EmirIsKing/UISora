@@ -110,11 +110,11 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                             return;
                         }
                         const blobData = await blobRes.json();
-                    
                         // Load the full history
-                        if (blobData && blobData.length > 0) {
+                        if (blobData) {
                             // Set the latest UI
-                            setGeneratedUI(blobData[blobData.length - 1]);
+                            setGeneratedUI(blobData[blobData.length - 1] || blobData);
+
 
                             // Populate chat history by pairing prompt[i] with aiResponse[i]
                             const chatHistory: ChatItemType[] = [];
@@ -159,7 +159,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
             }
         };
         fetchProjectDetails();
-    }, [projectId, user?.uid]);
+    }, [projectId, user?.uid, generatedUI]);
 
 
     useEffect(() => {
@@ -515,7 +515,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                   {/*<Screen screen={item.screen}>*/}
                                   {/*  <JsonToHtmlRenderer data={item.component} setHTMLData={setHTMLData} screen={item.screen.name} HTMLData={HTMLData}/>*/}
                                   {/*</Screen>*/}
-                                    <UIScreen hideMainInput={hideInput} setHideInput={setHideInput} setHTMLData={setHTMLData} item={item} HTMLData={HTMLData} />
+                                    <UIScreen projectId={projectId} uid={user?.uid || ""} hideMainInput={hideInput} setHideInput={setHideInput} setHTMLData={setHTMLData} item={item} HTMLData={HTMLData} />
                                 </div>
                               );
                             })}

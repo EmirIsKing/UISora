@@ -13,10 +13,11 @@ type props = {
     generating?:boolean;
     handleSubmit?:(e: React.FormEvent<Element>) => void;
     setHideMainInput?:(e:boolean) => void;
+    hideNonExport: boolean;
 }
 
 const Screen =
-                ({ children, screen, prompt, setPrompt, locked, generating, handleSubmit,setHideMainInput }:props) => {
+                ({ children, screen, prompt, setPrompt, locked, generating, handleSubmit,setHideMainInput, hideNonExport }:props) => {
     const screenRef = useRef<HTMLDivElement>(null);
     const [dimensions, setDimensions] = useState({
         width: 270,
@@ -38,7 +39,7 @@ const Screen =
 
                     return (
 
-        <div className={'flex flex-col gap-10'}
+        <div className={`flex flex-col gap-10 `}
              onClick={(e)=>{
             e.stopPropagation();
         }}
@@ -47,8 +48,8 @@ const Screen =
              }} >
             <div>
                 <span className={'flex justify-between text-white items-center'}>
-                    <h4 className={'font-semibold '}>{screen.name}</h4>
-                    <button onClick={()=> {
+                    <h4 className={`font-semibold ${hideNonExport?"text-black":""}`}>{screen.name}</h4>
+                    <button hidden={hideNonExport} onClick={()=> {
                         setEdit(!edit);
                         if (setHideMainInput) {
                             setHideMainInput(edit)
@@ -77,10 +78,10 @@ const Screen =
                 >
                     {children}
                 </div>
-            <div hidden={edit}>
+            <div hidden={edit || hideNonExport}>
                 <InputBox
                     classname={'p-0 max-md:block! '}
-                    styleSelectorHidden={true}  generating={generating|| false} handleSubmit={handleSubmit || (() => {})} prompt={prompt || ""} setPrompt={setPrompt || (() => {})} locked={locked || false}/>
+                    styleSelectorHidden={true}  generating={generating || false} handleSubmit={handleSubmit || (() => {})} prompt={prompt || ""} setPrompt={setPrompt || (() => {})} locked={locked || false}/>
             </div>
         </div>
     );

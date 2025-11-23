@@ -97,7 +97,8 @@ const UiExport: React.FC<UiExportProps> = ({ screenRef }) => {
       wrapper.style.top = "-99999px";
       wrapper.style.left = "0";
       wrapper.style.width = `${width}px`;
-      wrapper.style.height = `${height}px`;
+      wrapper.style.height = `${Number(height)+20}px`;
+      wrapper.style.paddingBottom = "20px";
       wrapper.style.overflow = "visible";
       wrapper.style.zIndex = "999999";
 
@@ -128,7 +129,7 @@ const UiExport: React.FC<UiExportProps> = ({ screenRef }) => {
       const dataUrl = await domtoimage.toPng(wrapper, {
         bgcolor: "#ffffff", // solid background
         width,
-        height,
+        height: height+20,
         quality: 3,
         style: { transform: "scale(1)", transformOrigin: "top left" },
       });

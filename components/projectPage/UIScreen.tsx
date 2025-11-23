@@ -27,9 +27,10 @@ type props = {
     HTMLData: HtmlEntry[];
     uid:string;
     projectId:string;
+    hideNonExport: boolean;
 }
 
-const UiScreen = ({item,setHTMLData, HTMLData, setHideInput, uid, projectId}:props) => {
+const UiScreen = ({item,setHTMLData, HTMLData, setHideInput, uid, projectId, hideNonExport}:props) => {
 
 
     const [prompt, setPrompt] = useState("");
@@ -63,6 +64,7 @@ const UiScreen = ({item,setHTMLData, HTMLData, setHideInput, uid, projectId}:pro
 
             setNewUI(data.component);
             setScreen(data.screen);
+            setPrompt("")
 
 
 
@@ -76,7 +78,7 @@ const UiScreen = ({item,setHTMLData, HTMLData, setHideInput, uid, projectId}:pro
 
 
     return (
-        <Screen setHideMainInput={setHideInput} screen={screen || item.screen} prompt={prompt} setPrompt={setPrompt} locked={locked} generating={generating} handleSubmit={handleSubmit}>
+        <Screen hideNonExport={hideNonExport} setHideMainInput={setHideInput} screen={screen || item.screen} prompt={prompt} setPrompt={setPrompt} locked={locked} generating={generating} handleSubmit={handleSubmit}>
             <JsonToHtmlRenderer  setPrevUI={setPrevUI} data={newUI || item.component} setHTMLData={setHTMLData} screen={item.screen.name} HTMLData={HTMLData}/>
         </Screen>
     )

@@ -21,6 +21,7 @@ import InputBox from '@/components/projectPage/InputBox';
 import SegmentedButtons from '@/components/projectPage/SegmentedButtons';
 import UIScreen from "@/components/projectPage/UIScreen";
 import {fetchProjectBlobData} from "@/actions/blob";
+import AddScreen from "@/components/projectPage/AddScreen";
 
 interface JsonToHtmlRendererProps {
 
@@ -73,6 +74,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
         const fetchProjectDetails = async () => {
             if (user?.uid) {
                 const projectDetails = await getProjectDetails(user?.uid, projectId);
+
                 const { state } = await getProjectState(projectId);
                 if (state === "locked") {
                     setLocked(true)
@@ -85,6 +87,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 if (projectDetails?.blobUrl) {
                     try {
                         const blobData = await fetchProjectBlobData(projectDetails?.blobUrl)
+                        console.log("blobData: ", blobData)
                         // if (!blobRes.ok) {
                         //     console.error('Failed to fetch blob data:', blobRes.status, blobRes.statusText);
                         //     return;
@@ -433,7 +436,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                       <button onClick={() => canvasRef.current?.zoomIn()} className="px-2 py-1 bg-white shadow rounded font-semibold">+</button>
                       <button onClick={() => canvasRef.current?.zoomOut()} className="px-2 py-1 bg-white shadow rounded font-semibold">-</button>
                       <button onClick={() => canvasRef.current?.reset()} className="px-2 py-1 bg-white shadow rounded font-semibold">Reset</button>
-                      
+
                     </div>
 
                     <ZoomPanCanvas ref={canvasRef} panningEnabled={true} initialScale={0.3} minScale={0.05} maxScale={10}>
@@ -441,7 +444,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                         //onClick={()=> { setSelected("none"); }}
                       >
                         <div ref={screenshotRef} className='no-highlight'>
-                          <div className="flex flex-nowrap items-start gap-x-[100px] p-4">
+                          <div className="flex flex-nowrap items-start gap-x-[100px] p-4 ">
                             {generatedUI.ui.map((item , index: number) => {
                               const screenWidth = item.screen.width || 280;
                               const screenHeight = item.screen.height || 540;
@@ -458,10 +461,11 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                   onClick={(e)=>{ e.stopPropagation(); }}
                                   onDoubleClick={(e)=>{ e.stopPropagation(); }}
                                 >
-                                    <UIScreen projectId={projectId} uid={user?.uid || ""} hideMainInput={hideInput} setHideInput={setHideInput} setHTMLData={setHTMLData} item={item} HTMLData={HTMLData} />
+                                    <UIScreen hideNonExport={exportModal} projectId={projectId} uid={user?.uid || ""} hideMainInput={hideInput} setHideInput={setHideInput} setHTMLData={setHTMLData} item={item} HTMLData={HTMLData} />
                                 </div>
                               );
                             })}
+                              <AddScreen hide={exportModal} setHideInput={setHideInput} setGeneratedUI={setGeneratedUI} projectId={projectId} uid={user?.uid || ""} key={"addScreen"} />
                           </div>
                         </div>
                       </div>

@@ -2,11 +2,10 @@
 
 import React,{useState} from 'react';
 import { Button } from "@/components/ui/button";
-import { useAuth } from '@/contexts/AuthContext';
-import { useParams } from 'next/navigation';
 import InputBox from "@/components/projectPage/InputBox";
 
 interface AddScreenProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setGeneratedUI: (ui: any) => void;
     uid: string;
     projectId: string;
@@ -48,7 +47,8 @@ const AddScreen: React.FC<AddScreenProps> = ({ setGeneratedUI, uid, projectId, s
 
             const newScreenData = await response.json();
 
-            setGeneratedUI((prevUI: any) => ({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            setGeneratedUI((prevUI: { ui: any; }) => ({
                 ...prevUI,
                 ui: [...prevUI.ui, { screen: newScreenData.screen, component: newScreenData.component }],
             }));

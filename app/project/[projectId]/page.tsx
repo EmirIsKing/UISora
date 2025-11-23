@@ -377,7 +377,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     return (
         <ProtectedRoute redirectTo={`/project/view/${projectId}`}>
             <section className={'flex flex-col h-screen'}>
-                <ProjectPageNavigation title={title} projectId={projectId} sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
+                <ProjectPageNavigation locked={locked} title={title} projectId={projectId} sidebarToggle={sidebarToggle} setSidebarToggle={setSidebarToggle}/>
             <div className='max-md:hidden'>
                 <InputBox hideInput={hideInput} prompt={prompt} generating={generating} sidebartoggle={sidebarToggle} setSelectedStyle={setSelectedStyle} locked={locked} handleSubmit={handleSubmit} selectedStyle={selectedStyle} setPrompt={setPrompt}/>
             </div>

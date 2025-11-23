@@ -13,7 +13,7 @@ import { getUserCredits } from '@/actions/getUserCredit';
 import { ChevronDown } from 'lucide-react';
 
 
-const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId, title}:{sidebarToggle: boolean; setSidebarToggle: (open: boolean) => void; projectId: string; title:string;}) => {
+const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId, title, locked}:{sidebarToggle: boolean; setSidebarToggle: (open: boolean) => void; projectId: string; title:string; locked:boolean;}) => {
 
     const router = useRouter();
     const [toggleProject, setToggleProject] = useState(false);
@@ -37,7 +37,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId, titl
         getUserCredits().then((credits) => {
             setCredits(credits);
         });
-    }, []);
+    }, [locked]);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {

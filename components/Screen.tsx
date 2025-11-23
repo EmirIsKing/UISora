@@ -13,7 +13,7 @@ type props = {
     generating?:boolean;
     handleSubmit?:(e: React.FormEvent<Element>) => void;
     setHideMainInput?:(e:boolean) => void;
-    hideNonExport: boolean;
+    hideNonExport?: boolean;
 }
 
 const Screen =

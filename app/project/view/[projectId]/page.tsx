@@ -48,11 +48,6 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
     const [chat, setChat] = useState<ChatItemType[]>([]);
     const [sidebarToggle, setSidebarToggle] = useState<boolean>(true);
     const { projectId } = use(params);
-    // const [zoom, setZoom] = useState(1);
-    // const [offset, setOffset] = useState({ x: 0, y: 0 });
-    // const [panningOn, setPanningOn] = useState()
-    // const [startPan, setStartPan] = useState({ x: 0, y: 0 });
-    // const containerRef = useRef(null);
     const {setSelected} = useSelectElement()
     const { user } = useAuth();
     const screenshotRef = useRef<HTMLDivElement>(null)
@@ -62,24 +57,6 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
     const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null)
     
 
-    // interface ScreenConfig {
-    //     screen: {
-    //         name: string;
-    //         width: number;
-    //         height: number;
-    //     };
-    //     component: HtmlElement[]; // Can be either a component or array of elements
-    // }
-
-// Define interface for the entire test data
-    // interface TestData {
-    //     ui: ScreenConfig[];
-    //     message: string;
-    // }
-
-    // interface MetaData {
-    //     ui: ScreenConfig[];
-    // }
 
     useEffect(() => {
         const fetchProjectDetails = async () => {

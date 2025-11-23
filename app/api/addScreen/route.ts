@@ -77,7 +77,6 @@ export async function POST(request: Request) {
         const convertedComponent = JSON.parse(await HtmlToJson(screen.component) as string);
 
         // 4. Replace UI inside history
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const updatedUI = [...history[0].ui, {screen: screen.screen, component: convertedComponent}];
 
         // 5. Credit calculation

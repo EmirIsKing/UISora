@@ -3,7 +3,6 @@
 import React,{useState} from 'react';
 import { Button } from "@/components/ui/button";
 import InputBox from "@/components/projectPage/InputBox";
-import UpgradeModal from "@/components/UpgradeModal";
 import {SubscriptionStatus} from "@/app/dashboard/projects/page";
 
 interface AddScreenProps {

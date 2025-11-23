@@ -6,7 +6,6 @@ import ProjectPageNavigation from "@/components/ProjectPageNavigation";
 import {useExportModal} from "@/store/store";
 import ZoomPanCanvas, { ZoomPanCanvasHandle } from "@/components/ZoomPanCanvas";
 import {HtmlElement} from "@/types/types";
-import {jsondata} from "@/utils/newtestjson";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
 import { getProjectDetails } from '@/actions/getProjectDetails';

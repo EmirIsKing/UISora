@@ -24,6 +24,7 @@ const UpgradeModal = ({addon, isOpen, setIsOpen}:{addon?:string; isOpen:boolean;
         <li>Unlimited projects</li>
         <li>Unlimited screens</li>
         <li>50,000 monthly credits (recurring)</li>
+        <li>Add Screens </li>
         <li>Exports enabled (images and UI files)</li>
         <li>Priority email support</li>
       </ul>

@@ -127,7 +127,7 @@ const UiExport: React.FC<UiExportProps> = ({ screenRef }) => {
 
       // 5) Render with dom-to-image-more
       const dataUrl = await domtoimage.toPng(wrapper, {
-        bgcolor: "#ffffff", // solid background
+        bgcolor: "#deaff0", // solid background
         width,
         height: height+20,
         quality: 3,

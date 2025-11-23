@@ -216,6 +216,7 @@ export function PricingCreative({userId, email}:{userId?:string; email?:string})
                           'Unlimited screens',
                           'Unlimited projects',
                           '50,000 monthly credits (recurring)',
+                            'Add Screens',
                           'Exports enabled (images and UI files)',
                           'Priority email support',
                          ].map((item) => (

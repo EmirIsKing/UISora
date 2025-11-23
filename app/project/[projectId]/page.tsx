@@ -49,7 +49,7 @@ interface HtmlEntry {
 
 export default function Project({ params }: { params: Promise<{ projectId: string }> }) {
     const [prompt, setPrompt] = useState('');
-    const [generatedUI, setGeneratedUI] = useState<JsonToHtmlRendererProps>(jsondata);
+    const [generatedUI, setGeneratedUI] = useState<JsonToHtmlRendererProps>({ui:[]});
     const [chat, setChat] = useState<ChatItemType[]>([]);
     //const [isChain, setIsChain] = useState(false)
     const [imageHolder, setImageHolder] = useState<string[]>([]);
@@ -67,7 +67,8 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [title, setTitle] = useState("")
     const [hideInput, setHideInput] = useState(false);
    // const [prevUI, setPrevUI] = useState();
-    
+    const [openPayModal, setOpenPayModal] = useState(false);
+    const [payModalText, setPayModalText] = useState("");
 
 
     useEffect(() => {
@@ -465,7 +466,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                 </div>
                               );
                             })}
-                              <AddScreen hide={exportModal} setHideInput={setHideInput} setGeneratedUI={setGeneratedUI} projectId={projectId} uid={user?.uid || ""} key={"addScreen"} />
+                              {generatedUI.ui.length >0 &&(<AddScreen setOpenPayModal={setOpenPayModal} setPayModalText={setPayModalText} subscription={subscription} hide={exportModal} setHideInput={setHideInput} setGeneratedUI={setGeneratedUI} projectId={projectId} uid={user?.uid || ""} key={"addScreen"} />)}
                           </div>
                         </div>
                       </div>
@@ -487,9 +488,10 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
 
                     </div>
                 ) : (
-                    <UpgradeModal addon="You <strong>can't Export</strong> in free plan." isOpen={exportModal} setIsOpen={setExportModal}/>
+                    <UpgradeModal  addon="You <strong>can't Export</strong> in free plan." isOpen={exportModal} setIsOpen={setExportModal}/>
                 )
             }
+                <UpgradeModal  addon={payModalText} isOpen={openPayModal} setIsOpen={setOpenPayModal}/>
         </section>
         </ProtectedRoute>
     );

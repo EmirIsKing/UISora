@@ -65,7 +65,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [generating, setGenerating] = useState(false);
     const [title, setTitle] = useState("")
     const [hideInput, setHideInput] = useState(false);
-    const [prevUI, setPrevUI] = useState();
+   // const [prevUI, setPrevUI] = useState();
     
 
 

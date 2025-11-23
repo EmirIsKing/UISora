@@ -220,7 +220,7 @@ export async function POST(request: Request) {
         const screenPrompts: Record<string, string> = {};
         if (isChainMode){
           console.log(previousUI)
-          const parsedPrevUi = previousUI.map((item: { screenName: any; component: any; }) => `${item.screenName} - ${item.component}`);
+          const parsedPrevUi = previousUI.map((item: { screenName: string; component: string; }) => `${item.screenName} - ${item.component}`);
           screenList.push(...parsedPrevUi)
           console.log("screenList: ", screenList);
         }

@@ -483,13 +483,13 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                       {isMobile && (
                           <div className={'relative w-full h-full scroll-smooth overflow-y-scroll'}>
                               <div ref={screenshotRef} className='no-highlight w-full'>
-                                  <div className="flex flex-col w-full justify-center items-center pt-50">
+                                  <div className="flex flex-col w-full justify-center items-center pt-70">
                                       {generatedUI.ui.map((item, index) => {
                                           const screenWidth = item.screen.width || 280;
                                           const screenHeight = item.screen.height || 540;
 
                                           return (
-                                              <div key={index} className="mt-[-550px] scale-[0.3]">
+                                              <div key={index} className="mt-[-480px] scale-[0.3]">
                                                   <div
                                                       style={{
                                                           width: `${screenWidth}px`,

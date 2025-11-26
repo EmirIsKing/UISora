@@ -6,7 +6,7 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 
 export const metadata: Metadata = {
-    title: "Dashboard | UISora",
+    title: "Dashboard",
     description: "Manage projects, credits, and generate new UIs.",
     robots: { index: false, follow: false },
 };

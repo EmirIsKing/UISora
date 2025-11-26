@@ -7,7 +7,7 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { PanelLeftCloseIcon, PanelLeftOpen } from 'lucide-react';
+import {ChevronDown, PanelLeftCloseIcon, PanelLeftOpen} from 'lucide-react';
 import { Button } from '@heroui/button';
 import { useExportModal } from '@/store/store';
 import { useRouter } from 'next/navigation';
@@ -123,15 +123,15 @@ const ProjectViewNavigation = ({
     };
 
     return (
-        <div className="h-12 flex items-center text-white bg-[#303030] px-4 z-[3000] shadow-lg">
+        <div className="h-12 flex items-center dark:text-white dark:bg-[#303030] backdrop-blur-md px-4 z-[3000] shadow-lg">
             <div className="flex">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <button className="px-4 flex py-2 rounded-md outline-0 hover:opacity-75 transition-all cursor-pointer">
+                        <button className="px-4 flex py-2 border rounded-md outline-0 hover:opacity-75 transition-all cursor-pointer">
               <span className="truncate w-40 max-md:w-20 overflow-hidden whitespace-nowrap block">
                 {projectName}
               </span>{' '}
-                            ∨
+                            <ChevronDown/>
                         </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56 bg-slate-900 border opacity-100 z-[4000] border-slate-100/90 text-slate-100/90">
@@ -158,7 +158,7 @@ const ProjectViewNavigation = ({
                         onPress={() => {
                         window.location.href = "/";
                         }}
-                        className="border border-white text-white rounded-full px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300"
+                        className="border dark:border-white dark:text-white rounded-full px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300"
                         isDisabled={!!error}
                     >
                         Sign In to export
@@ -166,7 +166,7 @@ const ProjectViewNavigation = ({
                     ) : (
                     <Button
                         onPress={toggleExportModal}
-                        className="border border-white text-white rounded-full px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300"
+                        className="border dark:border-white dark:text-white rounded-full px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300"
                         isDisabled={!!error}
                     >
                         Export

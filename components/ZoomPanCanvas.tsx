@@ -81,6 +81,24 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
     };
   }, []);
 
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const wheelHandler = (e: WheelEvent) => {
+      e.preventDefault();
+      const multiplier = e.deltaY > 0 ? 1 / 1.1 : 1.1;
+      applyTransform(scale * multiplier, e.clientX, e.clientY);
+    };
+
+    viewport.addEventListener("wheel", wheelHandler, { passive: false });
+
+    return () => {
+      viewport.removeEventListener("wheel", wheelHandler);
+    };
+  }, [scale]);
+
+
   function flushQueuedTransform() {
     const params = queuedTransformRef.current;
     if (!params) return;
@@ -183,7 +201,6 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
     <div
       ref={viewportRef}
       className={"relative w-full h-full overflow-hidden touch-none " + (className ?? '')}
-      onWheel={onWheel}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -208,6 +225,7 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
             top: '50%',
             transform: 'translate(-50%, -50%)',
           }}
+          className={'w-[800px]'}
         >
           {children}
         </div>

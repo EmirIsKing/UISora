@@ -3,18 +3,12 @@ import React, { useState, useEffect, useRef, use } from 'react';
 import Screen from "@/components/Screen";
 import UserChatItem from "@/components/UserChatItem";
 import AiChatItem from "@/components/AiChatItem";
-//import ProjectPageNavigation from "@/components/ProjectPageNavigation";
-//import {useExportData} from "@/store/store";
 import {useSelectElement} from "@/store/store";
-// Removed react-zoom-pan-pinch in favor of a custom mobile-friendly canvas
 import ZoomPanCanvas, { ZoomPanCanvasHandle } from "@/components/ZoomPanCanvas";
 import {HtmlElement} from "@/types/types";
 import {jsondata} from "@/utils/newtestjson";
 import JsonToHtmlRenderer from "@/components/JsonToHtmlRenderer";
-//import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
-//import { getProjectDetails } from '@/actions/getProjectDetails';
-//import { Send } from 'lucide-react';
 import ProjectViewNavigation from "@/components/projectView/ProjectViewNavigation";
 import {getProjectViewDetails} from "@/components/projectView/actions/getProjectViewDetails";
 import {useExportModal} from "@/store/store";
@@ -23,6 +17,8 @@ import UiExport from '@/components/UiExport';
 import { SubscriptionStatus } from '@/app/dashboard/projects/page';
 import { getSubscriptionStatus } from '@/actions/getSubscriptionStatus';
 import UpgradeModal from '@/components/UpgradeModal';
+import UIScreen from "@/components/projectPage/UIScreen";
+import AddScreen from "@/components/projectPage/AddScreen";
 
 
 interface JsonToHtmlRendererProps {
@@ -55,8 +51,15 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
     const { exportModal, setExportModal } = useExportModal();
     const [imageHolder, setImageHolder] = useState([]);
     const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null)
-    
+    const [isMobile, setIsMobile] = useState(false);
 
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     useEffect(() => {
         const fetchProjectDetails = async () => {
@@ -116,8 +119,6 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                     }
                     }
 
-
-
                 // Allow fetch if blobUrl exists OR project is public
 
             } catch (error) {
@@ -139,9 +140,6 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
         
             }, [generatedUI, user])
 
-
-
-
     const bottomOfChatRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -162,16 +160,16 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                 onClick={() => setSidebarToggle(false)}
             ></div>
 
-            <div className="h-screen bg-[#212121] flex text-black overflow-hidden">
+            <div className="h-screen dark:bg-[#212121] bg-[#f5f5f5] flex text-black overflow-hidden">
                 {/* Sidebar */}
                 <div
                     className={`transition-all duration-300 ease-in-out 
               ${sidebarToggle ? "w-1/3 max-w-sm" : "w-0"} 
-              bg-[#212121] border-w hite 
+              dark:bg-[#212121] bg-[#f2f2f2] border-white 
               relative flex flex-col shadow-lg shadow-r-white justify-between 
               max-md:fixed max-md:bottom-0 max-md:h-full max-md:mt-12 
             z-[2001] 
-              ${sidebarToggle ? "max-md:w-[308px]" : "max-md:w-0"}`}
+              ${sidebarToggle ? "max-md:w-[90%]" : "max-md:w-0"}`}
                     style={{
                         transitionProperty: "width, transform",
                         transform: sidebarToggle ? "translateX(0)" : "translateX(-100%)",
@@ -197,46 +195,81 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                 {/* Main Content */}
                 <div className="flex flex-1 relative overflow-hidden">
                   <div className={'relative w-full h-full'}>
-                    <div className="absolute top-4 left-4 z-50 flex gap-2">
-                      <button onClick={() => canvasRef.current?.zoomIn()} className="px-2 py-1 bg-white shadow rounded font-semibold">+</button>
-                      <button onClick={() => canvasRef.current?.zoomOut()} className="px-2 py-1 bg-white shadow rounded font-semibold">-</button>
-                      <button onClick={() => canvasRef.current?.reset()} className="px-2 py-1 bg-white shadow rounded font-semibold">Reset</button>
+                    <div className="absolute top-4 left-4 z-50 flex gap-2 dark:bg-white rounded bg-black text-white dark:text-black max-md:hidden">
+                      <button onClick={() => canvasRef.current?.zoomIn()} className="px-2 py-1 dark:hover:bg-black/60 hover:bg-white/60 rounded font-semibold">+</button>
+                      <button onClick={() => canvasRef.current?.zoomOut()} className="px-2 py-1 dark:hover:bg-black/60 hover:bg-white/60 rounded font-semibold">-</button>
+                      <button onClick={() => canvasRef.current?.reset()} className="px-2 py-1 dark:hover:bg-black/60 hover:bg-white/60 rounded font-semibold">Reset</button>
                       </div>
 
-                    <ZoomPanCanvas ref={canvasRef} panningEnabled={true} initialScale={0.3} minScale={0.05} maxScale={10}>
-                      <div
-                        onClick={()=> {
-                          setSelected("none");
-                        }}
-                      >
-                        <div ref={screenshotRef} className='no-highlight'>
-                          <div className="flex flex-nowrap items-start gap-x-[100px] p-4">
-                            {generatedUI.ui.map((item , index: number) => {
-                              const screenWidth = item.screen.width || 280;
-                              const screenHeight = item.screen.height || 540;
-
-                              return (
-                                <div
-                                  key={index}
-                                  style={{
-                                    width: `${screenWidth}px`,
-                                    height: `${screenHeight}px`,
-                                    flexShrink: 0,
-                                    position: 'relative'
+                      {!isMobile && (
+                          <ZoomPanCanvas ref={canvasRef} panningEnabled={true} initialScale={0.3} minScale={0.05} maxScale={10}>
+                              <div
+                                  onClick={()=> {
+                                      setSelected("none");
                                   }}
-                                  onClick={(e)=>{ e.stopPropagation(); }}
-                                  onDoubleClick={(e)=>{ e.stopPropagation(); }}
-                                >
-                                  <Screen screen={item.screen}>
-                                    <JsonToHtmlRenderer data={item.component} />
-                                  </Screen>
-                                </div>
-                              );
-                            })}
+                              >
+                                  <div ref={screenshotRef} className='no-highlight'>
+                                      <div className="flex flex-nowrap items-start gap-x-[100px] p-4">
+                                          {generatedUI.ui.map((item , index: number) => {
+                                              const screenWidth = item.screen.width || 280;
+                                              const screenHeight = item.screen.height || 540;
+
+                                              return (
+                                                  <div
+                                                      key={index}
+                                                      style={{
+                                                          width: `${screenWidth}px`,
+                                                          height: `${screenHeight}px`,
+                                                          flexShrink: 0,
+                                                          position: 'relative'
+                                                      }}
+                                                      onClick={(e)=>{ e.stopPropagation(); }}
+                                                      onDoubleClick={(e)=>{ e.stopPropagation(); }}
+                                                  >
+                                                      <Screen hideEdit={true} screen={item.screen}>
+                                                          <JsonToHtmlRenderer data={item.component} />
+                                                      </Screen>
+                                                  </div>
+                                              );
+                                          })}
+                                      </div>
+                                  </div>
+                              </div>
+                          </ZoomPanCanvas>
+                      )}
+                      {isMobile && (
+                          <div className={'relative w-full h-full scroll-smooth overflow-y-scroll'}>
+                              <div ref={screenshotRef} className='no-highlight w-full'>
+                                  <div className="flex flex-col w-full justify-center items-center pt-70">
+                                      {generatedUI.ui.map((item, index) => {
+                                          const screenWidth = item.screen.width || 280;
+                                          const screenHeight = item.screen.height || 540;
+
+                                          return (
+                                              <div key={index} className="mt-[-550px] scale-[0.3]">
+                                                  <div
+                                                      key={index}
+                                                      style={{
+                                                          width: `${screenWidth}px`,
+                                                          height: `${screenHeight}px`,
+                                                          flexShrink: 0,
+                                                          position: 'relative'
+                                                      }}
+                                                      onClick={(e)=>{ e.stopPropagation(); }}
+                                                      onDoubleClick={(e)=>{ e.stopPropagation(); }}
+                                                  >
+                                                      <Screen hideEdit={true} screen={item.screen}>
+                                                          <JsonToHtmlRenderer data={item.component} />
+                                                      </Screen>
+                                                  </div>
+                                              </div>
+                                          );
+                                      })}
+
+                                  </div>
+                              </div>
                           </div>
-                        </div>
-                      </div>
-                    </ZoomPanCanvas>
+                      )}
                   </div>
                 </div>
 

@@ -70,7 +70,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId, titl
 
 
     return (
-        <div className={'h-12  flex items-center text-white bg-[#303030] px-4 z-[3000] shadow-lg'}>
+        <div className={'h-12  flex items-center dark:text-white dark:bg-[#303030] backdrop-blur-md px-4 z-[3000] shadow-lg'}>
             <div className={'flex'}>
                     <DropdownMenu >
                         <DropdownMenuTrigger asChild>
@@ -78,13 +78,13 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId, titl
                                 {projectName ? <span className='truncate w-40 max-md:w-20 overflow-hidden whitespace-nowrap block'>{projectName}</span> :'Loading...'} <ChevronDown/>
                             </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent  className="w-56 bg-slate-900 border opacity-100 z-[4000] border-slate-100/90 text-slate-100/90">
+                        <DropdownMenuContent  className="w-56 dark:bg-slate-900 bg-slate-400 border  opacity-100 z-[4000] dark:border-slate-100/90 dark:text-slate-100/90">
                             <DropdownMenuItem disabled={true}>
                                 Credits remaining: 
-                                <span className='font-bold text-green-500'>{credits}</span>
+                                <span className='font-bold dark:text-green-500'>{credits}</span>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator className="bg-slate-100/90 h-px" />
-                            <DropdownMenuItem  onClick={()=>handleProjectSettings()} className="hover:bg-slate-800/90 bg-slate-900">
+                            <DropdownMenuItem  onClick={()=>handleProjectSettings()} className="hover:bg-slate-800/90 dark:bg-slate-900 hover:cursor-pointer">
                                 Project Settings
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={()=>handleGotoDashboard()} className="hover:bg-slate-800/90">
@@ -98,7 +98,7 @@ const ProjectPageNavigation = ({sidebarToggle, setSidebarToggle, projectId, titl
                 </button>
             </div>
             <div className={'flex justify-end flex-1 items-end'}>
-                    <Button onPress={()=>toggleExportModal()} className={'border border-white text-white rounded-md px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300 max-md:text-sm !max-md:py-1'}>
+                    <Button onPress={()=>toggleExportModal()} className={'border dark:border-white dark:text-white rounded-md px-2 cursor-pointer hover:px-3 transition-all ease-in-out duration-300 max-md:text-sm !max-md:py-1'}>
                         Export
                     </Button>
             </div>

@@ -14,15 +14,15 @@ const SegmentedButtons = ({ sidebarToggle, setSidebarToggle }: SegmentedButtonsP
       transition-all duration-300 ease-in-out
       z-9999
     ">
-      <ButtonGroup className="bg-black rounded-full p-1 shadow-sm font-bold text-white">
+      <ButtonGroup className="dark:bg-black rounded-full dark:text-white bg-black/60 p-1 shadow-sm font-bold text-black">
         <Button
           onClick={() => setSidebarToggle(true)}
           size="sm"
           className={`
             rounded-full px-5 transition-all duration-200
             ${sidebarToggle
-              ? "bg-[#303030] shadow"
-              : "hover:bg-[#2b2b2b]"}
+              ? "dark:bg-[#303030] bg-[#f9f9f9] dark:text-white shadow"
+              : "hover:bg-[#2b2b2b] text-white"}
           `}
         >
           Chat
@@ -34,8 +34,8 @@ const SegmentedButtons = ({ sidebarToggle, setSidebarToggle }: SegmentedButtonsP
           className={`
             rounded-full px-5 transition-all duration-200
             ${!sidebarToggle
-              ? "bg-[#303030] shadow"
-              : "hover:bg-[#2b2b2b]"}
+              ? "dark:bg-[#303030] dark:text-white bg-[#f9f9f9] shadow"
+              : "hover:bg-[#2b2b2b] text-white"}
           `}
         >
           Preview

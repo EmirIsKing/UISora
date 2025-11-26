@@ -154,8 +154,13 @@
   background: transparent;
 }
 
-.scrollbar-transparent::-webkit-scrollbar-thumb {
+.dark .scrollbar-transparent::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.3); /* Light transparency */
+  border-radius: 10px;
+}
+
+.scrollbar-transparent::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3); /* Light transparency */
   border-radius: 10px;
 }
 

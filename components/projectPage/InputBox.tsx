@@ -34,29 +34,24 @@ const InputBox = ({
         hidden={hideInput}
       className={`${classname? classname : "left-[calc(50%+90px)] max-md:left-[calc(50%-0.5px)] -translate-x-1/2 bottom-5 max-md:bottom-0 max-md:shadow-none! max-w-2xl px-4" +
           "   max-md:px-0 "}  z-2200
-        transition-all duration-300 ease-in-out absolute w-full
-        ${sidebartoggle ? "max-md:opacity-100 max-md:translate-y-0" : "max-md:opacity-100 max-md:translate-y-4 max-md:pointer-events-none"}
+        transition-all duration-300 ease-in-out absolute w-full 
+        ${sidebartoggle ? "max-md:opacity-100 max-md:translate-y-0" : "max-md:opacity-100 max-md:translate-y-4"}
       `}
     >
-      <div
-          hidden={styleSelectorHidden}
-        className={`
-          w-full flex text-white justify-center transition-all duration-300 ease-in-out max-md:backdrop-blur-md
-          ${sidebartoggle ? "max-md:opacity-100 max-md:translate-y-0" : "max-md:opacity-0 max-md:-translate-y-2 max-md:pointer-events-none"}
-        `}
-      >
-        <StyleSelector selectedStyle={selectedStyle|| ""} setSelectedStyle={setSelectedStyle || (() => {})} />
-      </div>
+
 
       <PromptInput
         onSubmit={handleSubmit}
-        className={`flex bg-[#303030]! text-white justify-center items-center 
-            pb-16 max scrollbar-transparent transition-all duration-300
-            max-md:border-t-white/20
+        className={`flex dark:bg-[#303030]! ${!styleSelectorHidden?'flex-col':'' } bg-[#f9f9f9]! text-white justify-center items-center 
+            max-md:pb-16  ${styleSelectorHidden?'pb-16 max-md:border-black! border! dark:border-white!':'pb-1 ' }  max scrollbar-transparent transition-all duration-300
+            max-md:border-t-black/20
+            dark:max-md:border-t-white/20
             max-md:border-l-0
             max-md:border-r-0
             max-md:border-b-0
             max-md:rounded-b-none
+            border-black/40
+            dark:border-white/50
 
             `}
       >
@@ -65,15 +60,27 @@ const InputBox = ({
           onChange={(e) => setPrompt(e.target.value)}
           placeholder={!locked ? "Type your prompt..." : generating ? "Generating..." : "Please wait..."}
           disabled={locked}
-          className="text-white"
+          className="dark:text-white text-black dark:placeholder-white/40! placeholder-black/40!"
         />
-        <PromptInputToolbar>
+        <PromptInputToolbar className={''}>
+
+          <div
+              hidden={styleSelectorHidden}
+              className={`
+          w-full flex dark:text-white text-black justify-center transition-all duration-300 ease-in-out max-md:backdrop-blur-md
+          ${sidebartoggle ? "max-md:opacity-100 max-md:translate-y-0" : "max-md:opacity-0 max-md:-translate-y-2 "}
+        `}
+          >
+            <StyleSelector selectedStyle={selectedStyle|| ""} setSelectedStyle={setSelectedStyle || (() => {})} />
+          </div>
           <PromptInputSubmit
             disabled={!prompt.trim() || locked}
             className="bg-linear-to-r cursor-pointer! from-blue-400 to-purple-600 hover:bg-slate-600 transition-all duration-300"
             status={generating ? "submitted" : "ready"}
           />
+
         </PromptInputToolbar>
+
       </PromptInput>
     </div>
   )

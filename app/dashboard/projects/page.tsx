@@ -75,13 +75,10 @@ const Page = () => {
       loadSub()
 
     }, [projects, user])
-    
 
-    useEffect(() => {
-      console.log(projects)
-    }, [projects])
-    
-
+    // useEffect(() => {
+    //   console.log(projects)
+    // }, [projects])
 
 
     return (

@@ -11,11 +11,11 @@ const AiChatItem = ({ message }: { message: string }) => {
 
                 {/* AI Icon */}
                 <div className="py-1 flex justify-start">
-                    <Logo variant='white' textHidden={true} className='w-7 rounded-full' />
+                    <Logo variant='auto' textHidden={true} className='w-7 rounded-full' />
                 </div>
 
                 {/* Chat Bubble */}
-                <div className="bg-white/2 rounded-md p-3 max-w-full wrap-break-word whitespace-pre-wrap text-white min-h-[50px]">
+                <div className="dark:bg-white/2 bg-black/2 rounded-md p-3 max-w-full wrap-break-word whitespace-pre-wrap text-white min-h-[50px]">
                     {message === "Generating..." ? (
                         <GenerateLoader />
                     ) : (

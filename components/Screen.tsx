@@ -14,10 +14,11 @@ type props = {
     handleSubmit?:(e: React.FormEvent<Element>) => void;
     setHideMainInput?:(e:boolean) => void;
     hideNonExport?: boolean;
+    hideEdit?:boolean;
 }
 
 const Screen =
-                ({ children, screen, prompt, setPrompt, locked, generating, handleSubmit,setHideMainInput, hideNonExport }:props) => {
+                ({ children, screen, prompt, setPrompt, locked, generating, handleSubmit,setHideMainInput, hideNonExport , hideEdit}:props) => {
     const screenRef = useRef<HTMLDivElement>(null);
     const [dimensions, setDimensions] = useState({
         width: 270,
@@ -39,7 +40,7 @@ const Screen =
 
                     return (
 
-        <div className={`flex flex-col gap-10 `}
+        <div className={`flex flex-col gap-10 max-md:gap-2`}
              onClick={(e)=>{
             e.stopPropagation();
         }}
@@ -48,8 +49,8 @@ const Screen =
              }} >
             <div>
                 <span className={'flex justify-between text-white items-center'}>
-                    <h4 className={`font-semibold ${hideNonExport?"text-black":""}`}>{screen.name}</h4>
-                    <button hidden={hideNonExport} onClick={()=> {
+                    <h4 className={`font-semibold dark:text-white text-black ${hideNonExport?"text-black":""}`}>{screen.name}</h4>
+                    <button hidden={hideNonExport || hideEdit} onClick={()=> {
                         setEdit(!edit);
                         if (setHideMainInput) {
                             setHideMainInput(edit)
@@ -62,7 +63,7 @@ const Screen =
             </div>
                 <div
                     ref={screenRef}
-                    className={`relative rounded-lg bg-[#252525] border border-black shadow-[5px_5px_0px_0px_rgba(255,255,255,0.5)] overflow-hidden transform-gpu`}
+                    className={`relative rounded-lg bg-[#252525] border border-black dark:shadow-[5px_5px_0px_0px_rgba(255,255,255,0.5)] shadow-[5px_5px_0px_0px_rgba(0,0,0,0.5)] overflow-hidden transform-gpu`}
                     style={{
                         width: `${dimensions.width}px`,
                         height: `${dimensions.height}px`,
@@ -78,7 +79,7 @@ const Screen =
                 >
                     {children}
                 </div>
-            <div hidden={edit || hideNonExport}>
+            <div hidden={edit || hideNonExport || hideEdit}>
                 <InputBox
                     classname={'p-0 max-md:block! '}
                     styleSelectorHidden={true}  generating={generating || false} handleSubmit={handleSubmit || (() => {})} prompt={prompt || ""} setPrompt={setPrompt || (() => {})} locked={locked || false}/>

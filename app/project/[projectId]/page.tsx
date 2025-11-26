@@ -65,10 +65,17 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [generating, setGenerating] = useState(false);
     const [title, setTitle] = useState("")
     const [hideInput, setHideInput] = useState(false);
-   // const [prevUI, setPrevUI] = useState();
     const [openPayModal, setOpenPayModal] = useState(false);
     const [payModalText, setPayModalText] = useState("");
+    const [isMobile, setIsMobile] = useState(false);
 
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     useEffect(() => {
         const fetchProjectDetails = async () => {
@@ -83,16 +90,10 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 } else {
                     setLocked(false)
                 }
-                console.log(projectDetails);
                 if (projectDetails?.blobUrl) {
                     try {
                         const blobData = await fetchProjectBlobData(projectDetails?.blobUrl)
-                        console.log("blobData: ", blobData)
-                        // if (!blobRes.ok) {
-                        //     console.error('Failed to fetch blob data:', blobRes.status, blobRes.statusText);
-                        //     return;
-                        // }
-                        // const blobData = blobRes
+
                         // Load the full history
                         if (blobData) {
                             // Set the latest UI
@@ -184,12 +185,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
             ? HTMLData
             : [];
            const token = await user?.getIdToken()
-           console.log("ui: ",ui)
-           console.log("HTMLData: ", HTMLData)
-           // setLocked(false)
-           // setGenerating(false)
-           //
-           // return;
+
            const response = await fetch('/api/generate-ui', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json',
@@ -245,11 +241,11 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                // Empty screens with titles - show immediately
                                if (data.screens && Array.isArray(data.screens)) {
                                    setGeneratedUI({ ui: [...data.screens] });
-                                   console.log(`Showing ${data.screens.length} empty screens with titles`);
+                                   //console.log(`Showing ${data.screens.length} empty screens with titles`);
                                }
                            } else if (currentEventType === 'status') {
                                // Status update - could show in UI if needed
-                               console.log('Status:', data.message);
+                               //console.log('Status:', data.message);
                            } else if (currentEventType === 'screen' || data.screen) {
                                // New screen generated - update UI immediately
                                const screenData = data.screen;
@@ -271,7 +267,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                    // Filter out placeholder screens and update with generated screens only
                                    const filteredScreens = data.allScreens.filter((screen: { component?: { content?: Array<string | unknown> } }) => !isPlaceholder(screen));
                                    setGeneratedUI({ ui: filteredScreens });
-                                   console.log(`Screen ${(data.index ?? 0) + 1}/${data.total ?? data.allScreens.length} generated: ${screenData.screen.name}`);
+                                   //console.log(`Screen ${(data.index ?? 0) + 1}/${data.total ?? data.allScreens.length} generated: ${screenData.screen.name}`);
                                } else if (screenData) {
                                    // Fallback: update incrementally, replacing placeholders
                                    setGeneratedUI((prevUI) => {
@@ -292,7 +288,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                        const filtered = newUI.filter(screen => !isPlaceholder(screen));
                                        return { ui: filtered };
                                    });
-                                   console.log(`Screen generated: ${screenData.screen.name}`);
+                                   //console.log(`Screen generated: ${screenData.screen.name}`);
                                }
                            } else if (currentEventType === 'complete') {
                                // Generation complete - always replace UI to remove any placeholders
@@ -391,14 +387,15 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 onClick={() => setSidebarToggle(false)}
             ></div>
 
-            <div className="h-screen bg-[#212121] flex text-black overflow-hidden">
+            <div className="h-screen dark:bg-[#212121] bg-[#f5f5f5] flex text-black overflow-hidden">
                 {/* Sidebar */}
                 <div
                     className={`transition-all duration-300 ease-in-out 
               ${sidebarToggle ? "w-1/3 max-w-sm" : "w-0"} 
-              bg-[#212121] border-w hite 
+              max-md:max-w-full!
+              dark:bg-[#212121] bg-[#f2f2f2] border-white 
               relative flex flex-col shadow-lg shadow-r-white justify-between 
-              max-md:fixed max-md:bottom-0 h-[85%] rounded-br-lg max-md:h-full max-md:mt-12 
+              max-md:fixed max-md:bottom-0 h-[100%] max-md:h-full max-md:mt-12 
             z-[2001] 
               ${sidebarToggle ? "max-md:w-full" : "max-md:w-0"}`}
                     style={{
@@ -407,10 +404,9 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                     }}>
                     {/* Chat History */}
                     <div
-                        className={`flex-1 flex-grow flex border flex-col w-full h-full
-                            rounded-br-lg
+                        className={`flex-1 flex-grow flex border border-[#f1f1f1] dark:border-black flex-col w-full h-full
                             max-md:mb-26
-                            overflow-y-auto pt-3 px-3 pb-24 max-md:pt-12 scrollbar-transparent scroll-smooth overscroll-y-contain
+                            overflow-y-auto pt-3 px-3 pb-24 max-md:pt-12 scrollbar-transparent  scroll-smooth overscroll-y-contain
                             ${sidebarToggle ? "" : "hidden"}
                             `}
                         ref={bottomOfChatRef}
@@ -430,46 +426,100 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 </div>
 
                 {/* Main Content */}
-                <div className="flex flex-1 relative overflow-hidden">
-                  <div className={'relative w-full h-full'}>
-                    <div className="absolute top-4 left-4 z-50 flex gap-2">
-                      <button onClick={() => canvasRef.current?.zoomIn()} className="px-2 py-1 bg-white shadow rounded font-semibold">+</button>
-                      <button onClick={() => canvasRef.current?.zoomOut()} className="px-2 py-1 bg-white shadow rounded font-semibold">-</button>
-                      <button onClick={() => canvasRef.current?.reset()} className="px-2 py-1 bg-white shadow rounded font-semibold">Reset</button>
+                <div className="flex flex-1 relative overflow-hidden ">
+                  <div className={'relative w-full h-full '}>
+                    <div className="absolute top-4 left-4 z-50 flex gap-2 dark:bg-white rounded bg-black text-white dark:text-black max-md:hidden">
+                      <button onClick={() => canvasRef.current?.zoomIn()} className="px-2 py-1 dark:hover:bg-black/60 hover:bg-white/60 rounded font-semibold">+</button>
+                      <button onClick={() => canvasRef.current?.zoomOut()} className="px-2 py-1 dark:hover:bg-black/60 hover:bg-white/60 rounded font-semibold">-</button>
+                      <button onClick={() => canvasRef.current?.reset()} className="px-2 py-1 dark:hover:bg-black/60 hover:bg-white/60 rounded font-semibold">Reset</button>
 
                     </div>
 
-                    <ZoomPanCanvas ref={canvasRef} panningEnabled={true} initialScale={0.3} minScale={0.05} maxScale={10}>
-                      <div
-                        //onClick={()=> { setSelected("none"); }}
-                      >
-                        <div ref={screenshotRef} className='no-highlight'>
-                          <div className="flex flex-nowrap items-start gap-x-[100px] p-4 ">
-                            {generatedUI.ui.map((item , index: number) => {
-                              const screenWidth = item.screen.width || 280;
-                              const screenHeight = item.screen.height || 540;
+                      {!isMobile && (<ZoomPanCanvas ref={canvasRef} panningEnabled={true} initialScale={0.3} minScale={0.05}
+                                      maxScale={10}>
+                          <div
+                              //onClick={()=> { setSelected("none"); }}
+                              className={''}
+                          >
+                              <div ref={screenshotRef} className='no-highlight'>
+                                  <div className="flex flex-nowrap items-start gap-x-[100px] p-4
+            max-md:flex-wrap max-md:gap-4 max-md:grid max-md:grid-cols-2">
+                                      {generatedUI.ui.map((item, index: number) => {
+                                          const screenWidth = item.screen.width || 280;
+                                          const screenHeight = item.screen.height || 540;
 
-                              return (
-                                <div
-                                  key={index}
-                                  style={{
-                                    width: `${screenWidth}px`,
-                                    height: `${screenHeight}px`,
-                                    flexShrink: 0,
-                                    position: 'relative'
-                                  }}
-                                  onClick={(e)=>{ e.stopPropagation(); }}
-                                  onDoubleClick={(e)=>{ e.stopPropagation(); }}
-                                >
-                                    <UIScreen hideNonExport={exportModal} projectId={projectId} uid={user?.uid || ""} hideMainInput={hideInput} setHideInput={setHideInput} setHTMLData={setHTMLData} item={item} HTMLData={HTMLData} />
-                                </div>
-                              );
-                            })}
-                              {generatedUI.ui.length >0 &&(<AddScreen setOpenPayModal={setOpenPayModal} setPayModalText={setPayModalText} subscription={subscription} hide={exportModal} setHideInput={setHideInput} setGeneratedUI={setGeneratedUI} projectId={projectId} uid={user?.uid || ""} key={"addScreen"} />)}
+                                          return (
+                                              <div
+                                                  key={index}
+                                                  style={{
+                                                      width: `${screenWidth}px`,
+                                                      height: `${screenHeight}px`,
+                                                      flexShrink: 0,
+                                                      position: 'relative'
+                                                  }}
+                                                  onClick={(e) => {
+                                                      e.stopPropagation();
+                                                  }}
+                                                  onDoubleClick={(e) => {
+                                                      e.stopPropagation();
+                                                  }}
+                                              >
+                                                  <UIScreen hideNonExport={exportModal} projectId={projectId}
+                                                            uid={user?.uid || ""} hideMainInput={hideInput}
+                                                            setHideInput={setHideInput} setHTMLData={setHTMLData}
+                                                            item={item} HTMLData={HTMLData}/>
+                                              </div>
+                                          );
+                                      })}
+                                      {generatedUI.ui.length > 0 && (
+                                          <AddScreen setOpenPayModal={setOpenPayModal} setPayModalText={setPayModalText}
+                                                     subscription={subscription} hide={exportModal}
+                                                     setHideInput={setHideInput} setGeneratedUI={setGeneratedUI}
+                                                     projectId={projectId} uid={user?.uid || ""} key={"addScreen"}/>)}
+                                  </div>
+                              </div>
                           </div>
-                        </div>
-                      </div>
-                    </ZoomPanCanvas>
+                      </ZoomPanCanvas>)}
+                      {isMobile && (
+                          <div className={'relative w-full h-full scroll-smooth overflow-y-scroll'}>
+                              <div ref={screenshotRef} className='no-highlight w-full'>
+                                  <div className="flex flex-col w-full justify-center items-center pt-50">
+                                      {generatedUI.ui.map((item, index) => {
+                                          const screenWidth = item.screen.width || 280;
+                                          const screenHeight = item.screen.height || 540;
+
+                                          return (
+                                              <div key={index} className="mt-[-550px] scale-[0.3]">
+                                                  <div
+                                                      style={{
+                                                          width: `${screenWidth}px`,
+                                                          height: `${screenHeight}px`,
+                                                          position: 'relative',
+                                                      }}
+                                                  >
+                                                      <UIScreen
+                                                          hideNonExport={exportModal}
+                                                          projectId={projectId}
+                                                          uid={user?.uid || ""}
+                                                          hideMainInput={hideInput}
+                                                          setHideInput={setHideInput}
+                                                          setHTMLData={setHTMLData}
+                                                          item={item}
+                                                          HTMLData={HTMLData}
+                                                      />
+                                                  </div>
+                                              </div>
+                                          );
+                                      })}
+                                      {generatedUI.ui.length > 0 && (
+                                          <AddScreen setOpenPayModal={setOpenPayModal} setPayModalText={setPayModalText}
+                                                     subscription={subscription} hide={exportModal}
+                                                     setHideInput={setHideInput} setGeneratedUI={setGeneratedUI}
+                                                     projectId={projectId} uid={user?.uid || ""} key={"addScreen"}/>)}
+                                  </div>
+                              </div>
+                          </div>
+                      )}
                   </div>
                 </div>
 

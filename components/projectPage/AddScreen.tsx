@@ -64,7 +64,7 @@ const AddScreen: React.FC<AddScreenProps> = ({ setGeneratedUI, uid, projectId, s
     };
 
     return (
-            <div hidden={hide} className={'flex flex-col max-w-100 relative  gap-10 '}>
+            <div hidden={hide} className={'flex flex-col max-w-100 relative  gap-10 max-md:scale-[0.3] max-md:mb-10 max-md:mt-[-530px]'}>
                 <Button onClick={()=> {
                     if ( subscription?.subscription?.status != "Active"){
                         setOpenPayModal(true);
@@ -73,9 +73,9 @@ const AddScreen: React.FC<AddScreenProps> = ({ setGeneratedUI, uid, projectId, s
                     }
                     setHidden(!hidden);
                     setHideInput(hidden);
-                }} className={'relative h-165 w-100 flex border-gray-300 flex-col border rounded-md justify-center items-center mt-25 cursor-pointer hover:scale-[1.01] active:scale-[0.99] text-white'}>
+                }} className={'relative h-165 w-100  flex dark:border-gray-300  border-gray-600 flex-col border rounded-md justify-center items-center mt-25 cursor-pointer hover:scale-[1.01] active:scale-[0.99] dark:text-white text-black'}>
                     <span className={'font-medium text-xl'}>Add Screen</span>
-                    <p className={'text-white/60'}>Click here to add a screen</p>
+                    <p className={'dark:text-white/60 text-black/60'}>Click here to add a screen</p>
                 </Button>
                 <div hidden={hidden}>
                     <InputBox

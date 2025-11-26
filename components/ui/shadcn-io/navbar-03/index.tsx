@@ -263,7 +263,7 @@ export const Navbar03 = React.forwardRef<HTMLElement, Navbar03Props>(
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                className="text-sm font-medium hover:bg-accent hover:text-accent-foreground cursor-pointer"
 
               >
                 {signInText}

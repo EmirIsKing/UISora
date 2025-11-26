@@ -21,6 +21,7 @@ import SegmentedButtons from '@/components/projectPage/SegmentedButtons';
 import UIScreen from "@/components/projectPage/UIScreen";
 import {fetchProjectBlobData} from "@/actions/blob";
 import AddScreen from "@/components/projectPage/AddScreen";
+import {useRouter} from "next/navigation";
 
 interface JsonToHtmlRendererProps {
 
@@ -68,6 +69,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [openPayModal, setOpenPayModal] = useState(false);
     const [payModalText, setPayModalText] = useState("");
     const [isMobile, setIsMobile] = useState(false);
+    const router = useRouter();
 
 
     useEffect(() => {
@@ -81,6 +83,9 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
         const fetchProjectDetails = async () => {
             if (user?.uid) {
                 const projectDetails = await getProjectDetails(user?.uid, projectId);
+                if (!projectDetails){
+                    router.push('/dashboard/projects')
+                }
 
                 const { state } = await getProjectState(projectId);
                 if (state === "locked") {
@@ -426,7 +431,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 </div>
 
                 {/* Main Content */}
-                <div className="flex flex-1 relative overflow-hidden ">
+                <div className="flex flex-1 relative overflow-hidden">
                   <div className={'relative w-full h-full '}>
                     <div className="absolute top-4 left-4 z-50 flex gap-2 dark:bg-white rounded bg-black text-white dark:text-black max-md:hidden">
                       <button onClick={() => canvasRef.current?.zoomIn()} className="px-2 py-1 dark:hover:bg-black/60 hover:bg-white/60 rounded font-semibold">+</button>
@@ -442,8 +447,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                               className={''}
                           >
                               <div ref={screenshotRef} className='no-highlight'>
-                                  <div className="flex flex-nowrap items-start gap-x-[100px] p-4
-            max-md:flex-wrap max-md:gap-4 max-md:grid max-md:grid-cols-2">
+                                  <div className="flex flex-nowrap items-start gap-x-[100px] p-4">
                                       {generatedUI.ui.map((item, index: number) => {
                                           const screenWidth = item.screen.width || 280;
                                           const screenHeight = item.screen.height || 540;
@@ -489,7 +493,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                           const screenHeight = item.screen.height || 540;
 
                                           return (
-                                              <div key={index} className="mt-[-480px] scale-[0.3]">
+                                              <div key={index} className="mt-[-505px] scale-[0.3]">
                                                   <div
                                                       style={{
                                                           width: `${screenWidth}px`,

@@ -61,7 +61,7 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
     const viewport = viewportRef.current;
     if (!viewport) return;
     const { clientWidth, clientHeight } = viewport;
-    setTranslate({ x: clientWidth / 2, y: clientHeight / 2 });
+    setTranslate({ x: clientWidth / 1.8, y: clientHeight / 5 });
   }, []);
 
   useEffect(() => {
@@ -136,12 +136,12 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
     applyTransform(scale * multiplier, rect.left + rect.width / 2, rect.top + rect.height / 2);
   }
 
-  // function onWheel(e: React.WheelEvent) {
-  //   // Always use mouse/trackpad wheel to zoom (no modifiers needed)
-  //   e.preventDefault();
-  //   const multiplier = e.deltaY > 0 ? 1 / 1.1 : 1.1;
-  //   applyTransform(scale * multiplier, e.clientX, e.clientY);
-  // }
+  function onWheel(e: React.WheelEvent) {
+    // Always use mouse/trackpad wheel to zoom (no modifiers needed)
+    e.preventDefault();
+    const multiplier = e.deltaY > 0 ? 1 / 1.1 : 1.1;
+    applyTransform(scale * multiplier, e.clientX, e.clientY);
+  }
 
   function onPointerDown(e: React.PointerEvent) {
     (e.target as Element).setPointerCapture(e.pointerId);
@@ -205,6 +205,7 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
+      onWheelCapture={onWheel}
     >
       <div
         ref={contentRef}
@@ -225,7 +226,7 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
             top: '50%',
             transform: 'translate(-50%, -50%)',
           }}
-          className={'w-[800px]'}
+          className={''}
         >
           {children}
         </div>

@@ -1,4 +1,3 @@
-// actions/getProjectDetails.ts
 'use server';
 
 import { adminDb } from '@/utils/firebaseAdmin';

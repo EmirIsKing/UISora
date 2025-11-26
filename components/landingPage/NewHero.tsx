@@ -43,7 +43,7 @@ export function HeroShowcase({
         <div className="mx-auto grid max-w-5xl z-20 max-md:py-2 items-center gap-10 px-6 py-10 lg:grid-cols-2 lg:gap-20">
           <div className="mx-auto flex flex-col items-center text-center md:ml-auto lg:max-w-3xl lg:items-start lg:text-left order-2 lg:order-1">
             <h1 className="my-6 text-4xl font-bold text-pretty lg:text-6xl xl:text-7xl">
-              {heading}
+              Build beautiful Mobile UIs, effortlessly.
             </h1>
 
             <p className="text-foreground/70 mb-8 max-w-xl lg:text-xl">

@@ -1,4 +1,3 @@
-// app/page.tsx — SERVER COMPONENT
 import NavBar from '@/components/landingPage/NavBar'
 import { HeroShowcase } from '@/components/landingPage/NewHero'
 import ProblemSolution from '@/components/landingPage/ProblemSolution'
@@ -13,7 +12,6 @@ import ClientAuthGate from '@/components/landingPage/ClientAuthGate'
 
 export default function Page() {
   return (
-    <ClientAuthGate>
       <div className="min-h-screen max-md:overflow-x-hidden">
         <NavBar/>
         <HeroShowcase/>
@@ -26,6 +24,5 @@ export default function Page() {
         <FAQ/>
         <Footer/>
       </div>
-    </ClientAuthGate>
   )
 }

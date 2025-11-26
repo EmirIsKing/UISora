@@ -1,19 +1,19 @@
 "use client"
-import React from 'react'
+import React,{useState} from 'react'
 
 const Header = () => {
-    // const [email, setEmail] = useState("")
+    const [email, setEmail] = useState("")
 
-    // const handleSubscribe = async () => {
-    //     await fetch("/api/newsletterSubscribe", {
-    //       method: "POST",
-    //       headers: { "Content-Type": "application/json" },
-    //       body: JSON.stringify({ email }),
-    //     });
-    // }
+    const handleSubscribe = async () => {
+        await fetch("/api/newsletterSubscribe", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+    }
 
     const handleEmail = (email:string) => {
-        //setEmail(email);
+        setEmail(email);
         console.log(email)
     }
 
@@ -26,7 +26,7 @@ const Header = () => {
       </div>
       <form action="" className="flex justify-between max-w-[500px] scale-75 sm:scale-100 mx-auto border shadow-[-7px_7px_0px_#000] dark:shadow-[-7px_7px_0px_#fff]">
         <input type='email' onBlur={(e)=>{handleEmail(e.target.value)}} placeholder='Enter your email' className='pl-4 outline-none'/>
-        <button type='submit' className='border-l py-4 px-4 sm:px-8 active:bg-gray-600/70 active:text-white cursor-pointer hover:bg-gray-600/20'>Subscribe</button>
+        <button type='button' onClick={handleSubscribe} className='border-l py-4 px-4 sm:px-8 active:bg-gray-600/70 active:text-white cursor-pointer hover:bg-gray-600/20'>Subscribe</button>
       </form>
     </div>
   )

@@ -138,7 +138,7 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
 
   function onWheel(e: React.WheelEvent) {
     // Always use mouse/trackpad wheel to zoom (no modifiers needed)
-    e.preventDefault();
+    //e.preventDefault();
     const multiplier = e.deltaY > 0 ? 1 / 1.1 : 1.1;
     applyTransform(scale * multiplier, e.clientX, e.clientY);
   }

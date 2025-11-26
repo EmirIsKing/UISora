@@ -136,12 +136,12 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
     applyTransform(scale * multiplier, rect.left + rect.width / 2, rect.top + rect.height / 2);
   }
 
-  function onWheel(e: React.WheelEvent) {
-    // Always use mouse/trackpad wheel to zoom (no modifiers needed)
-    e.preventDefault();
-    const multiplier = e.deltaY > 0 ? 1 / 1.1 : 1.1;
-    applyTransform(scale * multiplier, e.clientX, e.clientY);
-  }
+  // function onWheel(e: React.WheelEvent) {
+  //   // Always use mouse/trackpad wheel to zoom (no modifiers needed)
+  //   e.preventDefault();
+  //   const multiplier = e.deltaY > 0 ? 1 / 1.1 : 1.1;
+  //   applyTransform(scale * multiplier, e.clientX, e.clientY);
+  // }
 
   function onPointerDown(e: React.PointerEvent) {
     (e.target as Element).setPointerCapture(e.pointerId);

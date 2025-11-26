@@ -17,8 +17,6 @@ import UiExport from '@/components/UiExport';
 import { SubscriptionStatus } from '@/app/dashboard/projects/page';
 import { getSubscriptionStatus } from '@/actions/getSubscriptionStatus';
 import UpgradeModal from '@/components/UpgradeModal';
-import UIScreen from "@/components/projectPage/UIScreen";
-import AddScreen from "@/components/projectPage/AddScreen";
 
 
 interface JsonToHtmlRendererProps {

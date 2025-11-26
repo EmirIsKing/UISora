@@ -10,7 +10,6 @@ interface HeroShowcaseProps {
 }
 
 export function HeroShowcase({
-  heading = "Build beautiful Mobile UIs, effortlessly.",
   description = "Transform Text to UI with an Advanced AI Mobile UI Generator",
 }: HeroShowcaseProps) {
   return (

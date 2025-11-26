@@ -8,7 +8,6 @@ import Pricing from '@/components/landingPage/Pricing'
 import Examples from '@/components/landingPage/Examples'
 import FAQ from '@/components/landingPage/FAQ'
 import Footer from '@/components/landingPage/Footer'
-import ClientAuthGate from '@/components/landingPage/ClientAuthGate'
 
 export default function Page() {
   return (

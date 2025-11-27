@@ -15,6 +15,7 @@ import { Separator } from '../ui/separator';
 import { Button } from '../ui/button';
 import { IoArrowBackSharp } from "react-icons/io5";
 import { FirebaseError } from 'firebase/app';
+import {createUser} from "@/actions/createUser";
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
@@ -51,7 +52,19 @@ export default function SignInForm() {
 
   const handleGoogleSignIn = async () => {
     try {
-      await googleSignIn();
+      const result = await googleSignIn();
+      if (result) {
+        if (!result.user.email) return;
+        const response = await createUser(result.user.email, password, result.user.displayName);
+        if (response.success) {
+          await fetch("/api/newsletterSubscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: result.user.email }),
+          });
+          setTimeout(() => router.push("/dashboard/projects"), 1500);
+        }
+      }
       router.push('/dashboard/projects');
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {

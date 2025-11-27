@@ -77,13 +77,17 @@ export default function SignUpForm() {
     try {
       const result = await googleSignIn();
       if (result) {
-        setSuccessMessage("Account created! Redirecting...");
-        await fetch("/api/newsletterSubscribe", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: result.user.email }),
-        });
-        setTimeout(() => router.push("/dashboard/projects"), 1500);
+        if (!result.user.email) return;
+        const response = await createUser(result.user.email, password, result.user.displayName);
+        if (response.success) {
+          setSuccessMessage("Account created! Redirecting...");
+          await fetch("/api/newsletterSubscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: result.user.email }),
+          });
+          setTimeout(() => router.push("/dashboard/projects"), 1500);
+        }
       }
       router.push('/dashboard/projects');
     } catch (error: unknown) {

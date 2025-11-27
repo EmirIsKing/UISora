@@ -66,7 +66,7 @@ if (!user) {
           <div className='px-4 py-2 text-blue-500'>Credits: <span className='font-bold text-green-500'>{credits}</span></div>
           <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
             <div className="font-medium">{user.displayName || 'User'}</div>
-            <div className="text-gray-500">{user.email}</div>
+            <div className="text-gray-500 truncate">{user.email}</div>
             {user.emailVerified && (
               <div className="text-green-600 text-xs mt-1">✓ Email verified</div>
             )}

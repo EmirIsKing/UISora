@@ -11,7 +11,8 @@ import {
   sendPasswordResetEmail,
   signInWithPopup,
   GoogleAuthProvider,
-  UserCredential
+  UserCredential,
+  updateProfile
 } from 'firebase/auth';
 import { auth } from '@/utils/firebase';
 
@@ -72,7 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Update display name if provided
       if (name && userCredential.user) {
         // Note: You might want to update the user profile here
-        // await updateProfile(userCredential.user, { displayName: name });
+        await updateProfile(userCredential.user, { displayName: name });
       }
     } catch (error: any) {
       setError(getErrorMessage(error.code));

@@ -20,15 +20,11 @@ if (getApps().length === 0) {
 const auth = getAuth();
 const db = getFirestore();
 
-export async function createUser(email: string, password?: string, name?: string) {
+export async function createUser(email: string, password?: string, name?: string | null) {
     try {
         let userRecord;
         if (password) {
-            userRecord = await auth.createUser({
-            email,
-            password,
-            displayName: name || '',
-            });
+            userRecord =  userRecord = await auth.getUserByEmail(email)
         } else {
             userRecord = await auth.getUserByEmail(email)
         }
@@ -39,8 +35,9 @@ export async function createUser(email: string, password?: string, name?: string
             email: userRecord.email,
             name: userRecord.displayName,
             createdAt: new Date(),
+            boughtCredits: 0,
             credits: 2000,
-            notifications: [{id: nanoid(), date: new Date(), message: "Welcome to UISora 🎉 You’ve been awarded 2,000 free credits to start generating beautiful UIs. Let’s build something amazing! 🚀"}]
+            notifications: [{id: nanoid(), date: new Date(), message: "Welcome to UISora 🎉 You’ve been credited 2,000 free credits to start generating beautiful UIs. Let’s build something amazing! 🚀"}]
         });
 
         return {

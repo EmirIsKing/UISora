@@ -38,6 +38,18 @@ const Verify = () => {
     return () => clearInterval(interval);
   }, [router]);
 
+  useEffect(() => {
+
+    const interval = setInterval(async () => {
+     if (auth.currentUser){
+       const tempUser = auth.currentUser;
+       await sendEmailVerification(tempUser);
+     }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [auth.currentUser]);
+
   const resendVerification = async () => {
     const currentUser = auth.currentUser;
     if (!currentUser) return setMessage("No user signed in.");

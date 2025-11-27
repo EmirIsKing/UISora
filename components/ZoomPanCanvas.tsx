@@ -1,5 +1,12 @@
 'use client'
-import React, { useRef, useState, useImperativeHandle, useLayoutEffect, forwardRef, useEffect } from 'react';
+import React, {
+  useRef,
+  useState,
+  useImperativeHandle,
+  useLayoutEffect,
+  forwardRef,
+  useEffect
+} from 'react';
 
 type ZoomPanCanvasProps = {
   children: React.ReactNode;
@@ -22,15 +29,15 @@ const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(mi
 const PINCH_DETECT_DISTANCE = 0.001;
 
 const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(function ZoomPanCanvas(
-  {
-    children,
-    panningEnabled = true,
-    minScale = 0.1,
-    maxScale = 5,
-    initialScale = 0.5,
-    className,
-  },
-  ref
+    {
+      children,
+      panningEnabled = true,
+      minScale = 0.1,
+      maxScale = 5,
+      initialScale = 0.5,
+      className,
+    },
+    ref
 ) {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -47,30 +54,38 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
   const pointers = useRef<Map<number, { x: number; y: number }>>(new Map());
   const lastPanRef = useRef<{ x: number; y: number } | null>(null);
 
+  // Store the initial transform (translate + scale) to reset later
+  const initialTransform = useRef({ x: 0, y: 0, scale: initialScale });
+
   useImperativeHandle(ref, () => ({
     zoomIn: () => smoothZoom(1.2),
     zoomOut: () => smoothZoom(1 / 1.2),
     reset: () => {
-      setScale(initialScale);
-      setTranslate({ x: 0, y: 0 });
+      setScale(initialTransform.current.scale);
+      setTranslate({ x: initialTransform.current.x, y: initialTransform.current.y });
     },
   }));
 
   useLayoutEffect(() => {
-    // Center content on mount
     const viewport = viewportRef.current;
     if (!viewport) return;
     const { clientWidth, clientHeight } = viewport;
-    setTranslate({ x: clientWidth / 1.8, y: clientHeight / 5 });
+
+    // Compute initial centered position
+    const initialX = clientWidth / 1.8;
+    const initialY = clientHeight / 5;
+
+    setTranslate({ x: initialX, y: initialY });
+
+    // Save initial transform
+    initialTransform.current = { x: initialX, y: initialY, scale: initialScale };
   }, []);
 
   useEffect(() => {
     // Prevent iOS Safari two-finger browser zoom
     const viewport = viewportRef.current;
     if (!viewport) return;
-    const onGesture = (e: Event) => {
-      e.preventDefault();
-    };
+    const onGesture = (e: Event) => e.preventDefault();
     viewport.addEventListener('gesturestart', onGesture as EventListener, { passive: false });
     viewport.addEventListener('gesturechange', onGesture as EventListener, { passive: false });
     viewport.addEventListener('gestureend', onGesture as EventListener, { passive: false });
@@ -97,7 +112,6 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
       viewport.removeEventListener("wheel", wheelHandler);
     };
   }, [scale]);
-
 
   function flushQueuedTransform() {
     const params = queuedTransformRef.current;
@@ -137,8 +151,6 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
   }
 
   function onWheel(e: React.WheelEvent) {
-    // Always use mouse/trackpad wheel to zoom (no modifiers needed)
-    //e.preventDefault();
     const multiplier = e.deltaY > 0 ? 1 / 1.1 : 1.1;
     applyTransform(scale * multiplier, e.clientX, e.clientY);
   }
@@ -198,43 +210,40 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
   }
 
   return (
-    <div
-      ref={viewportRef}
-      className={"relative w-full h-full overflow-hidden touch-none " + (className ?? '')}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
-      onWheelCapture={onWheel}
-    >
       <div
-        ref={contentRef}
-        style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          width: '100%',
-          height: '100%',
-          transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
-          transformOrigin: '0 0',
-        }}
+          ref={viewportRef}
+          className={"relative w-full h-full overflow-hidden " + (className ?? '')}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          onWheelCapture={onWheel}
       >
         <div
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
-          className={''}
+            ref={contentRef}
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              width: '100%',
+              height: '100%',
+              transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+              transformOrigin: '0 0',
+            }}
         >
-          {children}
+          <div
+              style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+          >
+            {children}
+          </div>
         </div>
       </div>
-    </div>
   );
 });
 
 export default ZoomPanCanvas;
-
-

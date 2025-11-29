@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
   const userId = data.meta.custom_data?.user_id;
   const type = data.meta.custom_data?.type; // "CreditBuy" or undefined for subscription
-  console.log(type)
+  const now = new Date();
 
   const userRef = db.collection("users").doc(userId);
   const subscriptionId = data.data.id;
@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
   const plan = attributes.product_name;
   const customerId = attributes.customer_id;
   const renewsAt = attributes.renews_at ?? null;
+  const todayISO = now.toISOString();
   
   console.log("Event:", eventName, "| Type:", type);
 
@@ -89,6 +90,7 @@ export async function POST(request: NextRequest) {
           plan,
           customerId,
           renewsAt,
+          lastTopupAt: todayISO,
           createdAt: new Date().toISOString(),
         }
       }, { merge: true });
@@ -97,6 +99,7 @@ export async function POST(request: NextRequest) {
     case "subscription_payment_success":
       await userRef.update({
         credits: 50000, //  reset credits
+        "subscription.lastTopupAt": todayISO,
         "subscription.renewsAt": renewsAt,
         "subscription.lastRenewalAt": new Date().toISOString(),
       });

@@ -52,5 +52,7 @@ export async function GET() {
         processed++;
     }
 
+    console.log(processed);
+
     return NextResponse.json({ success: true, processed });
 }

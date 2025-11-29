@@ -133,7 +133,7 @@ Do not return any explanation, description, or markdown — only the JSON.
 
         messages.push({
             role: "user",
-            content: `Generate the "${screenName}" screen. ${screenPrompt} Do not use placeholder images; use the images below only if need, its not necessary to use: ${imageHolder.join(', ')}`
+            content: `Generate the "${screenName}" screen. ${screenPrompt} Do not use placeholder images; use the images below only if needed, its not a must to use: ${imageHolder.join(', ')}`
         });
         if (styleGuide) {
             messages.push({

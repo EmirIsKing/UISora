@@ -64,7 +64,7 @@ const AddScreen: React.FC<AddScreenProps> = ({ setGeneratedUI, uid, projectId, s
     };
 
     return (
-            <div hidden={hide} className={'flex flex-col max-w-100 relative  gap-10 max-md:scale-[0.3] max-md:mb-10 max-md:mt-[-530px]'}>
+            <div hidden={hide} className={'flex flex-col max-w-100 relative  gap-10 max-md:scale-[0.3] max-md:mb-10 max-md:mt-[-290px]'}>
                 <Button onClick={()=> {
                     if ( subscription?.subscription?.status != "Active"){
                         setOpenPayModal(true);

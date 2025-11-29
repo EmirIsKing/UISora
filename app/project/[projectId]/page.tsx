@@ -492,13 +492,28 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                           const screenWidth = item.screen.width || 280;
                                           const screenHeight = item.screen.height || 540;
 
+                                          const scale = 0.3;
+                                          const scaledHeight = screenHeight * scale;
+
                                           return (
-                                              <div key={index} className="mt-[-505px] scale-[0.3]">
+                                              <div
+                                                  key={index}
+                                                  style={{
+                                                      height: scaledHeight,
+                                                      display: "flex",
+                                                      justifyContent: "center",
+                                                      marginTop: index === 0 ? 0 : 0,
+                                                      // adjust overlap amount (0.9 = slight overlap)
+                                                  }}
+                                                  className={'mb-18'}
+                                              >
                                                   <div
                                                       style={{
-                                                          width: `${screenWidth}px`,
-                                                          height: `${screenHeight}px`,
-                                                          position: 'relative',
+                                                          width: screenWidth,
+                                                          height: screenHeight,
+                                                          transform: `scale(${scale})`,
+                                                          transformOrigin: "top center",
+                                                          position: "relative",
                                                       }}
                                                   >
                                                       <UIScreen
@@ -515,6 +530,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                               </div>
                                           );
                                       })}
+
                                       {generatedUI.ui.length > 0 && (
                                           <AddScreen setOpenPayModal={setOpenPayModal} setPayModalText={setPayModalText}
                                                      subscription={subscription} hide={exportModal}

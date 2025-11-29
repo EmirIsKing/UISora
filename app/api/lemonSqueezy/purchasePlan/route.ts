@@ -4,7 +4,6 @@ import { LemonSqueezyApiInstance } from "@/actions/lemonSqueezyApiInstance";
 export async function POST(req: Request) {
   try {
     const data = await req.json();
-    console.log(data)
 
     if (!data.productId || !data.userId) {
         return Response.json({message:"Product Id and user Id are required"}, { status: 500 });
@@ -45,8 +44,6 @@ export async function POST(req: Request) {
     })
 
     const checkoutUrl = response.data.data.attributes.url;
-    console.log(response.data)
-    console.log(response.data.data.attributes)
 
     return Response.json({checkoutUrl}, { status: 200 });
   } catch (error) {

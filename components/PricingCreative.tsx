@@ -14,10 +14,6 @@ export function PricingCreative({userId, email}:{userId?:string; email?:string})
   const checkout = async () => {
     if (!userId) return;
 
-    console.log(email)
-    console.log(userId)
-
-  
     try {
       setLoading(true)
       const response = await fetch("/api/lemonSqueezy/purchasePlan", {
@@ -33,7 +29,7 @@ export function PricingCreative({userId, email}:{userId?:string; email?:string})
       });
   
       const data = await response.json();
-  
+
       window.open(data.checkoutUrl);
     } catch (error) {
       console.error(error);

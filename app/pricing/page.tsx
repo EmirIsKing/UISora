@@ -17,9 +17,6 @@ const Pricing = () => {
     return () => unsubscribe();
   }, []);
 
-useEffect(() => {
-  console.log(user)
-}, [user])
   
 
   return (

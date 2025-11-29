@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
     switch (eventName) {
       case "subscription_created":
       await userRef.set({
-        credits: 50000, // ✅ Reset credits on new subscription
+        credits: 50000, // Reset credits on new subscription
         subscription: {
           id: subscriptionId,
           status,
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
 
     case "subscription_payment_success":
       await userRef.update({
-        credits: 50000, // ✅ reset credits
+        credits: 50000, //  reset credits
         "subscription.renewsAt": renewsAt,
         "subscription.lastRenewalAt": new Date().toISOString(),
       });

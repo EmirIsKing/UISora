@@ -16,7 +16,10 @@ if (!getApps().length) {
 const db = getFirestore();
 
 export async function GET() {
-    const today = new Date().toISOString().split("T")[0];
+    const now = new Date();
+    const currentMonth = now.toISOString().slice(0, 7); // "2025-11"
+    const todayISO = now.toISOString();
+
     const snapshot = await db.collection("users")
         .where("subscription.plan", "==", "Pro Annually")
         .get();
@@ -25,38 +28,29 @@ export async function GET() {
 
     for (const doc of snapshot.docs) {
         const user = doc.data();
-        const { subscription} = user;
+        const { subscription } = user;
 
-        if (!subscription?.renewsAt || !subscription?.createdAt) continue;
+        if (!subscription?.renewsAt) continue;
 
-        const renewsAt = new Date(subscription.renewsAt).toISOString().split("T")[0];
-        const createdAt = new Date(subscription.createdAt);
+        const renewsAt = new Date(subscription.renewsAt);
 
-        // Only top up if today == renewsAt
-        if (renewsAt !== today) continue;
+        // ❌ STOP if contract is over (user didn't renew)
+        if (renewsAt < now) continue;
 
-        // Stop if it has been 1 year since creation
-        const monthsSinceCreated =
-            (new Date().getFullYear() - createdAt.getFullYear()) * 12 +
-            (new Date().getMonth() - createdAt.getMonth());
-        if (monthsSinceCreated >= 12) continue;
+        // ❌ STOP if already topped up this month
+        if (subscription.lastTopupAt) {
+            const lastMonth = subscription.lastTopupAt.slice(0, 7);
+            if (lastMonth === currentMonth) continue;
+        }
 
-        const nextRenewDate = addOneMonth(renewsAt);
-
+        // 🔥 RESET CREDITS TO EXACT 50,000
         await doc.ref.update({
-            credits: 50000, // 💎 Add monthly credits (adjust amount)
-            "subscription.renewsAt": nextRenewDate,
-            "subscription.lastTopupAt": new Date().toISOString(),
+            credits: 50000,
+            "subscription.lastTopupAt": todayISO,
         });
 
         processed++;
     }
 
     return NextResponse.json({ success: true, processed });
-}
-
-function addOneMonth(dateStr: string) {
-    const d = new Date(dateStr);
-    d.setMonth(d.getMonth() + 1);
-    return d.toISOString().split("T")[0];
 }

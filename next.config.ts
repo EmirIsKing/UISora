@@ -25,6 +25,10 @@ const nextConfig: NextConfig = {
                 protocol: "https",
                 hostname: "cdn.uisora.com",
             },
+            {
+                protocol: "https",
+                hostname: "v3b.fal.media",
+            },
         ],
     },
 

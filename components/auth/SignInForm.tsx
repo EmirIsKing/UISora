@@ -56,7 +56,7 @@ export default function SignInForm() {
       if (result) {
         if (!result.user.email) return;
         const response = await createUser(result.user.email, password, result.user.displayName);
-        if (response.success) {
+        if (response.isNewUser) {
           await fetch("/api/newsletterSubscribe", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

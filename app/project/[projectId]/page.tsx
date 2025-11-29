@@ -485,9 +485,9 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                           </div>
                       </ZoomPanCanvas>)}
                       {isMobile && (
-                          <div className={'relative w-full h-full scroll-smooth overflow-y-scroll'}>
+                          <div className={`${exportModal ? "" : "relative w-full h-full scroll-smooth overflow-y-scroll"}`}>
                               <div ref={screenshotRef} className='no-highlight w-full'>
-                                  <div className="flex flex-col w-full justify-center items-center pt-70">
+                                  <div className={` ${exportModal ? "flex flex-nowrap items-start gap-x-[100px] p-4":"flex flex-col w-full justify-center items-center pt-70"}`}>
                                       {generatedUI.ui.map((item, index) => {
                                           const screenWidth = item.screen.width || 280;
                                           const screenHeight = item.screen.height || 540;
@@ -495,11 +495,12 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                           const scale = 0.3;
                                           const scaledHeight = screenHeight * scale;
 
+
                                           return (
                                               <div
                                                   key={index}
                                                   style={{
-                                                      height: scaledHeight,
+                                                      height: exportModal ? screenHeight : scaledHeight,
                                                       display: "flex",
                                                       justifyContent: "center",
                                                       marginTop: index === 0 ? 0 : 0,
@@ -511,7 +512,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                                                       style={{
                                                           width: screenWidth,
                                                           height: screenHeight,
-                                                          transform: `scale(${scale})`,
+                                                          transform: `${exportModal ? "scale(0.9)" : `scale(${scale})`}`,
                                                           transformOrigin: "top center",
                                                           position: "relative",
                                                       }}

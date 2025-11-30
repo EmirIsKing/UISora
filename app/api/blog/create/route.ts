@@ -35,7 +35,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error }, { status: 500 });
     }
 
-    await notifyIndexNow([`https://uisora.com/${body.slug}`]);
+    await notifyIndexNow([`https://uisora.com/blog/${body.slug}`]);
 
 
     return NextResponse.json({ success: true, data }, { status: 200 });

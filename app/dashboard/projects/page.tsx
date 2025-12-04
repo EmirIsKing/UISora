@@ -115,7 +115,13 @@ const Page = () => {
                             )}
 
                 {!loading &&
-                    projects.map((project) => (
+                    projects
+                        .sort((a, b) => {
+                            const timeA = a.createdAt.seconds * 1000 + a.createdAt.nanoseconds / 1e6;
+                            const timeB = b.createdAt.seconds * 1000 + b.createdAt.nanoseconds / 1e6;
+                            return timeB - timeA; // latest first
+                        })
+                        .map((project) => (
                         <ProjectItem
                             key={project.id}
                             project={project}

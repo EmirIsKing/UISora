@@ -11,11 +11,11 @@ export async function generateMetadata(
 
   return {
     title: formattedTitle,
-    description: 'Insights on AI-assisted UI design, mobile UX, and product building.',
+    description: `Insights on AI-assisted UI design, mobile UX, and product building. ${titleBase.charAt(0).toUpperCase()}${titleBase.slice(1)}`,
     alternates: { canonical: `/blog/${slug}` },
     openGraph: {
       title: formattedTitle,
-      description: 'Insights on AI-assisted UI design, mobile UX, and product building.',
+      description: `Insights on AI-assisted UI design, mobile UX, and product building. ${titleBase.charAt(0).toUpperCase()}${titleBase.slice(1)}`,
       images: [{ url: '/uisora-og.png', width: 1200, height: 630 }],
       type: 'article',
     },

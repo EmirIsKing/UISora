@@ -65,10 +65,6 @@ const Footer = () => {
           <p className="text-sm text-muted-foreground">
             © 2025 UISora. All rights reserved.
           </p>
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-primary transition-colors">Twitter</a>
-
-          </div>
         </div>
       </div>
     </footer>

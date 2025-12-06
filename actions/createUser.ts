@@ -51,7 +51,7 @@ export async function createUser(email: string, password?: string, name?: string
             await db.collection("users").doc(uid).set({
                 uid,
                 email: userRecord.email,
-                name: userRecord.displayName || name || "",
+                name: name || userRecord.displayName || "",
                 createdAt: new Date(),
                 boughtCredits: 0,
                 credits: 2000,

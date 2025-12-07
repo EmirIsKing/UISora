@@ -22,7 +22,7 @@ import UIScreen from "@/components/projectPage/UIScreen";
 import {fetchProjectBlobData} from "@/actions/blob";
 import AddScreen from "@/components/projectPage/AddScreen";
 import {useRouter} from "next/navigation";
-import HtmlExport from '@/components/htmlExport';
+import HtmlExport from '@/components/HtmlExport';
 
 interface JsonToHtmlRendererProps {
 

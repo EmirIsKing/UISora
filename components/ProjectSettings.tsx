@@ -4,6 +4,10 @@ import {setProjectSettings} from "@/actions/setProjectSettings";
 import {Button} from "@heroui/button";
 import { ProjectSettingsWithId} from "@/actions/getProjectDetails";
 import Loader from '@/components/Loader'
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from './ui/input-group';
+import {IconCheck} from "@tabler/icons-react";
+import {IconCopy} from "@tabler/icons-react";
+import {useCopyToClipboard} from 'usehooks-ts';
 
 const ProjectSettings = ({toggleSettings, projectDetails, setProjectNameOptimistic}:{toggleSettings:()=>void; projectDetails: ProjectSettingsWithId | null; setProjectNameOptimistic:(value:string)=>void}) => {
 
@@ -15,6 +19,7 @@ const ProjectSettings = ({toggleSettings, projectDetails, setProjectNameOptimist
 );
 
     const [loading, setLoading] = useState(false)
+    const [isCopied, copyToClipboard] = useCopyToClipboard();
 
     const saveSettings = async () => {
         try {
@@ -104,6 +109,27 @@ const ProjectSettings = ({toggleSettings, projectDetails, setProjectNameOptimist
                                 </label>
                             </div>
                         </div>
+                        {/*Share link*/}
+                        {projectVisibility === 'public' && projectDetails?.id && (
+                            <div className='flex flex-col gap-2'>
+                            <label className="font-medium">Sharable Link:</label>
+                            <InputGroup>
+                                <InputGroupInput value={`https://uisora.com/project/view/${projectDetails?.id}`} readOnly />
+                                <InputGroupAddon align="inline-end">
+                                <InputGroupButton
+                                    aria-label="Copy"
+                                    title="Copy"
+                                    size="icon-xs"
+                                    onClick={() => {
+                                    copyToClipboard(`https://uisora.com/project/view/${projectDetails?.id}`)
+                                    }}
+                                >
+                                    {isCopied ? <IconCheck /> : <IconCopy />}
+                                </InputGroupButton>
+                                </InputGroupAddon>
+                            </InputGroup>
+                        </div>
+                        )}
                     </div>
 
 

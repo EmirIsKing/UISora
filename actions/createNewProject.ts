@@ -31,7 +31,7 @@ export async function createNewProject(userId?: string): Promise<string> {
     const emptyUiJson: any[] = [];
     const settings: ProjectSettings = {
         projectName: "New Project",
-        visibility: "private"
+        visibility: "public"
     };
     //
     // // 1. Upload uiJson to Firebase Storage

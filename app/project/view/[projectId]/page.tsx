@@ -233,7 +233,7 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                                                       onDoubleClick={(e)=>{ e.stopPropagation(); }}
                                                   >
                                                       <Screen hideEdit={true} screen={item.screen}>
-                                                          <JsonToHtmlRenderer setHTMLData={setHTMLData} data={item.component} />
+                                                          <JsonToHtmlRenderer HTMLData={HTMLData} setHTMLData={setHTMLData} data={item.component} />
                                                       </Screen>
                                                   </div>
                                               );

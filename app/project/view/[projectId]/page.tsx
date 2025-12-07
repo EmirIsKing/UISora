@@ -17,6 +17,8 @@ import UiExport from '@/components/UiExport';
 import { SubscriptionStatus } from '@/app/dashboard/projects/page';
 import { getSubscriptionStatus } from '@/actions/getSubscriptionStatus';
 import UpgradeModal from '@/components/UpgradeModal';
+import HtmlExport from '@/components/HtmlExport';
+
 
 
 interface JsonToHtmlRendererProps {
@@ -36,6 +38,11 @@ type ChatItemType = {
     AiResponse: string;
 };
 
+interface HtmlEntry {
+    screenName: string;
+    component: string;
+}
+
 
 export default function ProjectView({ params }: { params: Promise<{ projectId: string }> }) {
     const [generatedUI, setGeneratedUI] = useState<JsonToHtmlRendererProps>(jsondata);
@@ -50,6 +57,7 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
     const [imageHolder, setImageHolder] = useState([]);
     const [subscription, setSubscription] = useState<SubscriptionStatus | null>(null)
     const [isMobile, setIsMobile] = useState(false);
+    const [HTMLData, setHTMLData] = useState<HtmlEntry[]>([])
 
 
     useEffect(() => {
@@ -225,7 +233,7 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                                                       onDoubleClick={(e)=>{ e.stopPropagation(); }}
                                                   >
                                                       <Screen hideEdit={true} screen={item.screen}>
-                                                          <JsonToHtmlRenderer data={item.component} />
+                                                          <JsonToHtmlRenderer setHTMLData={setHTMLData} data={item.component} />
                                                       </Screen>
                                                   </div>
                                               );
@@ -278,9 +286,10 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                     <div
                         onClick={()=>setExportModal(false)}
                         className={'fixed inset-0 flex w-full h-full justify-center items-center backdrop-blur-xs z-[9999]'}>
-                        <div className="bg-white text-black rounded-xl shadow-md w-80 flex items-center justify-center gap-4 p-12">
+                        <div className="bg-white text-black rounded-xl shadow-md w-80 grid grid-cols-2 items-center justify-center gap-4 p-12">
                             <AssetExport assets={imageHolder}/>
                             <UiExport screenRef={screenshotRef}/>
+                            <HtmlExport HtmlEntry={HTMLData}/>
                         </div>
 
                     </div>

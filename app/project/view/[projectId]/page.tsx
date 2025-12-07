@@ -67,6 +67,9 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
+
+    
+
     useEffect(() => {
         const fetchProjectDetails = async () => {
             try {
@@ -154,6 +157,9 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
         }
     }, [ chat, generatedUI, sidebarToggle ]);
 
+    // useEffect(() => {
+    //   console.log("HTMLData updated:", HTMLData);
+    // }, [HTMLData])
 
     return (
             <section className={'flex flex-col h-screen'}>
@@ -233,7 +239,7 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                                                       onDoubleClick={(e)=>{ e.stopPropagation(); }}
                                                   >
                                                       <Screen hideEdit={true} screen={item.screen}>
-                                                          <JsonToHtmlRenderer HTMLData={HTMLData} setHTMLData={setHTMLData} data={item.component} />
+                                                          <JsonToHtmlRenderer screen={item.screen.name} HTMLData={HTMLData} setHTMLData={setHTMLData} data={item.component} />
                                                       </Screen>
                                                   </div>
                                               );
@@ -265,7 +271,7 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                                                       onDoubleClick={(e)=>{ e.stopPropagation(); }}
                                                   >
                                                       <Screen hideEdit={true} screen={item.screen}>
-                                                          <JsonToHtmlRenderer data={item.component} />
+                                                          <JsonToHtmlRenderer screen={item.screen.name} HTMLData={HTMLData} setHTMLData={setHTMLData} data={item.component} />
                                                       </Screen>
                                                   </div>
                                               </div>

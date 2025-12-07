@@ -356,7 +356,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
            }
 
        } catch (error) {
-           console.log(error);
+           console.error(error);
            setChat((prevChat) =>
                prevChat.map((item, index) =>
                    index === prevChat.length - 1 ? { ...item, AiResponse: `Error: ${error instanceof Error ? error.message : "Unable to generate UI. Please try again later."}` } : item

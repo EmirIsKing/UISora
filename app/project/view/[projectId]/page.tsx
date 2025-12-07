@@ -111,7 +111,7 @@ export default function ProjectView({ params }: { params: Promise<{ projectId: s
                            
                         }
 
-                        console.log("Loaded blob data:", blobData);
+                        //console.log("Loaded blob data:", blobData);
                     } else {
                         console.error("Project is private or cannot be found.");
                     }

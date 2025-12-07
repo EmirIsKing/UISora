@@ -16,7 +16,7 @@ const AssetExport = ({assets}:{assets: string[]}) => {
     const zip = new JSZip();
     // @ts-expect-error or undefined
     const urls : string[] = assets.map(str => (str.match(/https?:\/\/[^\s]+/g) || [])[0])
-    console.log(urls)
+    //console.log(urls)
 
     for (let i = 0; i < assets.length; i++) {
       const url = urls[i];
@@ -36,7 +36,7 @@ const AssetExport = ({assets}:{assets: string[]}) => {
   return (
     <Button onPress={handleExport} className='flex text-black flex-col !px-4 !py-9 items-center justify-center border border-black rounded-md
       cursor-pointer active:opacity-70 hover:shadow-md transition-all duration-300'>
-      <span className={`text-sm font-bold text-nowrap ${isloading? "hidden":""}`}>Export Assets</span>
+      <span className={`text-sm font-bold text-nowrap ${isloading? "hidden":""}`}>Export Images</span>
       <span className={`text-sm text-gray-500 ${isloading? "hidden":""}`}>type: Zip</span>
       <span className={`loader ${isloading ? "":"!hidden"}`}></span>
     </Button>

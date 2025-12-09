@@ -69,8 +69,10 @@ Generate a single mobile app UI/UX screen based on the user's prompt.
 ${subHelper}
 
 The UI must be visually appealing and well-structured. Use modern design styles, spacing, typography, color usage, and layout flow. The default mobile screen size is minimum width 375px and minimum height 500px.
-return component in triple-quotes
+return component in triple-quotes.
+Do not use escape characters
 Rules:
+- Do not use escape characters
 - NEVER include DOCTYPE html.
 - NEVER include html, head, body.
 - NEVER include style or script  tags.
@@ -121,7 +123,8 @@ Example output:
 	 ]
  }
 
-The "component" string must contain valid HTML and inline CSS only. 
+The """component""" string must contain valid HTML and inline CSS only. 
+return component in triple-quotes.
 Do not return any explanation, description, or markdown — only the JSON.
 `;
 

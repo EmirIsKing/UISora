@@ -166,7 +166,7 @@ Do not return any explanation, description, or markdown — only the JSON.
         await sleep(2000);
 
         const response = await mistralClient.chat.complete({
-            model: "mistral-medium-2508",
+            model: "mistral-large-2512",
             messages,
             temperature: 0.7,
             responseFormat: { type: "json_object" },

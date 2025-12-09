@@ -46,6 +46,7 @@ function enforceRootDivDimensions(html: string, widthPx: number, heightPx: numbe
     return html.replace(fullMatch, newOpenTag);
 }
 
+
 export default async function GenerateSingleScreen(
     screenPrompt: string,
     screenName: string,
@@ -68,12 +69,21 @@ Generate a single mobile app UI/UX screen based on the user's prompt.
 ${subHelper}
 
 The UI must be visually appealing and well-structured. Use modern design styles, spacing, typography, color usage, and layout flow. The default mobile screen size is minimum width 375px and minimum height 500px.
-
+return component in triple-quotes
 Rules:
+- NEVER include DOCTYPE html.
+- NEVER include html, head, body.
+- NEVER include style or script  tags.
+- NEVER include external stylesheets.
+- NEVER generate a full webpage.
+- NEVER wrap the UI in an HTML document.
+- NEVER include CSS outside inline styles.
 - Always output raw HTML with real < > characters.
 - Never escape characters as \u003C or \u003E.
 - Never include backslashes before quotes.
 - Never HTML-escape tags.
+- No scrolls extend frame to match content (height)
+- No javascript.
 - Never reorder or auto-correct HTML.
 - The output must be 100% valid HTML.
 - Iterate of the code to make sure it is right.
@@ -83,7 +93,7 @@ Rules:
 - Only change exactly what user asks for and nothing else.
 - Each element must have a unique id.
 - Wrap the screen in one root <div>.
-- Use camelCase for SVG attributes.
+- Use camelCase for SVG attributes eg stroke-width should be strokeWidth.
 - No comments.
 - make the screen concise to reduce output tokens.
 - Do not over style the screen, keep it simple and minimalistic.
@@ -105,7 +115,7 @@ Example output:
 	 [
 		 { 
 			"screen": { "name": "${screenName}", "width": 375, "height": 700 }, 
-			"component": "<div id='unique-id' class='container' style='font-weight:bold'><h2 id='unique-id'>Screen Title</h2></div>" 
+			"component": """<div style="width:375px;height:700px;">...</div>"""
 			"message: "${screenName} - short detail about main changes made"
 		 } 
 	 ]
@@ -152,7 +162,7 @@ Do not return any explanation, description, or markdown — only the JSON.
         await sleep(2000);
 
         const response = await mistralClient.chat.complete({
-            model: "mistral-large-2512",
+            model: "mistral-medium-2508",
             messages,
             temperature: 0.7,
             responseFormat: { type: "json_object" },

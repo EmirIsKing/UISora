@@ -375,7 +375,10 @@ export async function POST(request: Request) {
                 console.log(`Deducted ${screenCredits} credits for screen ${result.screenName}`);
 
                 // Convert the screen
-                const convertedComponent = JSON.parse(await HtmlToJson(result.screen.component) as string);
+                const convertedComponent = JSON.parse(await HtmlToJson(result.screen.component.replace(/\u003C/g, "<")
+                    .replace(/\u003E/g, ">")
+                    .replace(/\u002F/g, "/")
+                    .replace(/,\s*}/g, "}")) as string);
                 const generatedScreen = {
                   screen: result.screen.screen,
                   component: convertedComponent,

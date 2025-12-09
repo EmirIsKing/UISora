@@ -70,7 +70,13 @@ ${subHelper}
 The UI must be visually appealing and well-structured. Use modern design styles, spacing, typography, color usage, and layout flow. The default mobile screen size is minimum width 375px and minimum height 500px.
 
 Rules:
--iterate of the code to make sure it is right.
+- Always output raw HTML with real < > characters.
+- Never escape characters as \u003C or \u003E.
+- Never include backslashes before quotes.
+- Never HTML-escape tags.
+- Never reorder or auto-correct HTML.
+- The output must be 100% valid HTML.
+- Iterate of the code to make sure it is right.
 - Use camelCase on SVG attributes.
 - Use pure HTML with inline CSS styles.
 - Generate ONLY ONE screen.
@@ -79,7 +85,6 @@ Rules:
 - Wrap the screen in one root <div>.
 - Use camelCase for SVG attributes.
 - No comments.
-- No malformed HTML.(&lt; instead of <)
 - make the screen concise to reduce output tokens.
 - Do not over style the screen, keep it simple and minimalistic.
 - Do not over scope the design.
@@ -134,7 +139,7 @@ Do not return any explanation, description, or markdown — only the JSON.
 
         messages.push({
             role: "user",
-            content: `Generate the "${screenName}" screen. ${screenPrompt} Do not use placeholder images; use the images below only if needed, its not a must to use: ${imageHolder.join(', ')}`
+            content: `Generate the "${screenName}" screen. ${screenPrompt} Do not use placeholder images; use the image links below if you need images: ${imageHolder.join(', ')}`
         });
         if (styleGuide) {
             messages.push({

@@ -107,6 +107,8 @@ export async function POST(request: Request) {
         let fattenedTokens = 0;
         let title: string = "New Project Title";
         let fattenedMessage: string = '';
+        let splashImagePrompt: string = '';
+        let otherImagesPrompt: string = '';
         
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let fattenedJson: any = null;
@@ -132,6 +134,8 @@ export async function POST(request: Request) {
           fattenedMessage = fattenedJson?.ui?.[0]?.message ?? '';
           title = fattenedJson?.ui?.[0]?.title ?? "New project Title";
           styleGuide = fattenedJson?.ui?.[0]?.style_guide ?? undefined;
+          splashImagePrompt = fattenedJson?.ui?.[0]?.splashImagePrompt ?? undefined;
+          otherImagesPrompt = fattenedJson?.ui?.[0]?.otherImagesPrompt ?? undefined;
           
           console.log("Prompt Fattening done");
           
@@ -176,8 +180,8 @@ export async function POST(request: Request) {
           const globalProjectRef = adminDb.doc(`projects/${projectId}`);
           const imageGenerationPromise = images.length === 0
             ? Promise.all([
-                ImageGeneration(fattenedPrompt + ' splash', 1).then(r => r?.json()),
-                ImageGeneration(fattenedPrompt + ' supporting images', 4).then(r => r?.json())
+                ImageGeneration(splashImagePrompt + ' splash', 1).then(r => r?.json()),
+                ImageGeneration(otherImagesPrompt + ' supporting images', 4).then(r => r?.json())
               ])
             : Promise.resolve(null);
           

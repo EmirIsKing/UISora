@@ -57,8 +57,8 @@ export default async function PromptFattening(prompt: string, subHelper: string)
                             etc
                         ],
                         message: "describing the ui screen by screen and some spacing between screen messages for readability.",
-                        splashImagePrompt: "An image of a coffee shop for a splash screen",
-                        otherImagesPrompt: "An image of coffee in a cup"
+                        splashImagePrompt: "simple prompt for a splashscreen in context",
+                        otherImagesPrompt: "simple prompt for general supporting images in context"
                     }
                 ],
             }

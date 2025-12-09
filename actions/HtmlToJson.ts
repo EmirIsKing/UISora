@@ -20,7 +20,7 @@ export default async function HtmlToJson(html: string) {
       return `<${tagName}${remaining}${mergedStyle}>`;
     });
 
-    const result = await HTMLToJSON(sanitized, true);
+    const result = await HTMLToJSON(html, true);
     return result;
   } catch (error) {
     console.error("HtmlToJson parse error:", error);

@@ -72,7 +72,6 @@ The UI must be visually appealing and well-structured. Use modern design styles,
 return component in triple-quotes.
 Do not use escape characters
 Rules:
-- Do not use escape characters. especially the / before style.
 - NEVER include DOCTYPE html.
 - NEVER include html, head, body.
 - NEVER include style or script  tags.
@@ -166,17 +165,17 @@ Do not return any explanation, description, or markdown — only the JSON.
         await sleep(2000);
 
         const response = await mistralClient.chat.complete({
-            model: "mistral-medium-latest",
+            model: "mistral-medium-2508",
             messages,
             temperature: 0.7,
             responseFormat: { type: "json_object" },
           });
 
         // Log response structure for debugging
-        console.log("Mistral Response:", JSON.stringify(response, null, 2));
-        console.log("Response choices:", response?.choices);
-        console.log("First choice:", response?.choices?.[0]);
-        console.log("Message:", response?.choices?.[0]?.message);
+        //console.log("Mistral Response:", JSON.stringify(response, null, 2));
+       // console.log("Response choices:", response?.choices);
+        //console.log("First choice:", response?.choices?.[0]);
+        //console.log("Message:", response?.choices?.[0]?.message);
 
         // Extract message/content safely
         const firstChoice = response?.choices?.[0];
@@ -204,8 +203,9 @@ Do not return any explanation, description, or markdown — only the JSON.
         const normalizedWidth = Math.max(370, Number(parsedScreen.width) || 375);
         const normalizedHeight = Math.max(500, Number(parsedScreen.height) || 500);
         const escapeReplace = parsed.ui[0].component.replace(/\\u003C/g, "<").replace(/\\u003E/g, ">").replace(/\\u002F/g, "/").replace(/\/\s+([a-zA-Z-]+=)/g, " $1").replace(/\/\s+style=/g, ' style=')
-        const adjustedComponent = enforceRootDivDimensions(escapeReplace, normalizedWidth, normalizedHeight);
+        const adjustedComponent = enforceRootDivDimensions(parsed.ui[0].component, normalizedWidth, normalizedHeight);
         const parsedMessage = parsed.ui[0].message;
+
 
         const screen: UIComponent = {
             screen: { name: parsedScreen.name || screenName, width: normalizedWidth, height: normalizedHeight },

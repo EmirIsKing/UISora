@@ -72,7 +72,7 @@ The UI must be visually appealing and well-structured. Use modern design styles,
 return component in triple-quotes.
 Do not use escape characters
 Rules:
-- Do not use escape characters
+- Do not use escape characters. especially the / before style.
 - NEVER include DOCTYPE html.
 - NEVER include html, head, body.
 - NEVER include style or script  tags.
@@ -203,7 +203,7 @@ Do not return any explanation, description, or markdown — only the JSON.
         const parsedScreen = parsed.ui[0].screen || {};
         const normalizedWidth = Math.max(370, Number(parsedScreen.width) || 375);
         const normalizedHeight = Math.max(500, Number(parsedScreen.height) || 500);
-        const escapeReplace = parsed.ui[0].component.replace(/\\u003C/g, "<").replace(/\\u003E/g, ">").replace(/\\u002F/g, "/").replace(/\/\s+([a-zA-Z-]+=)/g, "$1").replace(/\/\s+style=/g, ' style=')
+        const escapeReplace = parsed.ui[0].component.replace(/\\u003C/g, "<").replace(/\\u003E/g, ">").replace(/\\u002F/g, "/").replace(/\/\s+([a-zA-Z-]+=)/g, " $1").replace(/\/\s+style=/g, ' style=')
         const adjustedComponent = enforceRootDivDimensions(escapeReplace, normalizedWidth, normalizedHeight);
         const parsedMessage = parsed.ui[0].message;
 

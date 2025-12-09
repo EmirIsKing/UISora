@@ -28,7 +28,7 @@ const GenerateLoader = () => {
 
   return (
     <div className="flex flex-col gap-4 items-start justify-center p-4 text-md font-medium select-none">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 text-[#252525] dark:text-[#DADADA]">
           <Spinner className="h-5 w-5" />
           <span className="animate-pulse">Generating UI</span>
         </div>

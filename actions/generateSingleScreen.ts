@@ -70,6 +70,7 @@ ${subHelper}
 The UI must be visually appealing and well-structured. Use modern design styles, spacing, typography, color usage, and layout flow. The default mobile screen size is minimum width 375px and minimum height 500px.
 
 Rules:
+-iterate of the code to make sure it is right.
 - Use camelCase on SVG attributes.
 - Use pure HTML with inline CSS styles.
 - Generate ONLY ONE screen.
@@ -146,7 +147,7 @@ Do not return any explanation, description, or markdown — only the JSON.
         await sleep(2000);
 
         const response = await mistralClient.chat.complete({
-            model: "mistral-medium-latest",
+            model: "mistral-large-2512",
             messages,
             temperature: 0.7,
             responseFormat: { type: "json_object" },

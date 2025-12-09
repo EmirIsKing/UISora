@@ -106,6 +106,7 @@ Rules:
 - Use animations minimally, only through CSS transitions (no keyframes required).
 - Use absolute positioning carefully; do not use fixed.
 - Minimum width: 370px; minimum height: 700px.
+- Extend height to match the content so that you do not use scroll.
 - Make the screen tall enough to contain content—avoid overflow when possible.
 
 ${allScreens ? "These are already generated screens do not regenerate. " + allScreens : ""}
@@ -202,7 +203,8 @@ Do not return any explanation, description, or markdown — only the JSON.
         const parsedScreen = parsed.ui[0].screen || {};
         const normalizedWidth = Math.max(370, Number(parsedScreen.width) || 375);
         const normalizedHeight = Math.max(500, Number(parsedScreen.height) || 500);
-        const adjustedComponent = enforceRootDivDimensions(parsed.ui[0].component, normalizedWidth, normalizedHeight);
+        const escapeReplace = parsed.ui[0].component.replace(/\\u003C/g, "<").replace(/\\u003E/g, ">").replace(/\\u002F/g, "/").replace(/\/\s+([a-zA-Z-]+=)/g, "$1")
+        const adjustedComponent = enforceRootDivDimensions(escapeReplace, normalizedWidth, normalizedHeight);
         const parsedMessage = parsed.ui[0].message;
 
         const screen: UIComponent = {

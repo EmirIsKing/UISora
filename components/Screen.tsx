@@ -66,7 +66,7 @@ const Screen =
                     className={`relative rounded-lg bg-[#252525] border border-black dark:shadow-[5px_5px_0px_0px_rgba(255,255,255,0.5)] shadow-[5px_5px_0px_0px_rgba(0,0,0,0.5)] overflow-hidden transform-gpu`}
                     style={{
                         width: `${dimensions.width}px`,
-                        height: `${dimensions.height}px`,
+                        height: `auto`,
                         minHeight: `${dimensions.height}px`,
                     }}
 

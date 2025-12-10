@@ -68,7 +68,8 @@ Always keep in mind the dimensions of content on the screen cause this is only f
 Generate a single mobile app UI/UX screen based on the user's prompt.
 ${subHelper}
 
-The UI must be visually appealing and well-structured. Use modern design styles, spacing, typography, color usage, and layout flow. The default mobile screen size is minimum width 450px and minimum height 500px.
+The UI must be visually appealing and well-structured. Use modern design styles, spacing, typography, color usage, and layout flow. The default mobile screen size is minimum width 500px and minimum height 600px.
+use height auto on first element(div).
 return component in triple-quotes.
 Do not use escape characters
 Rules:
@@ -116,8 +117,8 @@ Example output:
  { "ui": 
 	 [
 		 { 
-			"screen": { "name": "${screenName}", "width": 450, "height": 700 }, 
-			"component": """<div style="width:450px;height:700px;">...</div>"""
+			"screen": { "name": "${screenName}", "width": 500, "height": 700 }, 
+			"component": """<div style="width:450px;height:auto;">...</div>"""
 			"message: "${screenName} - short detail about main changes made"
 		 } 
 	 ]
@@ -200,8 +201,8 @@ Do not return any explanation, description, or markdown — only the JSON.
 
         // Normalize dimensions and enforce on root component
         const parsedScreen = parsed.ui[0].screen || {};
-        const normalizedWidth = Math.max(450, Number(parsedScreen.width) || 450);
-        const normalizedHeight = Math.max(500, Number(parsedScreen.height) || 500);
+        const normalizedWidth = Math.max(500, Number(parsedScreen.width) || 500);
+        const normalizedHeight = Math.max(600, Number(parsedScreen.height) || 600);
         //const escapeReplace = parsed.ui[0].component.replace(/\\u003C/g, "<").replace(/\\u003E/g, ">").replace(/\\u002F/g, "/").replace(/\/\s+([a-zA-Z-]+=)/g, " $1").replace(/\/\s+style=/g, ' style=')
         const adjustedComponent = enforceRootDivDimensions(parsed.ui[0].component, normalizedWidth, normalizedHeight);
         const parsedMessage = parsed.ui[0].message;

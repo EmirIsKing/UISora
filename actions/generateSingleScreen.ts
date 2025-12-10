@@ -31,7 +31,7 @@ function enforceRootDivDimensions(html: string, widthPx: number, heightPx: numbe
     const styleAttrRegex = /\sstyle\s*=\s*"(.*?)"/i;
     const styleMatch = attrs.match(styleAttrRegex);
 
-    const enforcedStyles = `width:${widthPx}px;min-width:${Math.min(widthPx, 370)}px;height:${heightPx}px;min-height:${heightPx}px;`;
+    const enforcedStyles = `width:${widthPx}px;min-width:${Math.min(widthPx, 370)}px;height:auto;min-height:${heightPx}px;`;
 
     let newAttrs: string;
     if (styleMatch) {
@@ -43,6 +43,7 @@ function enforceRootDivDimensions(html: string, widthPx: number, heightPx: numbe
     }
 
     const newOpenTag = `<div${newAttrs}>`;
+    console.log(html.replace(fullMatch, newOpenTag) + "\n");
     return html.replace(fullMatch, newOpenTag);
 }
 
@@ -68,8 +69,7 @@ Always keep in mind the dimensions of content on the screen cause this is only f
 Generate a single mobile app UI/UX screen based on the user's prompt.
 ${subHelper}
 
-The UI must be visually appealing and well-structured. Use modern design styles, spacing, typography, color usage, and layout flow. The default mobile screen size is minimum width 500px and minimum height 600px.
-use height auto on first element(div).
+The UI must be visually appealing and well-structured. Use modern design styles, spacing, typography, color usage, and layout flow. The default mobile screen size is minimum width 500px and minimum height 1000px.
 return component in triple-quotes.
 Do not use escape characters
 Rules:
@@ -94,7 +94,7 @@ Rules:
 - Generate ONLY ONE screen.
 - Only change exactly what user asks for and nothing else.
 - Each element must have a unique id.
-- Wrap the screen in one root <div>.
+- Wrap the screen in one root <div style="height:auto;"> with height auto.
 - Use camelCase for SVG attributes eg stroke-width should be strokeWidth.
 - No comments.
 - make the screen concise to reduce output tokens.
@@ -105,7 +105,7 @@ Rules:
 - Do not use <Image>. Instead, simulate images with shapes or backgrounds.
 - Use animations minimally, only through CSS transitions (no keyframes required).
 - Use absolute positioning carefully; do not use fixed.
-- Minimum width: 370px; minimum height: 700px.
+- Minimum width: 500px; minimum height: 1000px.
 - Extend height to match the content so that you do not use scroll.
 - Make the screen tall enough to contain content—avoid overflow when possible.
 
@@ -117,8 +117,8 @@ Example output:
  { "ui": 
 	 [
 		 { 
-			"screen": { "name": "${screenName}", "width": 500, "height": 700 }, 
-			"component": """<div style="width:450px;height:auto;">...</div>"""
+			"screen": { "name": "${screenName}", "width": 500, "height": 1000 }, 
+			"component": """<div style="width:500px;height:auto;">...</div>"""
 			"message: "${screenName} - short detail about main changes made"
 		 } 
 	 ]

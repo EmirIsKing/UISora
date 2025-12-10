@@ -20,6 +20,7 @@ export default async function HtmlToJson(html: string) {
     //   return `<${tagName}${remaining}${mergedStyle}>`;
     // });
 
+    console.log("\n htmlToJson: ", html + "\n");
     const result = await HTMLToJSON(html, true);
     return result;
   } catch (error) {

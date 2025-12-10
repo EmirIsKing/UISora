@@ -451,7 +451,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                               <div ref={screenshotRef} className='no-highlight'>
                                   <div className="flex flex-nowrap items-start gap-x-[100px] p-4">
                                       {generatedUI.ui.map((item, index: number) => {
-                                          const screenWidth = item.screen.width || 280;
+                                          const screenWidth = item.screen.width|| 350;
                                           const screenHeight = item.screen.height || 540;
 
                                           return (

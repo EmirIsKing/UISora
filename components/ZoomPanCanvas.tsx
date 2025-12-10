@@ -33,8 +33,8 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
       children,
       panningEnabled = true,
       minScale = 0.1,
-      maxScale = 5,
-      initialScale = 0.5,
+      maxScale = 10,
+      initialScale = 0.3,
       className,
     },
     ref
@@ -72,7 +72,7 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
     const { clientWidth, clientHeight } = viewport;
 
     // Compute initial centered position
-    const initialX = clientWidth / 1.8;
+    const initialX = clientWidth / 1.8 - 240;
     const initialY = clientHeight / 5;
 
     setTranslate({ x: initialX, y: initialY });

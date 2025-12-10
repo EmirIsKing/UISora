@@ -49,7 +49,7 @@ const Screen =
              }} >
             <div>
                 <span className={'flex justify-between text-white items-center'}>
-                    <h4 className={`font-semibold dark:text-white text-black ${hideNonExport?"text-black":""}`}>{screen.name}</h4>
+                    <h4 className={`font-semibold text-4xl dark:text-white text-black ${hideNonExport?"text-black":""}`}>{screen.name}</h4>
                     <button hidden={hideNonExport || hideEdit} onClick={()=> {
                         setEdit(!edit);
                         if (setHideMainInput) {

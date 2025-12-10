@@ -43,7 +43,7 @@ function enforceRootDivDimensions(html: string, widthPx: number, heightPx: numbe
     }
 
     const newOpenTag = `<div${newAttrs}>`;
-    console.log(html.replace(fullMatch, newOpenTag) + "\n");
+   // console.log(html.replace(fullMatch, newOpenTag) + "\n");
     return html.replace(fullMatch, newOpenTag);
 }
 

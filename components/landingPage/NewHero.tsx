@@ -9,9 +9,7 @@ interface HeroShowcaseProps {
   description?: string
 }
 
-export function HeroShowcase({
-  description = "Transform Text to UI with an Advanced AI Mobile UI Generator",
-}: HeroShowcaseProps) {
+export function HeroShowcase({}: HeroShowcaseProps) {
   return (
     <main className="relative max-md:pt-4 bg-gradient-to-b from-background to-background/50" id="Hero">
       <div className='absolute inset-0'>
@@ -41,12 +39,12 @@ export function HeroShowcase({
 
         <div className="mx-auto grid max-w-5xl z-20 max-md:py-2 items-center gap-10 px-6 py-10 lg:grid-cols-2 lg:gap-20">
           <div className="mx-auto flex flex-col items-center text-center md:ml-auto lg:max-w-3xl lg:items-start lg:text-left order-2 lg:order-1">
-            <h1 className="my-6 text-4xl font-bold text-pretty lg:text-6xl xl:text-7xl">
+            <h1 className="my-6 text-4xl font-bold text-pretty animate-in fade-in duration-1000 ease-out slide-in-from-bottom lg:text-6xl xl:text-7xl">
               Build beautiful Mobile UIs, effortlessly.
             </h1>
 
-            <p className="text-foreground/70 mb-8 max-w-xl lg:text-xl">
-              {description}
+            <p className="text-foreground/70 mb-8 max-w-xl lg:text-xl motion-opacity-in-0 motion-duration-800 motion-delay-700">
+              Transform Text to UI with an Advanced AI Mobile UI Generator
             </p>
 
             <div className="mb-12 flex w-fit flex-col items-center gap-4 sm:flex-row">

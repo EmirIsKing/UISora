@@ -23,6 +23,8 @@ import {fetchProjectBlobData} from "@/actions/blob";
 import AddScreen from "@/components/projectPage/AddScreen";
 import {useRouter} from "next/navigation";
 import HtmlExport from '@/components/HtmlExport';
+import {AnimatePresence} from "framer-motion";
+import BasicToast from "@/components/smoothui/ui/BasicToast";
 
 interface JsonToHtmlRendererProps {
 
@@ -71,6 +73,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [payModalText, setPayModalText] = useState("");
     const [isMobile, setIsMobile] = useState(false);
     const router = useRouter();
+    const [showToast, setShowToast] = useState(false);
 
 
     useEffect(() => {
@@ -176,6 +179,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
            // Store the current prompt before clearing
            const currentPrompt = prompt + (selectedStyle ? ` Use style: ${selectedStyle}` : "");
            setPrompt('');
+           setSelectedStyle('')
 
            // Add user input to chat with a temporary AI response
            setChat((prevChat) => [...prevChat, { userPrompt: currentPrompt, AiResponse: "Generating..." }]);
@@ -184,6 +188,17 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
             if (creditCheck == null || creditCheck < 100) {
                 setLocked(false)
                 setGenerating(false)
+                setShowToast(true)
+                if (subscription?.subscription?.status != "Active"){
+                    setOpenPayModal(true)
+                    setPayModalText("You are out of credits subscribe to a plan or buy more.")
+                }
+                setChat((prevChat) =>
+                    prevChat.map((item, index) =>
+                        index === prevChat.length - 1 ? { ...item, AiResponse: `` } : item
+                    )
+                );
+
                 return;
             }
            
@@ -565,6 +580,16 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 )
             }
                 <UpgradeModal  addon={payModalText} isOpen={openPayModal} setIsOpen={setOpenPayModal}/>
+                <AnimatePresence>
+                    {showToast && (
+                        <BasicToast
+                            message={"You are out of credit subscribe to a plan or buy more."}
+                            type={"warning"}
+                            duration={3000}
+                            onClose={() => setShowToast(false)}
+                        />
+                    )}
+                </AnimatePresence>
         </section>
         </ProtectedRoute>
     );

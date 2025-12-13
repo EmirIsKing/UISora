@@ -67,7 +67,7 @@ export default function BasicToast({
     <AnimatePresence>
       {visible && (
         <motion.div
-          className={`fixed top-4 right-4 z-50 flex w-80 items-center gap-3 rounded-lg border p-4 shadow-lg ${toastClasses[type]} ${className}`}
+          className={`fixed top-4 right-4 z-50 flex w-80 items-center gap-3 rounded-lg border p-4 z-10000 shadow-lg ${toastClasses[type]} ${className}`}
           initial={{ opacity: 0, x: 50, scale: 0.8 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
           exit={{
@@ -109,7 +109,7 @@ export function ToastDemo() {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 p-4 z-10000000">
       <div className="flex flex-wrap gap-2">
         <button
           type="button"

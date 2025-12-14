@@ -31,7 +31,7 @@ function enforceRootDivDimensions(html: string, widthPx: number, heightPx: numbe
     const styleAttrRegex = /\sstyle\s*=\s*"(.*?)"/i;
     const styleMatch = attrs.match(styleAttrRegex);
 
-    const enforcedStyles = `width:${widthPx}px;min-width:${Math.min(widthPx, 370)}px;height:auto;min-height:${heightPx}px;`;
+    const enforcedStyles = `width:${widthPx}px;min-width:${Math.min(widthPx, 370)}px;height:auto;min-height:${heightPx}px `;
 
     let newAttrs: string;
     if (styleMatch) {

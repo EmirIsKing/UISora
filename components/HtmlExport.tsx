@@ -11,9 +11,10 @@ interface HtmlEntry {
 
 type HtmlExportProps = {
   HtmlEntry: HtmlEntry[];
+  projectName?: string;
 };
 
-const HtmlExport: React.FC<HtmlExportProps> = ({HtmlEntry}) => {
+const HtmlExport: React.FC<HtmlExportProps> = ({HtmlEntry, projectName}) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -26,20 +27,21 @@ const HtmlExport: React.FC<HtmlExportProps> = ({HtmlEntry}) => {
     setIsLoading(true);
 
     try {
-        let exportContent = "";
+        let exportContent = "\n\n";
         HtmlEntry.forEach((entry) => {
-            exportContent += `<!-- Screen: ${entry.screenName} -->\n`;
+            exportContent += `\n\n<!-- Screen: ${entry.screenName} -->\n`;
             exportContent += `${entry.component}\n\n`;
         });
 
+        let alignedContent = `<div style="display: flex; flex-direction: row; gap: 70px; justify-content: center; background-color: #deaff0;">${exportContent}</div>`
         // Create file
-        const blob = new Blob([exportContent], { type: "text/plain" });
+        const blob = new Blob([alignedContent], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
 
         // Create link
         const link = document.createElement("a");
         link.href = url;
-        link.download = "ui-sora-export.txt"; // file name
+        link.download = `uisora-export-${projectName}.txt`; // file name
         document.body.appendChild(link);
 
         // Trigger download

@@ -31,6 +31,15 @@ const VOID_ELEMENTS = new Set([
 
 //const handleSave = (data: any) => {};
 
+
+const normalizeStyleString = (style: string) =>
+    style.replace(
+        /([a-z])([A-Z])/g,
+        (_, a, b) => `${a}-${b.toLowerCase()}`
+    );
+
+
+
 // ✅ Convert JSON → HTML string
 const elementToHTML = (element: string | HtmlElement): string => {
   if (typeof element === "string") return element;
@@ -39,17 +48,21 @@ const elementToHTML = (element: string | HtmlElement): string => {
   if (!type || type === "#comment") return "";
 
   const attrString = Object.entries(attributes)
-    .map(([k, v]) => (k === "class" ? `class="${v}"` : `${k}="${v}"`))
-    .join(" ");
+      .map(([k, v]) => {
+        if (k === "style" && typeof v === "string") {
+          return `style="${normalizeStyleString(v)}"`;
+        }
+        return `${k}="${v}"`;
+      })
+      .join(" ");
 
   const openTag = attrString ? `<${type} ${attrString}>` : `<${type}>`;
 
-  // Void tags: <img src="...">
   if (VOID_ELEMENTS.has(type)) return openTag;
 
-  // Normal tags
   return `${openTag}${content.map(elementToHTML).join("")}</${type}>`;
 };
+
 
 const JsonToHtmlRenderer: React.FC<JsonToHtmlRendererProps> = ({ data, setHTMLData, screen = "" , setPrevUI}) => {
 

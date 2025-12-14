@@ -8,9 +8,10 @@ import domtoimage from "dom-to-image-more";
 
 type UiExportProps = {
   screenRef: RefObject<HTMLDivElement | null>;
+  projectName?: string;
 };
 
-const UiExport: React.FC<UiExportProps> = ({ screenRef }) => {
+const UiExport: React.FC<UiExportProps> = ({ screenRef, projectName }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   // copy computed styles of one element to the target element
@@ -137,7 +138,7 @@ const UiExport: React.FC<UiExportProps> = ({ screenRef }) => {
       // download
       const a = document.createElement("a");
       a.href = dataUrl;
-      a.download = "UIExport.png";
+      a.download = `uisora-export-${projectName}.png`;
       a.click();
 
       // cleanup

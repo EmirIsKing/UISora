@@ -5,7 +5,7 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
 
-const AssetExport = ({assets}:{assets: string[]}) => {
+const AssetExport = ({assets, projectName}:{assets: string[]; projectName?:string;}) => {
 
   const [isloading, setIsloading] = useState(false)
 
@@ -28,7 +28,7 @@ const AssetExport = ({assets}:{assets: string[]}) => {
     }
 
     const content = await zip.generateAsync({ type: "blob" });
-    saveAs(content, "assets.zip");
+    saveAs(content, `uisora-assets-${projectName}.zip`);
     setIsloading(false)
   };
 

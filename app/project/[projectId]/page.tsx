@@ -8,7 +8,7 @@ import ZoomPanCanvas, { ZoomPanCanvasHandle } from "@/components/ZoomPanCanvas";
 import {HtmlElement} from "@/types/types";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
-import { getProjectDetails } from '@/actions/getProjectDetails';
+import {getProjectDetails, ProjectSettingsWithId} from '@/actions/getProjectDetails';
 import AssetExport from '@/components/AssetExport';
 import UiExport from '@/components/UiExport';
 import UpgradeModal from '@/components/UpgradeModal';
@@ -74,6 +74,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
     const [isMobile, setIsMobile] = useState(false);
     const router = useRouter();
     const [showToast, setShowToast] = useState(false);
+    const [projectDetails, setProjectDetails] = useState<ProjectSettingsWithId | null>();
 
 
     useEffect(() => {
@@ -90,6 +91,8 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                 if (!projectDetails){
                     router.push('/dashboard/projects')
                 }
+
+                setProjectDetails(projectDetails)
 
                 const { state } = await getProjectState(projectId);
                 if (state === "locked") {
@@ -569,9 +572,9 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
                         onClick={()=>setExportModal(false)}
                         className={'fixed inset-0 flex w-full h-full justify-center items-center backdrop-blur-xs z-[9999]'}>
                         <div className="bg-white text-black rounded-xl shadow-md w-80 grid grid-cols-2 items-center justify-center gap-4 p-12">
-                            <AssetExport assets={imageHolder}/>
-                            <UiExport screenRef={screenshotRef}/>
-                            <HtmlExport HtmlEntry={HTMLData}/>
+                            <AssetExport assets={imageHolder} projectName={ title || projectDetails?.settings.projectName}/>
+                            <UiExport screenRef={screenshotRef} projectName={ title || projectDetails?.settings.projectName}/>
+                            <HtmlExport HtmlEntry={HTMLData} projectName={ title || projectDetails?.settings.projectName}/>
                         </div>
 
                     </div>

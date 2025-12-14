@@ -79,7 +79,7 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
 
     // Save initial transform
     initialTransform.current = { x: initialX, y: initialY, scale: initialScale };
-  }, []);
+  }, [initialScale]);
 
   useEffect(() => {
     // Prevent iOS Safari two-finger browser zoom
@@ -111,7 +111,7 @@ const ZoomPanCanvas = forwardRef<ZoomPanCanvasHandle, ZoomPanCanvasProps>(functi
     return () => {
       viewport.removeEventListener("wheel", wheelHandler);
     };
-  }, [scale]);
+  }, [scale, applyTransform]);
 
   function flushQueuedTransform() {
     const params = queuedTransformRef.current;

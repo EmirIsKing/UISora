@@ -154,7 +154,7 @@ export default function Project({ params }: { params: Promise<{ projectId: strin
             }
         };
         fetchProjectDetails();
-    }, [projectId, user?.uid ]);
+    }, [projectId, user?.uid , router]);
 
 
 

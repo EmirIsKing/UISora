@@ -33,7 +33,7 @@ const HtmlExport: React.FC<HtmlExportProps> = ({HtmlEntry, projectName}) => {
             exportContent += `${entry.component}\n\n`;
         });
 
-        let alignedContent = `<div style="display: flex; flex-direction: row; gap: 70px; justify-content: center; background-color: #deaff0;">${exportContent}</div>`
+        const alignedContent = `<div style="display: flex; flex-direction: row; gap: 70px; justify-content: center; background-color: #deaff0;">${exportContent}</div>`
         // Create file
         const blob = new Blob([alignedContent], { type: "text/plain" });
         const url = URL.createObjectURL(blob);

@@ -48,7 +48,7 @@ const Verify = () => {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [auth.currentUser]);
+  }, []);
 
   const resendVerification = async () => {
     const currentUser = auth.currentUser;

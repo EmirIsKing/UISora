@@ -3,6 +3,7 @@ import { Star } from "lucide-react"
 import SignUp from "./SignUp"
 import WatchDemo from "./WatchDemo"
 import Marquee from "./Marquee"
+import ProductHuntBadge from "@/components/ProductHuntBadge";
 
 interface HeroShowcaseProps {
   heading?: string
@@ -58,9 +59,10 @@ export function HeroShowcase({}: HeroShowcaseProps) {
               </div>
             </div>
 
-            <div className="flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start">
+            <div className="flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start max-md:gap-4">
               <SignUp />
               <WatchDemo />
+              <ProductHuntBadge/>
             </div>
           </div>
 

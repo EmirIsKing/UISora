@@ -22,7 +22,7 @@ export function HeroShowcase({}: HeroShowcaseProps) {
 
       <section className="relative overflow-visible max-md:justify-center">
         {/* Background image for mobile */}
-        <div className="absolute top-[-50px] left-0 w-full h-full z-0 pointer-events-none lg:hidden flex items-center justify-center">
+        {/* <div className="absolute top-[-50px] left-0 w-full h-full z-0 pointer-events-none lg:hidden flex items-center justify-center">
           <div className="relative mx-auto w-full max-w-sm sm:max-w-md md:max-w-lg px-6">
             <div className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-[#543CF3]/20 to-transparent blur-2xl"></div>
             <div className="relative overflow-hidden rounded-2xl">
@@ -36,11 +36,11 @@ export function HeroShowcase({}: HeroShowcaseProps) {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="mx-auto grid max-w-5xl z-20 max-md:py-2 items-center gap-10 px-6 py-10 lg:grid-cols-2 lg:gap-20">
-          <div className="mx-auto flex flex-col items-center text-center md:ml-auto lg:max-w-3xl lg:items-start lg:text-left order-2 lg:order-1">
-            <h1 className="my-6 text-4xl font-bold text-pretty animate-in fade-in duration-1000 ease-out slide-in-from-bottom lg:text-6xl xl:text-7xl">
+        <div className="mx-auto flex text-center max-w-5xl z-20 max-md:py-2 items-center gap-10 px-6 py-10 lg:grid-cols-2 lg:gap-20">
+          <div className="mx-auto flex flex-col items-center justify-center text-center md:ml-auto lg:max-w-3xl order-2 lg:order-1">
+            <h1 className="my-6 flex text-4xl text-center font-bold text-pretty animate-in fade-in duration-1000 ease-out slide-in-from-bottom lg:text-6xl xl:text-7xl">
               Build beautiful Mobile UIs, effortlessly.
             </h1>
 
@@ -48,7 +48,7 @@ export function HeroShowcase({}: HeroShowcaseProps) {
               Transform Text to UI with an Advanced AI Mobile UI Generator
             </p>
 
-            <div className="mb-12 flex w-fit flex-col items-center gap-4 sm:flex-row">
+            {/* <div className="mb-12 flex w-fit flex-col items-center gap-4 sm:flex-row">
               <div className="flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map((starNumber) => (
                   <Star
@@ -57,16 +57,16 @@ export function HeroShowcase({}: HeroShowcaseProps) {
                   />
                 ))}
               </div>
-            </div>
+            </div> */}
 
-            <div className="flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start max-md:gap-4">
+            <div className="flex w-full flex-col justify-center items-center gap-2 sm:flex-row max-md:gap-4">
               <SignUp />
               <WatchDemo />
               <ProductHuntBadge/>
             </div>
           </div>
 
-          <div className="hidden lg:flex sm:static sm:z-auto order-1 lg:order-2">
+          {/* <div className="hidden lg:flex sm:static sm:z-auto order-1 lg:order-2">
             <div className="relative mx-auto max-w-md md:max-w-lg lg:max-w-xl">
               <div className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-[#543CF3]/20 to-transparent blur-2xl"></div>
               <div className="relative overflow-hidden rounded-2xl shadow-2xl ring-1 ring-black/10 md:rotate-[-1.5deg] md:hover:rotate-0 transition-transform duration-300">
@@ -80,7 +80,7 @@ export function HeroShowcase({}: HeroShowcaseProps) {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Mobile */}

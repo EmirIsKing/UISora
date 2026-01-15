@@ -168,7 +168,7 @@ Do not return any explanation, description, or markdown — only the JSON.
         const response = await mistralClient.chat.complete({
             model: "mistral-medium-2508",
             messages,
-            temperature: 0.7,
+            temperature: 0.6,
             responseFormat: { type: "json_object" },
           });
 

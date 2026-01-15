@@ -52,8 +52,8 @@ export default async function PromptFattening(prompt: string, subHelper: string)
                             }
                         },
                         ui:[
-                            "splash: how splash should be",
-                            "onboarding: how oonboarding should be",
+                            "splash: detailed description of splash screen",
+                            "onboarding: detailed description of onboarding screen",
                             etc
                         ],
                         message: "describing the ui screen by screen and some spacing between screen messages for readability.",
@@ -77,7 +77,8 @@ export default async function PromptFattening(prompt: string, subHelper: string)
             model: 'chatgpt-4o-latest',
             messages,
             store: true,
-            response_format: { type: "json_object" }
+            response_format: { type: "json_object" },
+            temperature: 0.7,
         });
 
 

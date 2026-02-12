@@ -74,11 +74,10 @@ export default async function PromptFattening(prompt: string, subHelper: string)
 
         // Call OpenAI API
         const response = await openai.chat.completions.create({
-            model: process.env.OPENAI_MODEL!,
+            model: "gpt-5-mini-2025-08-07",
             messages,
             store: true,
             response_format: { type: "json_object" },
-            temperature: 0.7,
         });
 
 

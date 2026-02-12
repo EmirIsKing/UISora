@@ -118,7 +118,7 @@ Example output:
 	 [
 		 { 
 			"screen": { "name": "${screenName}", "width": 500, "height": 1000 }, 
-			"component": """<div style="width:500px;height:auto;">...</div>"""
+			"component": "<div style='width:500px;height:auto;'>...</div>"
 			"message: "${screenName} - short detail about main changes made"
 		 } 
 	 ]
@@ -194,6 +194,7 @@ Do not return any explanation, description, or markdown — only the JSON.
         const creditUsed = (response as any)?.usage?.totalTokens ?? 0;
 
         const parsed = JSON.parse(content);
+    
 
         if (!parsed.ui || !Array.isArray(parsed.ui) || parsed.ui.length === 0) {
             throw new Error("Invalid response format from Mistral");

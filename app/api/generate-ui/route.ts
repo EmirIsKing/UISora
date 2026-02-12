@@ -374,6 +374,8 @@ export async function POST(request: Request) {
                 await userRef.update({ credits: adminIncrement(-screenCredits) });
                 console.log(`Deducted ${screenCredits} credits for screen ${result.screenName}`);
 
+                console.log("result: ", result)
+
                 // Convert the screen
                 const convertedComponent = JSON.parse(await HtmlToJson(result.screen.component.replace(/font-family:\s*'([^']+)'/gi, 'font-family: $1')) as string);
                 const generatedScreen = {

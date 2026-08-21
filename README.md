@@ -28,14 +28,6 @@ UISora turns plain-English app descriptions into complete, production-ready mobi
 - **Photo Sharing** — Instagram-style feeds and filters
 - **Health & Fitness** — Workout tracking with progress charts
 - **Finance** — Crypto trading apps with real-time charts
-## Pricing
- 
-| Plan | Price | Screens | Projects | Credits | Exports |
-|------|-------|---------|----------|---------|---------|
-| **Hobby** | Free | Up to 7 | 1 | 2,000 (one-time) | Not included |
-| **Pro** | $112/month | Unlimited | Unlimited | 50,000/month (recurring) | Images & UI files |
- 
-Annual billing is also available. Pro includes priority email support; Hobby includes basic email support.
  
 ## Getting started
  

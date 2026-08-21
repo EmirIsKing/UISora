@@ -2,8 +2,7 @@
  
 **AI Mobile UI Generator** — Transform text into beautiful mobile UIs.
  
-🔗 [Live app](https://ui-sora.vercel.app/) · [uisora.com](https://uisora.com)
- 
+🔗 [Live app](https://ui-sora.vercel.app/) 
 ## Overview
  
 UISora turns plain-English app descriptions into complete, production-ready mobile UIs. Describe your app idea, let the AI generate the screens, then export the code or design assets straight into your workflow.

@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.jsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# UISora
+ 
+**AI Mobile UI Generator** — Transform text into beautiful mobile UIs.
+ 
+🔗 [Live app](https://ui-sora.vercel.app/) · [uisora.com](https://uisora.com)
+ 
+## Overview
+ 
+UISora turns plain-English app descriptions into complete, production-ready mobile UIs. Describe your app idea, let the AI generate the screens, then export the code or design assets straight into your workflow.
+ 
+## Features
+ 
+- **AI-Powered Generation** — Transform text into complete mobile UIs instantly.
+- **Real-time Preview** — Watch your designs materialize as they're generated.
+- **Multiple Screens** — Generate entire, interconnected application flows, not just single views.
+- **Export Ready** — Download production-ready code and design assets.
+- **Credit System** — Transparent, flexible pricing with no hidden fees.
+- **Modern Design Patterns** — Built on current UI/UX trends and web technologies.
+## How it works
+ 
+1. **Describe** — Write a description of your app concept in plain English, simple or detailed.
+2. **Generate** — The AI processes your description and produces modern mobile interfaces in seconds.
+3. **Export** — Download your designs as production-ready code or design files.
+## Example use cases
+ 
+- **E-Commerce** — Product grid and cart flows
+- **Social Media** — Chat apps with stories and messaging
+- **Productivity** — Task managers with kanban boards and calendars
+- **Photo Sharing** — Instagram-style feeds and filters
+- **Health & Fitness** — Workout tracking with progress charts
+- **Finance** — Crypto trading apps with real-time charts
+## Pricing
+ 
+| Plan | Price | Screens | Projects | Credits | Exports |
+|------|-------|---------|----------|---------|---------|
+| **Hobby** | Free | Up to 7 | 1 | 2,000 (one-time) | Not included |
+| **Pro** | $112/month | Unlimited | Unlimited | 50,000/month (recurring) | Images & UI files |
+ 
+Annual billing is also available. Pro includes priority email support; Hobby includes basic email support.
+ 
+## Getting started
+ 
+1. Visit [ui-sora.vercel.app](https://ui-sora.vercel.app/) and click **Sign Up**.
+2. Describe your app idea in plain English.
+3. Review the generated screens and iterate as needed.
+4. Export your UI as code or design assets (Pro plan) once you're happy with it.
+## Links
+ 
+- [Features](https://ui-sora.vercel.app/#features)
+- [Pricing](https://ui-sora.vercel.app/#pricing)
+- [Examples](https://ui-sora.vercel.app/#examples)
+- [Blog](https://ui-sora.vercel.app/blog)
+- [About](https://ui-sora.vercel.app/about)
